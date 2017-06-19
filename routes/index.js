@@ -11,10 +11,6 @@ router.get('/', function(req, res, next) {
   res.render('login',{layout:false})
 });
 
-router.get('/createEvent', function(req, res, next) {
-  res.render('createEvent')
-});
-
 router.get('/testeJavaScriptTemplate', function(req, res, next) {
   res.render('testeJavaScriptTemplate')
 });
@@ -162,6 +158,10 @@ router.post('/login', function(req, res, next) {
 
 router.get('*', function(req, res, next) {
   req.session.Matricula ? next() : res.redirect('/');
+});
+
+router.get('/createEvent', function(req, res, next) {
+  res.render('createEvent')
 });
 
 router.get('/panel', function(req, res, next) {
