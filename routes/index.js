@@ -53,7 +53,6 @@ router.get('/email-change-password', function(req, res, next) {
 });
 
 router.get('/change-password', function(req, res, next) {
-  //(req.session.credential) ? console.log('tem credential') : console.log('n-------tem credential');
   let obj = {layout:false}
   if (req.session.matricula) {
     obj.matricula = req.session.matricula
@@ -97,7 +96,7 @@ router.post('/change-password', function(req, res, next) {
   });
 })
 
-router.post('/emailforgetpassword', function(req, res, next) {
+router.post('/email-forget-password', function(req, res, next) {
   conn.acquire(function(err,con){
     let randomString = Util.randomAlphaNumeric(6)
     let matricula = parseInt(req.body.matriculaToReset)
@@ -128,7 +127,7 @@ router.get('*', function(req, res, next) {
   req.session.matricula ? next() : res.redirect('/');
 });
 
-router.get('/createEvent', function(req, res, next) {
+router.get('/create-event', function(req, res, next) {
   res.render('createEvent')
 });
 
