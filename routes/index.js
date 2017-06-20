@@ -1,31 +1,45 @@
-var express = require('express');
-var router = express.Router();
-var conn = require(process.env.PWD + '/conn');
-var Util = require(process.env.PWD + '/util/Util')
-var mailSender = require(process.env.PWD + '/util/MailSender')
-var fs = require('fs');
-var pdf = require('html-pdf');
-var A4option = require(process.env.PWD + '/views/report/A4config')
+const express = require('express');
+const router = express.Router();
+const conn = require(process.env.PWD + '/conn');
+const Util = require(process.env.PWD + '/util/Util')
+const mailSender = require(process.env.PWD + '/util/MailSender')
+const fs = require('fs');
+const moment = require('moment');
+const md5 = require('md5');
+const pdf = require('html-pdf');
+const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', function(req, res, next) {
+  console.log('emntrei no /');
   res.render('login',{layout:false})
 });
 
-router.get('/testeJavaScriptTemplate', function(req, res, next) {
-  res.render('testeJavaScriptTemplate')
-});
-
-router.get('/gerarPDF', function(req, res, next) {
+router.post('/login', function(req, res, next) {
   conn.acquire(function(err,con){
-    con.query('select * from User u inner join AccessGroup ag on u.Group_ID = ag.AccessGroupID limit 3000', function(err, result) {
+    con.query('SELECT * FROM usuarios WHERE Matricula = ?', [req.body.matricula], function(err, result) {
       con.release();
-      if(err){
-        res.render('error', { error: err } );
-      }else{
-        let html = Util.generateHTMLReport(res,result,['Group_ID','Matricula','DateBirth','PasswordChanged','Password'])
+      if(err){ res.render('error', { error: err } );}
+      else{
+        if(0 === result.length){
+          res.render('login',{ layout: false, alertClass: 'alert-danger', msg: 'Incorrect Enrolment Number  '})
+        }else if( result[0].senha !== md5(req.body.password) ){
+          res.render('login',{ layout:false, alertClass: 'alert-danger', msg: 'Incorrect Password'})
+        }else{
+          if(0 === result[0].primeiroacesso){
+            req.session.matricula = req.body.matricula
+            req.session.password = req.body.password
+            console.log('entrei nao é primeira acesso');
+            console.log(req.session);
+            res.redirect('/change-password')
+          }else{
+            console.log('entrei nao é primeira acesso');
+            req.session.matricula = result[0].matricula
+            res.redirect('/panel')
+          }
+        }
       }
-    })
-  })
+    });
+  });
 });
 
 router.get('/logout', function(req, res, next) {
@@ -34,59 +48,45 @@ router.get('/logout', function(req, res, next) {
   res.render('login', {layout:false, alertClass: 'alert-info', msg : 'Logout Successfull !'})
 });
 
-router.get('/change-password', function(req, res, next) {
-  //(req.session.credential) ? console.log('tem credential') : console.log('n-------tem credential');
-  let obj = {layout:false}
-  if (req.session.credential) {
-    obj.matricula = req.session.credential.matricula
-    obj.password = req.session.credential.password
-    console.log('$$$$$$ - tem credencial');
-    req.session.credential.matricula = null
-    req.session.credential.password = null
-    res.render('change-password', obj)
-  } else {
-    console.log('----n tem credencial');
-    res.render('change-password', obj)
-  }
-  console.log('felipe' + JSON.stringify(obj));
-});
-
 router.get('/email-change-password', function(req, res, next) {
   res.render('change-password', {layout:false})
 });
 
+router.get('/change-password', function(req, res, next) {
+  let obj = {layout:false}
+  if (req.session.matricula) {
+    obj.matricula = req.session.matricula
+    obj.password = req.session.password
+    res.render('change-password', obj)
+  } else {
+    res.render('change-password', obj)
+  }
+});
+
 router.post('/change-password', function(req, res, next) {
-  let Email = req.body.Email
-  let Password = req.body.currentpassword
+  let matricula = parseInt(req.body.matricula)
+  let currentpassword = req.body.currentpassword
   conn.acquire(function(err,con){
-    let sql = ''
-    if(Number.isInteger(parseInt(Email))){
-        sql = 'SELECT Matricula FROM User where Matricula = ? AND Password = ?'
-    }else{
-        sql = 'SELECT Matricula FROM User where Email = ? AND Password = ?'
-    }
-    con.query(sql, [Email, Password], function(err, result) {
+    let query = 'SELECT matricula FROM usuarios where matricula = ? AND senha = md5(?)'
+    con.query(query, [matricula, currentpassword], function(err, result) {
       console.log(this.sql);
       con.release();
       if(err){
         res.render('error', { error: err } );
       }else{
         if(0 === result.length){
-          res.send('ninguem com essa senha')
+          res.render('change-password',{layout:false, alertClass: 'alert-danger', msg: 'Incorrect Enrolment Number or Password.'});
         }else{
           conn.acquire(function(err,con){
-            if(Number.isInteger(parseInt(Email))){
-                sql = 'UPDATE User SET Password = ?, ChangePassword = 1, PasswordChanged = NOW() WHERE Matricula = ?'
-            }else{
-                sql = 'UPDATE User SET Password = ?, ChangePassword = 1, PasswordChanged = NOW() WHERE Email = ?'
-            }
-            con.query(sql, [req.body.Password, Email], function(err, result) {
-              console.log('update' + this.sql);
+            let query = 'UPDATE usuarios SET senha = md5(?), primeiroacesso = 1, date_last_change_pass = NOW() WHERE Matricula = ?'
+            con.query(query, [req.body.newpassword, matricula], function(err, result) {
+              console.log('updateQuery - ' + this.sql);
               con.release();
               if(err){
                 res.render('error', { error: err } );
               }else{
-                res.send(result);
+                req.session.matricula = matricula
+                res.redirect('/panel')
               }
             })
           })
@@ -96,32 +96,22 @@ router.post('/change-password', function(req, res, next) {
   });
 })
 
-router.post('/emailforgetpassword', function(req, res, next) {
+router.post('/email-forget-password', function(req, res, next) {
   conn.acquire(function(err,con){
     let randomString = Util.randomAlphaNumeric(6)
-    let userToReset = req.body.matriculaOrEmail
-    let sql = ''
-    if(Number.isInteger(parseInt(userToReset))){
-        sql = 'UPDATE User SET Password = ?, ChangePassword=0 WHERE Matricula = ?'
-    }else{
-        sql = 'UPDATE User SET Password = ?, ChangePassword=0 WHERE Email = ?'
-    }
-    con.query(sql, [randomString, userToReset], function(err, result) {
+    let matricula = parseInt(req.body.matriculaToReset)
+    let sql = 'UPDATE usuarios SET senha = md5(?), primeiroacesso=0 WHERE matricula = ?'
+    con.query(sql, [randomString, matricula], function(err, result) {
       con.release();
       if(err){
         res.render('error', { error: err } );
       }else{
         if(!!result.affectedRows){
-          if(Number.isInteger(parseInt(userToReset))){
-            sql = 'SELECT Email FROM User WHERE Matricula = ?'
-            con.query(sql, [parseInt(userToReset)], function(err, result) {
-              mailSender.emailRecoverPassword(randomString, result[0].Email)
-              res.render('login',{layout:false, alertClass: 'alert-success', msg: 'Please, check your e-mail. New Password was sent.'});
-            })
-          }else{
-              mailSender.emailRecoverPassword(randomString, userToReset)
-              res.render('login',{layout:false, alertClass: 'alert-success', msg: 'Please, check your e-mail. New Password was sent.'});
-          }
+          sql = 'SELECT email FROM usuarios WHERE Matricula = ?'
+          con.query(sql, [matricula], function(err, result) {
+            mailSender.emailRecoverPassword(randomString, result[0].email, matricula)
+            res.render('login',{layout:false, alertClass: 'alert-success', msg: 'Please, check your e-mail. New Password was sent.'});
+          })
         }else{
           res.render('login',{layout:false, alertClass: 'alert-danger', msg: 'Incorrect Matrícula / E-mail.'});
         }
@@ -131,32 +121,13 @@ router.post('/emailforgetpassword', function(req, res, next) {
   });
 });
 
-router.post('/login', function(req, res, next) {
-  conn.acquire(function(err,con){
-    con.query('SELECT * FROM User WHERE Matricula = ?', [req.body.matricula], function(err, result) {
-      con.release();
-      if(err){
-        res.render('error', { error: err } );
-      }else{
-        if(0 === result.length){
-          res.render('login',{ layout:false , alertClass: 'alert-danger', msg: 'Incorrect Matricula'})
-        }else if(req.body.password !== result[0].Password){
-          res.render('login',{ layout:false , alertClass: 'alert-danger', msg: 'Incorrect Password'})
-        }else{
-          if(0 === result[0].ChangePassword){
-            req.session.credential = req.body
-            res.redirect('/change-password')
-          }else{
-            req.session.Matricula = result[0].Matricula
-            res.redirect('/panel')
-          }
-        }
-      }
-    });
-  });
+router.get('*', function(req, res, next) {
+  console.log('entrei no *');
+  console.log(req.session);
+  req.session.matricula ? next() : res.redirect('/');
 });
 
-router.get('/createEvent', function(req, res, next) {
+router.get('/create-event', function(req, res, next) {
   res.render('createEvent')
 });
 
@@ -165,7 +136,7 @@ router.get('*', function(req, res, next) {
 });
 
 router.get('/panel', function(req, res, next) {
-  res.render('panel',{userSession: req.session})
+  res.render('panel', { sess: req.session})
 });
 
 module.exports = router;
