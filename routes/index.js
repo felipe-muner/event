@@ -115,7 +115,6 @@ router.post('/email-forget-password', function(req, res, next) {
         }else{
           res.render('login',{layout:false, alertClass: 'alert-danger', msg: 'Incorrect Matrícula / E-mail.'});
         }
-
       }
     });
   });
