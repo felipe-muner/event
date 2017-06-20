@@ -4,6 +4,7 @@ const conn = require(process.env.PWD + '/conn');
 const Util = require(process.env.PWD + '/util/Util')
 const mailSender = require(process.env.PWD + '/util/MailSender')
 const fs = require('fs');
+const moment = require('moment');
 const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
@@ -75,7 +76,7 @@ router.post('/change-password', function(req, res, next) {
         res.render('error', { error: err } );
       }else{
         if(0 === result.length){
-          res.send(this.sql)
+          res.render('change-password',{layout:false, alertClass: 'alert-danger', msg: 'Incorrect Enrolment Number or Password.'});
         }else{
           conn.acquire(function(err,con){
             let query = 'UPDATE usuarios SET senha = md5(?), primeiroacesso = 1, date_last_change_pass = NOW() WHERE Matricula = ?'
@@ -98,25 +99,20 @@ router.post('/change-password', function(req, res, next) {
 
 router.post('/emailforgetpassword', function(req, res, next) {
   conn.acquire(function(err,con){
-    let randomString = md5( Util.randomAlphaNumeric(6) )
-    let userToReset = req.body.matriculaOrEmail
-    let sql = 'UPDATE usuarios SET senha = ?, ChangePassword=0 WHERE Matricula = ?'
-    con.query(sql, [randomString, userToReset], function(err, result) {
+    let randomString = Util.randomAlphaNumeric(6)
+    let matricula = parseInt(req.body.matriculaToReset)
+    let sql = 'UPDATE usuarios SET senha = md5(?), primeiroacesso=0 WHERE matricula = ?'
+    con.query(sql, [randomString, matricula], function(err, result) {
       con.release();
       if(err){
         res.render('error', { error: err } );
       }else{
         if(!!result.affectedRows){
-          if(Number.isInteger(parseInt(userToReset))){
-            sql = 'SELECT Email FROM User WHERE Matricula = ?'
-            con.query(sql, [parseInt(userToReset)], function(err, result) {
-              mailSender.emailRecoverPassword(randomString, result[0].Email)
-              res.render('login',{layout:false, alertClass: 'alert-success', msg: 'Please, check your e-mail. New Password was sent.'});
-            })
-          }else{
-              mailSender.emailRecoverPassword(randomString, userToReset)
-              res.render('login',{layout:false, alertClass: 'alert-success', msg: 'Please, check your e-mail. New Password was sent.'});
-          }
+          sql = 'SELECT email FROM usuarios WHERE Matricula = ?'
+          con.query(sql, [matricula], function(err, result) {
+            mailSender.emailRecoverPassword(randomString, result[0].email, matricula)
+            res.render('login',{layout:false, alertClass: 'alert-success', msg: 'Please, check your e-mail. New Password was sent.'});
+          })
         }else{
           res.render('login',{layout:false, alertClass: 'alert-danger', msg: 'Incorrect Matrícula / E-mail.'});
         }
