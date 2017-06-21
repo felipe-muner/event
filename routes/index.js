@@ -25,6 +25,7 @@ router.post('/login', function(req, res, next) {
         }else if( result[0].senha !== md5(req.body.password) ){
           res.render('login',{ layout:false, alertClass: 'alert-danger', msg: 'Incorrect Password'})
         }else{
+
           if(0 === result[0].primeiroacesso){
             req.session.matricula = req.body.matricula
             req.session.password = req.body.password
@@ -131,7 +132,7 @@ router.get('/create-event', function(req, res, next) {
 });
 
 router.get('*', function(req, res, next) {
-  req.session.Matricula ? next() : res.redirect('/');
+  req.session.matricula ? next() : res.redirect('/');
 });
 
 router.get('/panel', function(req, res, next) {
