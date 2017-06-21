@@ -29,11 +29,9 @@ router.post('/login', function(req, res, next) {
           if(0 === result[0].primeiroacesso){
             req.session.matricula = req.body.matricula
             req.session.password = req.body.password
-            console.log('entrei nao é primeira acesso');
-            console.log(req.session);
             res.redirect('/change-password')
           }else{
-            console.log('entrei nao é primeira acesso');
+            console.log(moment(result[0].date_last_change_pass).format('YYYY-MM-DD HH:mm:ss:SSS'));
             req.session.matricula = result[0].matricula
             res.redirect('/panel')
           }
