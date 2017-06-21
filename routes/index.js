@@ -16,22 +16,38 @@ router.get('/', function(req, res, next) {
 
 router.post('/login', function(req, res, next) {
   conn.acquire(function(err,con){
-    con.query('SELECT * FROM usuarios WHERE Matricula = ?', [req.body.matricula], function(err, result) {
+    con.query('SELECT *,(select valor from constantes where nome = ?) as limitDaySamePassword FROM usuarios WHERE Matricula = ?', ['qtd_dia_alter_senha', req.body.matricula], function(err, result) {
       con.release();
       if(err){ res.render('error', { error: err } );}
       else{
-        if(0 === result.length){
+        if( result[0].AttemptLogin > 2){
+          res.send('usuario bloqueado, favor entrar em contato com ict')
+        }else if(0 === result.length){
           res.render('login',{ layout: false, alertClass: 'alert-danger', msg: 'Incorrect Enrolment Number  '})
         }else if( result[0].senha !== md5(req.body.password) ){
+          conn.acquire(function(err,con){
+            con.query('UPDATE usuarios SET AttemptLogin = AttemptLogin + 1 where Matricula = ?', [req.body.matricula], function(err, result) {
+              con.release();
+              if(err){ res.render('error', { error: err } );}
+            })
+          })
           res.render('login',{ layout:false, alertClass: 'alert-danger', msg: 'Incorrect Password'})
         }else{
-
           if(0 === result[0].primeiroacesso){
             req.session.matricula = req.body.matricula
             req.session.password = req.body.password
             res.redirect('/change-password')
+          }else if( moment().diff(moment(result[0].date_last_change_pass),'days') > parseInt(result[0].limitDaySamePassword) ){
+            req.session.matricula = req.body.matricula
+            req.session.password = req.body.password
+            res.send('necessario alterar senha')
           }else{
-            console.log(moment(result[0].date_last_change_pass).format('YYYY-MM-DD HH:mm:ss:SSS'));
+            conn.acquire(function(err,con){
+              con.query('UPDATE usuarios SET AttemptLogin = 0 where Matricula = ?', [req.body.matricula], function(err, result) {
+                con.release();
+              })
+            })
+            console.log('diferenca menor que dia limite  ---  ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
             req.session.matricula = result[0].matricula
             res.redirect('/panel')
           }
@@ -120,8 +136,8 @@ router.post('/email-forget-password', function(req, res, next) {
 });
 
 router.get('*', function(req, res, next) {
-  console.log('entrei no *');
-  console.log(req.session);
+  //console.log('entrei no *');
+  //console.log(req.session);
   req.session.matricula ? next() : res.redirect('/');
 });
 
