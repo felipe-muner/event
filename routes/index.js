@@ -9,6 +9,11 @@ const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
+router.get('/testeJavaScriptTemplate', function(req, res, next) {
+  console.log('testeJavaScriptTemplate view');
+  res.render('testeJavaScriptTemplate',{layout:false})
+});
+
 router.get('/', function(req, res, next) {
   console.log('emntrei no /');
   res.render('login',{layout:false})
@@ -93,7 +98,7 @@ router.post('/change-password', function(req, res, next) {
           res.render('change-password',{layout:false, alertClass: 'alert-danger', msg: 'Incorrect Enrolment Number or Password.'});
         }else{
           conn.acquire(function(err,con){
-            let query = 'UPDATE usuarios SET senha = md5(?), primeiroacesso = 1, date_last_change_pass = NOW() WHERE Matricula = ?'
+            let query = 'UPDATE usuarios SET senha = md5(?), primeiroacesso = 1, AttemptLogin = 0, date_last_change_pass = NOW() WHERE Matricula = ?'
             con.query(query, [req.body.newpassword, matricula], function(err, result) {
               console.log('updateQuery - ' + this.sql);
               con.release();
