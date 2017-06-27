@@ -14,6 +14,11 @@ router.get('/testeJavaScriptTemplate', function(req, res, next) {
   res.render('testeJavaScriptTemplate',{layout:false})
 });
 
+router.get('/*', function(req, res, next) {
+  console.log(req.session)
+  next()
+});
+
 router.get('/', function(req, res, next) {
   console.log('emntrei no /');
   res.render('login',{layout:false})
@@ -21,17 +26,49 @@ router.get('/', function(req, res, next) {
 
 router.post('/login', function(req, res, next) {
   conn.acquire(function(err,con){
-    con.query('SELECT *,(select valor from constantes where nome = ?) as limitDaySamePassword FROM usuarios WHERE Matricula = ?', ['qtd_dia_alter_senha', req.body.matricula], function(err, result) {
+    con.query('SELECT '+
+                'u.matricula,'+
+                'u.nomeusuario,'+
+                'u.AttemptLogin,'+
+                'u.senha,'+
+                'u.date_last_change_pass,'+
+                'u.primeiroacesso,'+
+                's.idsistema,'+
+                'uca.id_perfil_sistema,'+
+                'unidades.idunidade,'+
+                'unidades.unidade,'+
+                'departamentos.nomedepartamento,'+
+                '(select valor from constantes where nome = ?) as limitDaySamePassword '+
+              'FROM '+
+                'sistemas s '+
+              'INNER JOIN '+
+                'usuarios u '+
+              'INNER JOIN '+
+                'usuario_controle_acesso uca '+
+              'ON '+
+                's.idsistema = uca.id_sistema '+
+              'AND '+
+                'uca.id_usuario = u.idusuario '+
+              'INNER JOIN '+
+                'unidades ON u.id_site = unidades.idunidade '+
+              'INNER JOIN '+
+                'departamentos ON u.id_departamento = departamentos.iddepartamento '+
+              'WHERE '+
+                's.idsistema = 7 '+
+              'AND '+
+                'matricula = ?', ['qtd_dia_alter_senha', parseInt(req.body.matricula)], function(err, result) {
       con.release();
       if(err){ res.render('error', { error: err } );}
       else{
-        if( result[0].AttemptLogin > 2){
+        console.log(this.sql);
+        console.log(result[0]);
+        if( result[0].AttemptLogin > 2 ){
           res.send('usuario bloqueado, favor entrar em contato com ict')
         }else if(0 === result.length){
-          res.render('login',{ layout: false, alertClass: 'alert-danger', msg: 'Incorrect Enrolment Number  '})
+          res.render('login',{ layout: false, alertClass: 'alert-danger', msg: 'Incorrect Enrolment Number'})
         }else if( result[0].senha !== md5(req.body.password) ){
           conn.acquire(function(err,con){
-            con.query('UPDATE usuarios SET AttemptLogin = AttemptLogin + 1 where Matricula = ?', [req.body.matricula], function(err, result) {
+            con.query('UPDATE usuarios SET AttemptLogin = AttemptLogin + 1 where matricula = ?', [req.body.matricula], function(err, result) {
               con.release();
               if(err){ res.render('error', { error: err } );}
             })
@@ -48,13 +85,33 @@ router.post('/login', function(req, res, next) {
             res.send('necessario alterar senha')
           }else{
             conn.acquire(function(err,con){
-              con.query('UPDATE usuarios SET AttemptLogin = 0 where Matricula = ?', [req.body.matricula], function(err, result) {
+              con.query('UPDATE usuarios SET AttemptLogin = 0 where matricula = ?', [req.body.matricula], function(err, result) {
                 con.release();
               })
             })
-            console.log('diferenca menor que dia limite  ---  ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
+            console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
             req.session.matricula = result[0].matricula
+            req.session.idunidade = result[0].idunidade
+            req.session.profile = result[0].id_perfil_sistema
             res.redirect('/panel')
+            // conn.acquire(function(err,con){
+            //   con.query('SELECT '+
+            //               'f.name,'+
+            //               'f.action '+
+            //             'FROM '+
+            //                 'Functionality f '+
+            //             'inner join '+
+            //               'ProfileFuncionality pf '+
+            //             'ON '+
+            //               'f.FunctionalityID = pf.Funcionality_ID '+
+            //             'WHERE ' +
+            //               'pf.Profile_ID = ?', [parseInt(result[0].id_perfil_sistema)], function(err, funcionality) {
+            //     con.release();
+            //     console.log(funcionality);
+            //     console.log(this.sql);
+            //
+            //   })
+            // })
           }
         }
       }
@@ -155,6 +212,7 @@ router.get('*', function(req, res, next) {
 });
 
 router.get('/panel', function(req, res, next) {
+  console.log(req.session + 2);
   res.render('panel', { sess: req.session})
 });
 
