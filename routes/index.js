@@ -15,12 +15,14 @@ router.get('/testeJavaScriptTemplate', function(req, res, next) {
 });
 
 router.get('/*', function(req, res, next) {
+  console.log('entrei aqui *****!');
   console.log(req.session)
   next()
 });
 
 router.get('/', function(req, res, next) {
   if (req.session.matricula) {
+    console.log('entrei aqui ////!');
     res.redirect('/panel')
   }else{
     res.render('login',{layout:false})
@@ -93,6 +95,7 @@ router.post('/login', function(req, res, next) {
             })
             console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
             req.session.matricula = result[0].matricula
+            req.session.nomeusuario = result[0].nomeusuario
             req.session.idunidade = result[0].idunidade
             req.session.profile = result[0].id_perfil_sistema
             res.redirect('/panel')
@@ -194,7 +197,35 @@ router.get('*', function(req, res, next) {
 });
 
 router.get('/panel', function(req, res, next) {
-  res.render('panel', { sess: req.session})
+  console.log('entrei panel');
+  let perfil = ''
+  switch (req.session.profile) {
+    case 15:
+        perfil = "Administrator";
+        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'administrator'})
+        break;
+    case 16:
+        perfil = "Local Approver";
+        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'local-approver'})
+        break;
+    case 17:
+        perfil = "Common User";
+        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'common-user'})
+        break;
+    case 19:
+        perfil = "Local Supervisor";
+        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'local-supervisor'})
+        break;
+    case 20:
+        perfil = "Reception";
+        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'reception'})
+        break;
+    }
+
+    console.log('Nome Usuario: ' + req.session.nomeusuario );
+    console.log('Perfil: ' + perfil );
+    console.log('Unidade: ' + req.session.idunidade );
+
 });
 
 module.exports = router;
