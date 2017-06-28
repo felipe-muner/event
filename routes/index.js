@@ -203,35 +203,11 @@ router.get('*', function(req, res, next) {
 
 router.get('/panel', function(req, res, next) {
   console.log('entrei panel');
-  let perfil = ''
-  switch (req.session.profile) {
-    case 15:
-        perfil = "Administrator";
-        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'administrator'})
-        break;
-    case 16:
-        perfil = "Local Approver";
-        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'local-approver'})
-        break;
-    case 17:
-        perfil = "Common User";
-        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'common-user'})
-        break;
-    case 19:
-        perfil = "Local Supervisor";
-        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'local-supervisor'})
-        break;
-    case 20:
-        perfil = "Reception";
-        res.render('panel', {sess: JSON.stringify(req.session,null,2), layout: 'reception'})
-        break;
-    }
-
-    console.log('Nome Usuario: ' + req.session.nomeusuario );
-    console.log('Perfil: ' + perfil );
-    console.log('Unidade: ' + req.session.idunidade );
-    console.log(req.session.functionalityProfile);
-
+  res.render('panel', {sess: req.session})
+  console.log('Nome Usuario: ' + req.session.nomeusuario);
+  console.log('Perfil: ' + req.session.profile);
+  console.log('Unidade: ' + req.session.idunidade);
+  console.log(req.session.functionalityProfile);
 });
 
 module.exports = router;

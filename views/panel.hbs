@@ -5,6 +5,10 @@
   </style>
 {{/section}}
 
+{{#section 'functionality'}}
+  {{sess.functionalityProfile}}
+{{/section}}
+
   <div class="row" style="margin-bottom:10px;">
     <div class="col-sm-4">
       <select class="form-control" name="">
@@ -54,8 +58,8 @@
     viewRender: function (view, element) {
       console.log('primeiro dia' + view.start.format('YYYY-MM-DD'));
       console.log('ultimo dia' + view.end.format('YYYY-MM-DD'));
-     var b = $('#calendar').fullCalendar('getDate');
-     console.log('change month - ' + b.format('YYYY-MM-DD'));
+      var b = $('#calendar').fullCalendar('getDate');
+      console.log('change month - ' + b.format('YYYY-MM-DD'));
    }
    ,events: [{
 					title: 'All Day Event',
