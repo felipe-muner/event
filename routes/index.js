@@ -92,12 +92,18 @@ router.post('/login', function(req, res, next) {
                 con.release();
               })
             })
-            console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
-            req.session.matricula = result[0].matricula
-            req.session.nomeusuario = result[0].nomeusuario
-            req.session.idunidade = result[0].idunidade
-            req.session.profile = result[0].id_perfil_sistema
-            res.redirect('/panel')
+            conn.acquire(function(err,con){
+              con.query('select f.Name, f.Action from Functionality f inner join ProfileFuncionality pf on pf.Funcionality_ID = f.FunctionalityID where pf.Profile_ID = 15;', [result[0].id_perfil_sistema], function(err, functionality) {
+                con.release();
+                console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
+                req.session.matricula = result[0].matricula
+                req.session.nomeusuario = result[0].nomeusuario
+                req.session.idunidade = result[0].idunidade
+                req.session.profile = result[0].id_perfil_sistema
+                req.session.functionalityProfile = functionality
+                res.redirect('/panel')
+              })
+            })
           }
         }
       }
@@ -224,6 +230,7 @@ router.get('/panel', function(req, res, next) {
     console.log('Nome Usuario: ' + req.session.nomeusuario );
     console.log('Perfil: ' + perfil );
     console.log('Unidade: ' + req.session.idunidade );
+    console.log(req.session.functionalityProfile);
 
 });
 
