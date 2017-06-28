@@ -20,7 +20,12 @@ router.get('/*', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  res.render('login',{layout:false})
+  if (req.session.matricula) {
+    res.redirect('/panel')
+  }else{
+    res.render('login',{layout:false})
+  }
+
 });
 
 router.post('/login', function(req, res, next) {
