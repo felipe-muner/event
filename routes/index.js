@@ -20,7 +20,6 @@ router.get('/*', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  console.log('entrei no /');
   res.render('login',{layout:false})
 });
 
@@ -60,8 +59,6 @@ router.post('/login', function(req, res, next) {
       con.release();
       if(err){ res.render('error', { error: err } );}
       else{
-        console.log(this.sql);
-        console.log(result[0]);
         if( result[0].AttemptLogin > 2 ){
           res.send('usuario bloqueado, favor entrar em contato com ict')
         }else if(0 === result.length){
@@ -94,24 +91,6 @@ router.post('/login', function(req, res, next) {
             req.session.idunidade = result[0].idunidade
             req.session.profile = result[0].id_perfil_sistema
             res.redirect('/panel')
-            // conn.acquire(function(err,con){
-            //   con.query('SELECT '+
-            //               'f.name,'+
-            //               'f.action '+
-            //             'FROM '+
-            //                 'Functionality f '+
-            //             'inner join '+
-            //               'ProfileFuncionality pf '+
-            //             'ON '+
-            //               'f.FunctionalityID = pf.Funcionality_ID '+
-            //             'WHERE ' +
-            //               'pf.Profile_ID = ?', [parseInt(result[0].id_perfil_sistema)], function(err, funcionality) {
-            //     con.release();
-            //     console.log(funcionality);
-            //     console.log(this.sql);
-            //
-            //   })
-            // })
           }
         }
       }
@@ -198,8 +177,6 @@ router.post('/email-forget-password', function(req, res, next) {
 });
 
 router.get('*', function(req, res, next) {
-  //console.log('entrei no *');
-  //console.log(req.session);
   req.session.matricula ? next() : res.redirect('/');
 });
 
@@ -212,7 +189,6 @@ router.get('*', function(req, res, next) {
 });
 
 router.get('/panel', function(req, res, next) {
-  console.log(req.session + 2);
   res.render('panel', { sess: req.session})
 });
 
