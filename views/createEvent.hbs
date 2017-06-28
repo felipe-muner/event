@@ -5,6 +5,12 @@
   </style>
 {{/section}}
 
+{{#section 'functionality'}}
+  {{#each sess.functionalityProfile}}
+    <li><a href="{{Action}}"><i class="fa {{Icon}}"></i> {{Name}} </a></li>
+  {{/each}}
+{{/section}}
+
   <div class="row" style="margin-bottom:10px;">
     <div class="col-sm-4">
       <select class="form-control" name="">

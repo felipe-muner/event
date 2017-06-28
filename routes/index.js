@@ -196,7 +196,9 @@ router.get('*', function(req, res, next) {
 });
 
 router.get('/create-event', function(req, res, next) {
-  res.render('createEvent')
+  console.log('entrei na rota create-event');
+  console.log(req.session);
+  res.render('createEvent',{sess: req.session})
 });
 
 router.get('*', function(req, res, next) {
