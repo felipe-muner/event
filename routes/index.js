@@ -27,7 +27,6 @@ router.get('/', function(req, res, next) {
   }else{
     res.render('login',{layout:false})
   }
-
 });
 
 router.post('/login', function(req, res, next) {
@@ -66,9 +65,7 @@ router.post('/login', function(req, res, next) {
       con.release();
       if(err){ res.render('error', { error: err } );}
       else{
-        if( result[0].AttemptLogin > 2 ){
-          res.send('usuario bloqueado, favor entrar em contato com ict')
-        }else if(0 === result.length){
+        if(0 === result.length){
           res.render('login',{ layout: false, alertClass: 'alert-danger', msg: 'Incorrect Enrolment Number'})
         }else if( result[0].senha !== md5(req.body.password) ){
           conn.acquire(function(err,con){
@@ -79,7 +76,9 @@ router.post('/login', function(req, res, next) {
           })
           res.render('login',{ layout:false, alertClass: 'alert-danger', msg: 'Incorrect Password'})
         }else{
-          if(0 === result[0].primeiroacesso){
+          if( result[0].AttemptLogin > 2 ){
+            res.send('usuario bloqueado, favor entrar em contato com ict')
+          }else if(0 === result[0].primeiroacesso){
             req.session.matricula = req.body.matricula
             req.session.password = req.body.password
             res.redirect('/change-password')
