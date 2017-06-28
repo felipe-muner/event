@@ -20,7 +20,7 @@ router.get('/*', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  console.log('emntrei no /');
+  console.log('entrei no /');
   res.render('login',{layout:false})
 });
 
