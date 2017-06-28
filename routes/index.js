@@ -62,6 +62,7 @@ router.post('/login', function(req, res, next) {
                 's.idsistema = 7 '+
               'AND '+
                 'matricula = ?', ['qtd_dia_alter_senha', parseInt(req.body.matricula)], function(err, result) {
+      console.log('query GETUSER: ' + this.sql)
       con.release();
       if(err){ res.render('error', { error: err } );}
       else{
@@ -93,7 +94,8 @@ router.post('/login', function(req, res, next) {
               })
             })
             conn.acquire(function(err,con){
-              con.query('select f.Name, f.Action from Functionality f inner join ProfileFuncionality pf on pf.Funcionality_ID = f.FunctionalityID where pf.Profile_ID = 15;', [result[0].id_perfil_sistema], function(err, functionality) {
+              con.query('select f.Name, f.Action, f.Icon from Functionality f inner join ProfileFuncionality pf on pf.Funcionality_ID = f.FunctionalityID where pf.Profile_ID = ?', [result[0].id_perfil_sistema], function(err, functionality) {
+                console.log('query profile: ' + this.sql);
                 con.release();
                 console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
                 req.session.matricula = result[0].matricula
