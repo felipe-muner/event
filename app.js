@@ -17,6 +17,7 @@ conn.init();
 
 var index = require('./routes/index');
 var user = require('./routes/user');
+var manageprofile = require('./routes/manage-profile');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use(expressSession({secret:'e2r3$r!q0oIl', saveUninitialized:false, resave:f
 
 app.use('/', index);
 app.use('/user', user);
+app.use('/manage-profile', manageprofile);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

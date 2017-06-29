@@ -17,3 +17,11 @@ div.meuMenu .label{
 .alert{
   margin-bottom: 15px;
 }
+
+.label{
+  cursor: pointer;
+}
+
+.modal-footer{
+  padding: 10px 5px 5px 5px;
+}

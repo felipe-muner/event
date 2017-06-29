@@ -14,17 +14,17 @@ router.get('/testeJavaScriptTemplate', function(req, res, next) {
   res.render('testeJavaScriptTemplate',{layout:false})
 });
 
-router.get('/*', function(req, res, next) {
-  console.log('entrei aqui *****!');
-  console.log(req.session)
-  next()
-});
+// router.get('/*', function(req, res, next) {
+//   next()
+// });
 
 router.get('/', function(req, res, next) {
+  console.log('entrei aqui testarei session');
   if (req.session.matricula) {
-    console.log('entrei aqui ////!');
+    console.log('entrei aqui tem session!');
     res.redirect('/panel')
   }else{
+    console.log('entrei aqui NNNNN tem session!');
     res.render('login',{layout:false})
   }
 });
@@ -62,7 +62,7 @@ router.post('/login', function(req, res, next) {
                 's.idsistema = 7 '+
               'AND '+
                 'matricula = ?', ['qtd_dia_alter_senha', parseInt(req.body.matricula)], function(err, result) {
-      console.log('query GETUSER: ' + this.sql)
+      //console.log('query GETUSER: ' + this.sql)
       con.release();
       if(err){ res.render('error', { error: err } );}
       else{
@@ -95,9 +95,9 @@ router.post('/login', function(req, res, next) {
             })
             conn.acquire(function(err,con){
               con.query('select f.Name, f.Action, f.Icon from Functionality f inner join ProfileFuncionality pf on pf.Funcionality_ID = f.FunctionalityID where pf.Profile_ID = ?', [result[0].id_perfil_sistema], function(err, functionality) {
-                console.log('query profile: ' + this.sql);
+                //console.log('query profile: ' + this.sql);
                 con.release();
-                console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
+                //console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
                 req.session.matricula = result[0].matricula
                 req.session.nomeusuario = result[0].nomeusuario
                 req.session.idunidade = result[0].idunidade
@@ -191,19 +191,15 @@ router.post('/email-forget-password', function(req, res, next) {
   });
 });
 
-router.get('*', function(req, res, next) {
-  req.session.matricula ? next() : res.redirect('/');
-});
-
 router.get('/create-event', function(req, res, next) {
   console.log('entrei na rota create-event');
   console.log(req.session);
   res.render('createEvent',{sess: req.session})
 });
 
-router.get('*', function(req, res, next) {
-  req.session.matricula ? next() : res.redirect('/');
-});
+// router.get('*', function(req, res, next) {
+//   req.session.matricula ? next() : res.redirect('/');
+// });
 
 router.get('/panel', function(req, res, next) {
   console.log('entrei panel');
