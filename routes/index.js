@@ -94,7 +94,7 @@ router.post('/login', function(req, res, next) {
               })
             })
             conn.acquire(function(err,con){
-              con.query('select f.Name, f.Action, f.Icon from Functionality f inner join ProfileFunctionality pf on pf.Functionality_ID = f.FunctionalityID where pf.Profile_ID = ?', [result[0].id_perfil_sistema], function(err, functionality) {                
+              con.query('select f.Name, f.Action, f.Icon from Functionality f inner join ProfileFunctionality pf on pf.Functionality_ID = f.FunctionalityID where pf.Profile_ID = ?', [result[0].id_perfil_sistema], function(err, functionality) {
                 console.log('query profile: ' + this.sql);
                 con.release();
                 //console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
@@ -189,12 +189,6 @@ router.post('/email-forget-password', function(req, res, next) {
       }
     });
   });
-});
-
-router.get('/create-event', function(req, res, next) {
-  console.log('entrei na rota create-event');
-  console.log(req.session);
-  res.render('createEvent',{sess: req.session})
 });
 
 // router.get('*', function(req, res, next) {
