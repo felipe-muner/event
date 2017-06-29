@@ -11,4 +11,3 @@ let b = a.functionalities.map(function(e){
   return item
 })
 console.log(b);
-// console.log(values);
