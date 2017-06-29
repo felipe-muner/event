@@ -11,6 +11,10 @@ function hbsHelpers(hbs) {
       },
       dizNome: function() {
         return moment().format('YYYY-MM-DD hh:mm:ss:SSS')
+      },
+      inc: function(value) {
+        console.log(typeof value);
+        return value + 1
       }
     }
   });
