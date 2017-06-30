@@ -11,7 +11,7 @@ const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', function(req, res, next) {
   console.log('entrei evento routa externo');
-  res.render('create-external-event/panel-external-event',{dados:'felipe externo',sess:req.session})
+  res.render('external-event/external-event',{dados:'felipe externo',sess:req.session})
 });
 
 module.exports = router;

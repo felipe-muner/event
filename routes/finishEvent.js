@@ -10,8 +10,8 @@ const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', function(req, res, next) {
-  console.log('entrei evento routa interno');
-  res.render('internal-event/internal-event',{dados:'felipe interno evento',sess:req.session})
+  console.log('finish-event');
+  res.render('finish-event/finish-event',{dados:'finish-event',sess:req.session})
 });
 
 module.exports = router;
