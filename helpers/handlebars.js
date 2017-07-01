@@ -25,7 +25,6 @@ function hbsHelpers(hbs) {
         //console.log('convBoolToHuman' + value);
         return (parseInt(value) === 1) ? 'Sim/Yes' : 'Nāo/No'
       }
-
     }
   });
 }
