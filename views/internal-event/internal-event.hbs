@@ -4,14 +4,24 @@
   {{/each}}
 {{/section}}
 
-<select class="" name="getAllSiteBuildingRoom">
-  {{#each getAllSiteBuildingRoom}}
-      <option value="{{RoomID}}">{{unidade}} - {{NameBuilding}} - {{NameRoom}}</option>
-  {{/each}}
-</select>
+<div class="row">
+  <div class="col-sm-6">
+    <select class="js-example-basic-single btn-block" name="getAllSiteBuildingRoom" >
+      {{#each getAllSiteBuildingRoom}}
+          <option value="{{RoomID}}">{{unidade}} - {{NameBuilding}} - {{NameRoom}}</option>
+      {{/each}}
+    </select>
+  </div>
+</div>
 
 {{#section 'script'}}
-  <script type="text/javascript">
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".js-example-basic-single").select2();
 
-  </script>
+    $(".js-example-basic-single").change(function(e){
+      console.log(this.value);
+    })
+  });
+</script>
 {{/section}}

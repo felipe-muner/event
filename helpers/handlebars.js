@@ -12,7 +12,7 @@ function hbsHelpers(hbs) {
       dizNome: function() {
         return moment().format('YYYY-MM-DD hh:mm:ss:SSS')
       },
-      stringifyHb: function(obj) {
+      json: function(obj) {
         return JSON.stringify(obj)
       },
       inc: function(value) {
