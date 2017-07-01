@@ -16,8 +16,8 @@ var conn = require('./conn');
 conn.init();
 
 var index = require('./routes/index');
-var createInternalEvent = require('./routes/createInternalEvent');
-var createExternalEvent = require('./routes/createExternalEvent');
+var createInternalEvent = require('./routes/InternalEvent');
+var createExternalEvent = require('./routes/ExternalEvent');
 var finishEvent = require('./routes/finishEvent');
 
 var menuItem = require('./routes/menuItem');

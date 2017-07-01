@@ -4,6 +4,14 @@
   {{/each}}
 {{/section}}
 
-ola
+<select class="" name="getAllSiteBuildingRoom">
+  {{#each getAllSiteBuildingRoom}}
+      <option value="{{RoomID}}">{{unidade}} - {{NameBuilding}} - {{NameRoom}}</option>
+  {{/each}}
+</select>
 
-{{dados}}
+{{#section 'script'}}
+  <script type="text/javascript">
+
+  </script>
+{{/section}}
