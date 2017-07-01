@@ -15,7 +15,12 @@ function hbsHelpers(hbs) {
       inc: function(value) {
         console.log(typeof value);
         return value + 1
+      },
+      convBoolToHuman: function(value) {
+        console.log(value);
+        return (parseInt(value) === 1) ? 'Sim/Yes' : 'Nāo/No'
       }
+
     }
   });
 }

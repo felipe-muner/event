@@ -25,3 +25,18 @@ div.meuMenu .label{
 .modal-footer{
   padding: 10px 5px 5px 5px;
 }
+
+.panel {
+  margin-bottom: 5px;
+}
+
+table {
+  font-size: 11px;
+}
+
+th{
+   text-align:center;
+}
+td{
+  padding:4px !important;
+}
