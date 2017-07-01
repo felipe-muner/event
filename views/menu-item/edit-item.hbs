@@ -1,0 +1,38 @@
+{{#section 'functionality'}}
+  {{#each sess.functionalityProfile}}
+    <li><a href="{{Action}}"><i class="fa {{Icon}}"></i> {{Name}} </a></li>
+  {{/each}}
+{{/section}}
+
+<div class="row">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      Edit Product
+    </div>
+    <div class="panel-body">
+      <form method="POST" action="/menu-item/edit">
+        <input type="hidden" name="EventProductID" value="{{findById.EventProductID}}">
+        <div class="col-sm-3">
+          <input value="{{findById.NamePort}}" type="text" class="form-control" placeholder=" Portuguese Product Name"  name="NamePort" required autofocus>
+        </div>
+        <div class="col-sm-3">
+          <input value="{{findById.NameEnglish}}" type="text" class="form-control" placeholder=" English Product Name"  name="NameEnglish" required>
+        </div>
+        <div class="col-sm-2">
+          <input value="{{findById.Price}}" type="number" class="form-control" placeholder="Price / Preço" name="Price" step="0.01" required>
+        </div>
+        <div class="col-sm-2">
+          <select class="form-control" name="Unit" placeholder="Unit" required>
+            <option value="">Unit / Unidade</option>
+            {{#each units}}
+              <option {{setSelected ../findById.EventProductUnitID EventProductUnitID}} value="{{EventProductUnitID}}">{{NameEnglish}} - {{NamePort}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="col-sm-1">
+          <input type="submit" value="Edit Product" class="btn btn-warning">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

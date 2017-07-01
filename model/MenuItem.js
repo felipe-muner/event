@@ -21,12 +21,59 @@ function MenuItem(){
                 'FROM '+
                   'EventProduct ep INNER JOIN EventProductUnit epu '+
                 'ON ep.Unit = epu.EventProductUnitID', function(err, result) {
-        console.log(this.sql);
+        // console.log(this.sql);
         con.release();
         if(err){
           res.render('error', { error: err } );
         }else{
           req.allProduct = result
+          next()
+        }
+      });
+    });
+  }
+  this.changeActive = function(req, res, next){
+    conn.acquire(function(err,con){
+      let changedActive
+      (parseInt(req.params.Active) === 1) ? changedActive = 0 : changedActive = 1
+      console.log(typeof changedActive);
+      con.query('UPDATE EventProduct SET Active = ? WHERE EventProductID = ?', [changedActive, req.params.EventProductID], function(err, result) {
+        console.log(this.sql);
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          next()
+        }
+      });
+    });
+  }
+  this.findById = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('SELECT '+
+                  'ep.EventProductID, ep.NameEnglish, ep.NamePort, ep.Price, ep.Active, epu.NameEnglish as NameUnitEngl, epu.NamePort as NameUnitPort, epu.EventProductUnitID '+
+                'FROM '+
+                  'EventProduct ep INNER JOIN EventProductUnit epu '+
+                'ON ep.Unit = epu.EventProductUnitID '+
+                'WHERE '+
+                'ep.EventProductID = ?', [parseInt(req.params.EventProductID)], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          req.findById = result[0]
+          next()
+        }
+      });
+    });
+  }
+  this.updateItem = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('UPDATE EventProduct SET ? WHERE EventProductID = ?', [req.body, req.body.EventProductID], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
           next()
         }
       });

@@ -11,27 +11,38 @@ const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', MenuItem.getAllProduct, MenuItem.getAllUnit ,function(req, res, next) {
-  let msgAlert = req.session.msgAlert
-  if(msgAlert){
-    delete req.session.msgAlert
-  }
-  res.render('menu-item/menu-item',
-    {
+  console.log(req.session);
+  let flashMsg = req.session.flashMsg
+  if(flashMsg) delete req.session.flashMsg
+  res.render('menu-item/menu-item',{
       units: req.allUnit,
       allProduct: req.allProduct,
       sess:req.session,
-      msgAlert
-    }
-  )
+      flashMsg
+  })
 }).post('/', MenuItem.addProduct, MenuItem.getAllUnit, function(req, res, next) {
-  req.session.msgAlert = 'Created successfully. Criado com sucesso.'
+  req.session.flashMsg = {}
+  req.session.flashMsg.txtMsg = 'Created successfully. Criado com sucesso.'
+  req.session.flashMsg.styleMsg = 'alert-success'
   res.redirect('/menu-item')
-}).put('/edit-product', function(req, res, next) {
-  res.send('vou editar')
-}).delete('/', function(req, res, next) {
+}).get('/edit/:EventProductID', MenuItem.getAllUnit, MenuItem.findById, function(req, res, next) {
+  console.log(req.findById);
+  res.render('menu-item/edit-item',{
+      units: req.allUnit,
+      findById: req.findById,
+      sess:req.session
+  })
+}).post('/edit', MenuItem.updateItem,function(req, res, next) {
+  req.session.flashMsg = {}
+  req.session.flashMsg.txtMsg = 'Product Updated!'
+  req.session.flashMsg.styleMsg = 'alert-warning'
+  res.redirect('/menu-item')
+}).get('/change-active/:EventProductID/:Active', MenuItem.changeActive, function(req, res, next) {
+  req.session.flashMsg = {}
+  req.session.flashMsg.txtMsg = (parseInt(req.params.Active) === 1) ? 'Product Disabled!' : 'Product Able!'
+  req.session.flashMsg.styleMsg = 'alert-warning'
+  res.redirect('/menu-item')
 });
-
-
 
 router.get('/product-unit', function(req, res, next) {
   console.log('product-unit');

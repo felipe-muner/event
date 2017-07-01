@@ -7,11 +7,11 @@
   <a href="/menu-item/product-unit"><span class="label label-primary">Product Unit</span></a>
   <a href="/menu-item"><span class="label label-danger">Menu Item</span></a>
 </div> -->
-{{#if msgAlert}}
+{{#if flashMsg}}
 <div class="row">
-  <div class="alert alert-success alert-dismissible" role="alert">
+  <div class="alert {{flashMsg.styleMsg}} alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <strong>Success!</strong> {{msgAlert}}
+    <strong>Done!</strong> {{flashMsg.txtMsg}}
   </div>
 </div>
 {{/if}}
@@ -23,7 +23,6 @@
     </div>
     <div class="panel-body">
       <form class="" method="POST">
-        <input type="hidden" name="EventProductID" value="30">
         <div class="col-sm-3">
           <input type="text" class="form-control" placeholder=" Portuguese Product Name"  name="NamePort" required autofocus>
         </div>
@@ -69,9 +68,11 @@
           <td>{{NameUnitPort}} / {{NameUnitEngl}}</td>
           <td style="text-align:right;">{{Price}}</td>
           <td style="text-align:center;">
-            <a href="/menu-item/edit-product"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+            <a href="/menu-item/edit/{{EventProductID}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
           </td>
-          <td style="text-align:center;">{{convBoolToHuman Active}}</td>
+          <td style="text-align:center;">
+            <a href="/menu-item/change-active/{{EventProductID}}/{{Active}}">{{convBoolToHuman Active}}</a>
+          </td>
         </tr>
       {{/each}}
     </tbody>

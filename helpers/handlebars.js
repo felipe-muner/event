@@ -12,12 +12,17 @@ function hbsHelpers(hbs) {
       dizNome: function() {
         return moment().format('YYYY-MM-DD hh:mm:ss:SSS')
       },
+      stringifyHb: function(obj) {
+        return JSON.stringify(obj)
+      },
       inc: function(value) {
-        console.log(typeof value);
         return value + 1
       },
+      setSelected: function(value, unitList) {
+        return (value === unitList) ? 'selected' : ''
+      },
       convBoolToHuman: function(value) {
-        console.log(value);
+        //console.log('convBoolToHuman' + value);
         return (parseInt(value) === 1) ? 'Sim/Yes' : 'Nāo/No'
       }
 
