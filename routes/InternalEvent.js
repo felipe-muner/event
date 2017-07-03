@@ -18,9 +18,7 @@ router.get('/', InternalEvent.getAllSiteBuildingRoom, function(req, res, next) {
     getAllSiteBuildingRoom: req.getAllSiteBuildingRoom
   })
 }).post('/search-events', InternalEvent.searchEventTwoDate, function(req, res, next) {
-  // req.allEvents = req.allEvents.map(function(e){
-  //   return e
-  // })
+  console.log(req.allEvents);
   res.json(req.allEvents)
 })
 
