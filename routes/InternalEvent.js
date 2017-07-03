@@ -12,7 +12,7 @@ const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', InternalEvent.getAllSiteBuildingRoom, function(req, res, next) {
   console.log('entrei evento routa interno');
-  console.log(req);
+  console.log(req.connection);
   res.render('internal-event/internal-event',{
     sess:req.session,
     getAllSiteBuildingRoom: req.getAllSiteBuildingRoom
