@@ -6,7 +6,7 @@
 
 <div class="row">
   <div class="col-sm-6">
-    <select class="js-example-basic-single btn-block" name="getAllSiteBuildingRoom" >
+    <select id="roomID" class="btn-block" name="getAllSiteBuildingRoom" >
       <option value="">SELECT THE ROOM</option>
       {{#each getAllSiteBuildingRoom}}
         <option value="{{RoomID}}">{{unidade}} - {{NameBuilding}} - {{NameRoom}}</option>
@@ -25,13 +25,35 @@
   </div>
 </div>
 
+<div id="modalNewEvent" class="modal fade" role="dialog">
+  <div class="modal-dialog" style="width:90%;">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">New Internal Event</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {{#section 'script'}}
 <script type="text/javascript">
   $(document).ready(function() {
-    $(".js-example-basic-single").select2();
+    $("#roomID").select2();
 
-    $(".js-example-basic-single").change(function(e){
-      console.log(this.value);
+    $("#roomID").change(function(e){
+      var curretFullDate = $("#calendar").fullCalendar('getDate');
+      var currentMonth = curretFullDate.month() + 1
+      var currentYear = curretFullDate.year()
+      var idRoom = $("#roomID").val()
+      searchEvents()
     })
 
     var date = new Date(),
@@ -41,64 +63,107 @@
     $('#calendar').fullCalendar({
       dayClick: function(date, jsEvent, view) {
         console.log('click in day - ' + date.format('YYYY-MM-DD'));
+        ( '' !== $("#roomSelect").val() ) ? showModalNewEvent() : alert('--click day without room. Please, select the Room.')
+
       },
       viewRender: function (view, element) {
-        console.log('primeiro dia' + view.start.format('YYYY-MM-DD'));
-        console.log('ultimo dia' + view.end.format('YYYY-MM-DD'));
-       var b = $('#calendar').fullCalendar('getDate');
-       console.log('change month - ' + b.format('YYYY-MM-DD'));
-     },events: [{
-   					title: 'All Day Event',
-   					start: new Date(y, m, 1)
-   				  }, {
-   					title: 'Long Event',
-   					start: new Date(y, m, d - 5),
-   					end: new Date(y, m, d - 2)
-   				  }, {
-   					title: 'Meeting',
-   					start: new Date(y, m, d, 10, 30),
-   					allDay: false
-   				  }, {
-   					title: 'Meeting',
-   					start: new Date(y, m, d, 10, 30),
-   					allDay: false
-   				  }, {
-   					title: 'Meeting',
-   					start: new Date(y, m, d, 10, 30),
-   					allDay: false
-   				  }, {
-   					title: 'Meeting',
-   					start: new Date(y, m, d, 10, 30),
-   					allDay: false
-   				  }, {
-   					title: 'Meeting',
-   					start: new Date(y, m, d, 10, 30),
-   					allDay: false
-   				  }, {
-   					title: 'Meeting',
-   					start: new Date(y, m, d, 10, 30),
-   					allDay: false
-   				  }, {
-   					title: 'Meeting',
-   					start: new Date(y, m, d, 10, 30),
-   					allDay: false
-   				  }, {
-   					title: 'Lunch',
-   					start: new Date(y, m, d + 14, 12, 0),
-   					end: new Date(y, m, d, 14, 0),
-   					allDay: false
-   				  }, {
-   					title: 'Birthday Party',
-   					start: new Date(y, m, d + 1, 19, 0),
-   					end: new Date(y, m, d + 1, 22, 30),
-   					allDay: false
-   				  }, {
-   					title: 'Click for Google',
-   					start: new Date(y, m, 28),
-   					end: new Date(y, m, 29),
-   					url: 'http://google.com/'
-   				  }]
+        // console.log('primeiro dia' + view.start.format('YYYY-MM-DD'));
+        // console.log('ultimo dia' + view.end.format('YYYY-MM-DD'));
+        // var b = $('#calendar').fullCalendar('getDate');
+        // console.log('change month - ' + b.format('YYYY-MM-DD'));
+        if( '' !== $("#roomSelect").val() ) searchEvents()
+
+      }
+          // [{
+      		// 	title: 'All Day Event',
+      		// 	start: new Date(y, m, 1)
+      		//   }, {
+      		// 	title: 'Meeting2',
+      		// 	start: new Date(y, m, d, 10, 30),
+      		// 	allDay: false
+      		//  }]
     })
-  });
+    // var monthEvent = [{
+    //     title: 'All Day Event',
+    //     start: new Date(2017, 6, 1)
+    //     }, {
+    //     title: 'Meeting2',
+    //     start: new Date(2017, 6, 5, 10, 30),
+    //     allDay: false
+    //    }]
+    //$('#calendar').fullCalendar('addEventSource', monthEvent);
+   });
+
+  function searchEvents(){
+    if($("#roomID").val() === '') return
+    console.log('roomID - ' + $("#roomID").val());
+    console.log('Primeiro dia do calendar - ' + $('.fc-day').first().data('date'))
+    console.log('Ultimo dia do calendar - ' + $('.fc-day').last().data('date'))
+    let dataSend = {
+      roomID: $("#roomID").val(),
+      firstDay: $('.fc-day').first().data('date'),
+      lastDay: $('.fc-day').last().data('date')
+    }
+    $.ajax({
+        url: '/internal-event/search-events',
+        type: 'POST',
+        data: dataSend,
+        dataType:'json',
+        success: function(data) {
+          var data2 = [{
+                  title: 'All Day Event',
+                  start: new Date(2017, 6, 3)
+                  }, {
+                  title: 'Meeting2',
+                  start: new Date(2017, 6, 5, 10, 30),
+                  allDay: false
+                 }]
+          $('#calendar').fullCalendar('removeEvents');
+          $('#calendar').fullCalendar('eventRender', data2);
+        }
+    })
+
+    //var curretFullDate = $("#calendar").fullCalendar('getDate');
+    //alert(roomID + ' - ' + currentYear + '/' + currentMonth)
+
+  }
+
+  function showModalNewEvent(){
+    //alert('new event')
+    console.log($('#roomID').select2('data')[0].text)
+    $('#modalNewEvent').modal('show')
+  }
+
+  // var form = document.createElement("form");
+  // form.method = "POST";
+  // form.action = "/internal-event/search-events";
+  //
+  // var roomID = document.createElement("input");
+  // roomID.name = 'roomId'
+  // roomID.value = $("#roomID").val()
+  // form.appendChild(roomID)
+  //
+  // var currentMonth = document.createElement("input");
+  // currentMonth.name = 'currentMonth'
+  // currentMonth.value = curretFullDate.month() + 1
+  // form.appendChild(currentMonth)
+  //
+  // var currentYear = document.createElement("input");
+  // currentYear.name = 'currentYear'
+  // currentYear.value = curretFullDate.year()
+  // form.appendChild(currentYear)
+  //
+  // var firstDayCalendar = document.createElement("input");
+  // firstDayCalendar.name = 'firstDayCalendar'
+  // firstDayCalendar.value = $('.fc-day').first().data('date')
+  // form.appendChild(firstDayCalendar)
+  //
+  // var lastDayCalendar = document.createElement("input");
+  // lastDayCalendar.name = 'lastDayCalendar'
+  // lastDayCalendar.value = $('.fc-day').last().data('date')
+  // form.appendChild(lastDayCalendar)
+  //
+  // document.body.appendChild(form);
+  // form.submit();
 </script>
 {{/section}}

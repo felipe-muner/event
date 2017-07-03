@@ -19,7 +19,6 @@ var index = require('./routes/index');
 var createInternalEvent = require('./routes/InternalEvent');
 var createExternalEvent = require('./routes/ExternalEvent');
 var finishEvent = require('./routes/finishEvent');
-
 var menuItem = require('./routes/menuItem');
 var manageProfile = require('./routes/manage-profile');
 var user = require('./routes/user');
@@ -34,7 +33,7 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

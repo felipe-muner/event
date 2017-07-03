@@ -11,12 +11,17 @@ const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', InternalEvent.getAllSiteBuildingRoom, function(req, res, next) {
-  console.log('entrei evento routa interno');
-  console.log(req.connection);
+  //console.log('entrei evento routa interno');
+  //console.log(req.connection);
   res.render('internal-event/internal-event',{
     sess:req.session,
     getAllSiteBuildingRoom: req.getAllSiteBuildingRoom
   })
+}).post('/search-events', InternalEvent.searchEventTwoDate, function(req, res, next) {
+  req.allEvents = req.allEvents.map(function(e){
+    return e
+  })
+  res.json(req.allEvents)
 })
 
 module.exports = router;
