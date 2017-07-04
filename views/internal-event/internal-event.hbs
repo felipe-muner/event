@@ -61,7 +61,7 @@
       eventBorderColor: '#f00',
       dayClick: function(date, jsEvent, view) {
         console.log('click in day - ' + date.format('YYYY-MM-DD'));
-        ( '' !== $("#roomSelect").val() ) ? showModalNewEvent() : alert('--click day without room. Please, select the Room.')
+        ( '' !== $("#roomID").val() ) ? showModalNewEvent() : alert('--click day without room. Please, select the Room.')
 
       },
       eventClick: function(calEvent, jsEvent, view) {
@@ -77,7 +77,7 @@
         // console.log('ultimo dia' + view.end.format('YYYY-MM-DD'));
         // var b = $('#calendar').fullCalendar('getDate');
         // console.log('change month - ' + b.format('YYYY-MM-DD'));
-        if( '' !== $("#roomSelect").val() ) searchEvents()
+        if( '' !== $("#roomID").val() ) searchEvents()
 
       },eventRender: function(event, element) {
         element.find(".fc-event-title").remove();
