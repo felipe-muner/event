@@ -57,6 +57,11 @@
     })
 
     $('#calendar').fullCalendar({
+      header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay,listMonth'
+		  },
       eventColor: '#378006',
       eventBorderColor: '#f00',
       dayClick: function(date, jsEvent, view) {
@@ -65,7 +70,7 @@
 
       },
       eventClick: function(calEvent, jsEvent, view) {
-        // alert('Event: ' + calEvent.title);
+        alert('Event: ' + calEvent.title);
         // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
         // alert('View: ' + view.name);
 
@@ -77,21 +82,21 @@
         // console.log('ultimo dia' + view.end.format('YYYY-MM-DD'));
         // var b = $('#calendar').fullCalendar('getDate');
         // console.log('change month - ' + b.format('YYYY-MM-DD'));
-        if( '' !== $("#roomID").val() ) searchEvents()
+        if( '' !== $("#roomID").val() ) searchEvents(view)
 
       },eventRender: function(event, element) {
         element.find(".fc-event-title").remove();
         element.find(".fc-event-time").remove();
-        // element.find(".fc-content").remove();
-        var new_description =
-            '<strong>Event: </strong><br/>' + event.title + '<br/>'
-            + moment(event.start).format("HH:mm") + '-'
-            + moment(event.end).format("HH:mm") + '<br/>'
-            + event.customer + '<br/>'
-            + '<strong>Address: </strong><br/>' + event.address + '<br/>'
-            + '<strong>Task: </strong><br/>' + event.task + '<br/>'
-            + '<strong>Place: </strong>' + event.place + '<br/>';
-        element.append(new_description);
+        //element.find(".fc-content").remove();
+
+        // var new_description =
+        //     moment(event.start).format("HH:mm") + '-'
+        //     + moment(event.end).format("HH:mm") + '<br/>'
+        //     + event.customer + '<br/>'
+        //     + '<strong>Address: </strong><br/>' + event.address + '<br/>'
+        //     + '<strong>Task: </strong><br/>' + event.task + '<br/>'
+        //     + '<strong>Place: </strong>' + event.place + '<br/>';
+        // element.append(new_description);
         var tooltip = 'event.Description;'
         $(element).attr("data-original-title", tooltip)
         $(element).tooltip({ container: "body"})
@@ -117,14 +122,19 @@
    });
 
   function searchEvents(){
+    console.log($('#calendar').fullCalendar('getView').start)
+    console.log($('#calendar').fullCalendar('getView').end)
+    console.log('________________________');
+
     if($("#roomID").val() === '') return
     console.log('roomID - ' + $("#roomID").val());
-    console.log('Primeiro dia do calendar - ' + $('.fc-day').first().data('date'))
-    console.log('Ultimo dia do calendar - ' + $('.fc-day').last().data('date'))
+    console.log('Primeiro dia do calendar - ' + moment($('#calendar').fullCalendar('getView').start).format('YYYY-MM-DD') )
+    console.log('Ultimo dia do calendar - ' + moment($('#calendar').fullCalendar('getView').end).format('YYYY-MM-DD'))
+
     let dataSend = {
       roomID: $("#roomID").val(),
-      firstDay: $('.fc-day').first().data('date'),
-      lastDay: $('.fc-day').last().data('date')
+      firstDay: moment($('#calendar').fullCalendar('getView').start).format('YYYY-MM-DD'),
+      lastDay: moment($('#calendar').fullCalendar('getView').end).format('YYYY-MM-DD')
     }
     $.ajax({
         url: '/internal-event/search-events',

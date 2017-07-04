@@ -60,19 +60,20 @@ function InternalEvent(){
   this.searchEventTwoDate = function(req, res, next){
     conn.acquire(function(err,con){
       console.log(req.body);
-      con.query('SELECT EventID, Name as title, StartingDate, StartingTime, EndTime FROM Event '+
-      'WHERE StartingDate >= ? AND StartingDate <= ? AND '+
+      con.query('SELECT EventID, Name as title, StartEvent as start, EndEvent as end FROM Event '+
+      'WHERE Date(StartEvent) >= ? AND Date(StartEvent) <= ? AND '+
       'Room_ID = ?', [req.body.firstDay, req.body.lastDay, req.body.roomID],function(err, result) {
         con.release();
         if(err){
           res.render('error', { error: err } );
         }else{
+          // console.log('qwe');
           console.log(this.sql);
-          result = result.map(function(e){
-            e.start = moment(e.StartingDate).format('YYYY-MM-DD')
-            return e
-          })
-          console.log(result);
+          // result = result.map(function(e){
+          //   e.start = moment(e.StartingDate).format('YYYY-MM-DD')
+          //   return e
+          // })
+          // console.log(result);
           req.allEvents = result
           next()
         }
