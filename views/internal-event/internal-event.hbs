@@ -56,23 +56,45 @@
       searchEvents()
     })
 
-    var date = new Date(),
-  					d = date.getDate(),
-  					m = date.getMonth(),
-  					y = date.getFullYear();
     $('#calendar').fullCalendar({
+      eventColor: '#378006',
+      eventBorderColor: '#f00',
       dayClick: function(date, jsEvent, view) {
         console.log('click in day - ' + date.format('YYYY-MM-DD'));
         ( '' !== $("#roomSelect").val() ) ? showModalNewEvent() : alert('--click day without room. Please, select the Room.')
 
       },
-      viewRender: function (view, element) {
+      eventClick: function(calEvent, jsEvent, view) {
+        // alert('Event: ' + calEvent.title);
+        // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+        // alert('View: ' + view.name);
+
+        // change the border color just for fun
+        $(this).css('border-color', 'blue');
+
+      },viewRender: function (view, element) {
         // console.log('primeiro dia' + view.start.format('YYYY-MM-DD'));
         // console.log('ultimo dia' + view.end.format('YYYY-MM-DD'));
         // var b = $('#calendar').fullCalendar('getDate');
         // console.log('change month - ' + b.format('YYYY-MM-DD'));
         if( '' !== $("#roomSelect").val() ) searchEvents()
 
+      },eventRender: function(event, element) {
+        element.find(".fc-event-title").remove();
+        element.find(".fc-event-time").remove();
+        // element.find(".fc-content").remove();
+        var new_description =
+            '<strong>Event: </strong><br/>' + event.title + '<br/>'
+            + moment(event.start).format("HH:mm") + '-'
+            + moment(event.end).format("HH:mm") + '<br/>'
+            + event.customer + '<br/>'
+            + '<strong>Address: </strong><br/>' + event.address + '<br/>'
+            + '<strong>Task: </strong><br/>' + event.task + '<br/>'
+            + '<strong>Place: </strong>' + event.place + '<br/>';
+        element.append(new_description);
+        var tooltip = 'event.Description;'
+        $(element).attr("data-original-title", tooltip)
+        $(element).tooltip({ container: "body"})
       }
           // [{
       		// 	title: 'All Day Event',
@@ -110,7 +132,6 @@
         data: dataSend,
         dataType:'json',
         success: function(data) {
-                    
           $('#calendar').fullCalendar('removeEvents');
           $('#calendar').fullCalendar('addEventSource', data)
         }

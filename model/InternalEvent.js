@@ -1,4 +1,5 @@
 const conn = require(process.env.PWD + '/conn');
+const moment = require('moment')
 
 function InternalEvent(){
   this.getAllSite = function(req, res, next){
@@ -67,6 +68,11 @@ function InternalEvent(){
           res.render('error', { error: err } );
         }else{
           console.log(this.sql);
+          result = result.map(function(e){
+            e.start = moment(e.StartingDate).format('YYYY-MM-DD')
+            return e
+          })
+          console.log(result);
           req.allEvents = result
           next()
         }
