@@ -61,7 +61,7 @@ function InternalEvent(){
     conn.acquire(function(err,con){
       console.log(req.body);
       con.query('SELECT EventID, Name as title, StartEvent as start, EndEvent as end FROM Event '+
-      'WHERE Date(StartEvent) >= ? AND Date(StartEvent) <= ? AND '+
+      'WHERE Date(StartEvent) >= ? AND Date(StartEvent) < ? AND '+
       'Room_ID = ?', [req.body.firstDay, req.body.lastDay, req.body.roomID],function(err, result) {
         con.release();
         if(err){
