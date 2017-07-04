@@ -63,6 +63,7 @@
 				right: 'month,agendaWeek,agendaDay,listMonth'
 		  },
       timezone:'local',
+      timeFormat: 'H(:mm)',
       eventColor: '#378006',
       eventBorderColor: '#f00',
       dayClick: function(date, jsEvent, view) {
@@ -91,7 +92,7 @@
         //element.find(".fc-content").remove();
         debugger
         event.description = 'This is a cool event'
-        event.id = event.EventID        
+        event.id = event.EventID
         // var new_description =
         //     moment(event.start).format("HH:mm") + '-'
         //     + moment(event.end).format("HH:mm") + '<br/>'
