@@ -64,6 +64,7 @@
 		  },
       timezone:'local',
       timeFormat: 'H(:mm)',
+      displayEventEnd: true,
       eventColor: '#378006',
       eventBorderColor: '#f00',
       dayClick: function(date, jsEvent, view) {
@@ -101,9 +102,13 @@
         //     + '<strong>Task: </strong><br/>' + event.task + '<br/>'
         //     + '<strong>Place: </strong>' + event.place + '<br/>';
         // element.append(new_description);
-        var tooltip = 'event.Description;'
+        var tooltip = '<div class="text-left">Nome do Evento: XXXX teste' + '<br />'
+                      + '<span style="color:blue;">Date: XXXX teste</span>' + '<br />'
+                      + 'Start Time: 10:00' + '<br />'
+                      + 'End Time: 12:00' + '<br />'
+                      + 'Nome do Evento: XXXX teste</div>'
         $(element).attr("data-original-title", tooltip)
-        $(element).tooltip({ container: "body"})
+        $(element).tooltip({ container: "body",html:'true'})
       }
           // [{
       		// 	title: 'All Day Event',
