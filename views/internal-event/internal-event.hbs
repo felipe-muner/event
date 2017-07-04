@@ -62,6 +62,7 @@
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay,listMonth'
 		  },
+      timezone:'local',
       eventColor: '#378006',
       eventBorderColor: '#f00',
       dayClick: function(date, jsEvent, view) {
@@ -70,7 +71,6 @@
 
       },
       eventClick: function(calEvent, jsEvent, view) {
-        debugger
         alert('Event: ' + calEvent.title);
         // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
         // alert('View: ' + view.name);
@@ -89,8 +89,9 @@
         element.find(".fc-event-title").remove();
         element.find(".fc-event-time").remove();
         //element.find(".fc-content").remove();
+        debugger
         event.description = 'This is a cool event'
-        event.id = event.EventID
+        event.id = event.EventID        
         // var new_description =
         //     moment(event.start).format("HH:mm") + '-'
         //     + moment(event.end).format("HH:mm") + '<br/>'
