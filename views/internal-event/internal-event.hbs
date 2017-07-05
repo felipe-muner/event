@@ -31,20 +31,36 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">New Internal Event</h4>
+        <h5 class="modal-title">New Internal Event - <span id="dateTitle"></span> in <span id="roomTitle"></span></h5>
       </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
+      <form id="formNewEvent" action="index.html" method="post">
+        <div class="modal-body">
+          <div class="container">
+            <div class="col-sm-1">
+              <label for="startTimeNewEvent">Start</label>
+              <input type="time" name="startTimeNewEvent" id="startTimeNewEvent" class="form-control" required>
+            </div>
+            <div class="col-sm-1">
+              <label for="endTimeNewEvent">End</label>
+              <input type="time" name="endTimeNewEvent" id="endTimeNewEvent" class="form-control" required>
+            </div>
+            <div class="col-sm-4">
+              <label for="nameNewEvent"> </label>
+              <input type="text" name="nameNewEvent" id="nameNewEvent" class="form-control" placeholder=" Event Name" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" value="Create" class="btn btn-success">
+        </div>
+      </form>
     </div>
   </div>
 </div>
 
 {{#section 'script'}}
 <script type="text/javascript">
+
   $(document).ready(function() {
     $("#roomID").select2();
 
@@ -53,8 +69,13 @@
       var currentMonth = curretFullDate.month() + 1
       var currentYear = curretFullDate.year()
       var idRoom = $("#roomID").val()
-      searchEvents()
+      $('#calendar').fullCalendar('removeEvents');
+      if('' !== idRoom) searchEvents()
     })
+
+    setTimeout(function () {
+      $('#roomID').val('551').trigger('change');
+    }, 100);
 
     $('#calendar').fullCalendar({
       header: {
@@ -66,81 +87,31 @@
       timeFormat: 'H(:mm)',
       displayEventEnd: true,
       allDaySlot:false,
-      eventColor: '#378006',
-      eventBorderColor: '#f00',
       dayClick: function(date, jsEvent, view) {
-        console.log('click in day - ' + date.format('YYYY-MM-DD'));
-        ( '' !== $("#roomID").val() ) ? showModalNewEvent() : alert('--click day without room. Please, select the Room.')
-
+        ( '' !== $("#roomID").val() ) ? showModalNewEvent(date) : alert('--click day without room. Please, select the Room.')
       },
       eventClick: function(calEvent, jsEvent, view) {
-        alert('Event: ' + calEvent.title);
-        // alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-        // alert('View: ' + view.name);
-
-        // change the border color just for fun
-        $(this).css('border-color', 'blue');
 
       },viewRender: function (view, element) {
-        // console.log('primeiro dia' + view.start.format('YYYY-MM-DD'));
-        // console.log('ultimo dia' + view.end.format('YYYY-MM-DD'));
-        // var b = $('#calendar').fullCalendar('getDate');
-        // console.log('change month - ' + b.format('YYYY-MM-DD'));
-        if( '' !== $("#roomID").val() ) searchEvents(view)
-
+        if( '' !== $("#roomID").val() ) searchEvents()
       },eventRender: function(event, element) {
         element.find(".fc-event-title").remove();
         element.find(".fc-event-time").remove();
-        //element.find(".fc-content").remove();
-        debugger
         event.description = 'This is a cool event'
         event.id = event.EventID
-        // var new_description =
-        //     moment(event.start).format("HH:mm") + '-'
-        //     + moment(event.end).format("HH:mm") + '<br/>'
-        //     + event.customer + '<br/>'
-        //     + '<strong>Address: </strong><br/>' + event.address + '<br/>'
-        //     + '<strong>Task: </strong><br/>' + event.task + '<br/>'
-        //     + '<strong>Place: </strong>' + event.place + '<br/>';
-        // element.append(new_description);
         var tooltip = '<div class="text-left">Nome do Evento: XXXX teste' + '<br />'
-                      + '<span style="color:blue;">Date: XXXX teste</span>' + '<br />'
+                      + '<span style="color:yellow;">Date: XXXX teste</span>' + '<br />'
                       + 'Start Time: 10:00' + '<br />'
                       + 'End Time: 12:00' + '<br />'
                       + 'Nome do Evento: XXXX teste</div>'
         $(element).attr("data-original-title", tooltip)
         $(element).tooltip({ container: "body",html:'true'})
       }
-          // [{
-      		// 	title: 'All Day Event',
-      		// 	start: new Date(y, m, 1)
-      		//   }, {
-      		// 	title: 'Meeting2',
-      		// 	start: new Date(y, m, d, 10, 30),
-      		// 	allDay: false
-      		//  }]
     })
-    // var monthEvent = [{
-    //     title: 'All Day Event',
-    //     start: new Date(2017, 6, 1)
-    //     }, {
-    //     title: 'Meeting2',
-    //     start: new Date(2017, 6, 5, 10, 30),
-    //     allDay: false
-    //    }]
-    //$('#calendar').fullCalendar('addEventSource', monthEvent);
    });
 
   function searchEvents(){
-    // console.log($('#calendar').fullCalendar('getView').start)
-    // console.log($('#calendar').fullCalendar('getView').end)
-    // console.log('________________________');
-
     if($("#roomID").val() === '') return
-    // console.log('roomID - ' + $("#roomID").val());
-    // console.log('Primeiro dia do calendar - ' + moment($('#calendar').fullCalendar('getView').start).format('YYYY-MM-DD') )
-    // console.log('Ultimo dia do calendar - ' + moment($('#calendar').fullCalendar('getView').end).format('YYYY-MM-DD'))
-
     let dataSend = {
       roomID: $("#roomID").val(),
       firstDay: moment($('#calendar').fullCalendar('getView').start).format('YYYY-MM-DD'),
@@ -156,48 +127,37 @@
           $('#calendar').fullCalendar('addEventSource', data)
         }
     })
-
-    //var curretFullDate = $("#calendar").fullCalendar('getDate');
-    //alert(roomID + ' - ' + currentYear + '/' + currentMonth)
-
   }
 
-  function showModalNewEvent(){
-    //alert('new event')
-    console.log($('#roomID').select2('data')[0].text)
+  function showModalNewEvent(date){
+    $('#roomTitle').text($('#roomID').select2('data')[0].text)
+    $('#dateTitle').text(moment(date).format('DD/MM/YYYY'))
     $('#modalNewEvent').modal('show')
+    populateToTest()
+  }
+  $('#modalNewEvent').on('shown.bs.modal', function () {
+    $('#startTimeNewEvent').focus();
+  })
+
+  function populateToTest(){
+    $('#startTimeNewEvent').val('10:00')
+    $('#endTimeNewEvent').val('11:00')
+    $('#nameNewEvent').val('nome evento teste')
   }
 
-  // var form = document.createElement("form");
-  // form.method = "POST";
-  // form.action = "/internal-event/search-events";
-  //
-  // var roomID = document.createElement("input");
-  // roomID.name = 'roomId'
-  // roomID.value = $("#roomID").val()
-  // form.appendChild(roomID)
-  //
-  // var currentMonth = document.createElement("input");
-  // currentMonth.name = 'currentMonth'
-  // currentMonth.value = curretFullDate.month() + 1
-  // form.appendChild(currentMonth)
-  //
-  // var currentYear = document.createElement("input");
-  // currentYear.name = 'currentYear'
-  // currentYear.value = curretFullDate.year()
-  // form.appendChild(currentYear)
-  //
-  // var firstDayCalendar = document.createElement("input");
-  // firstDayCalendar.name = 'firstDayCalendar'
-  // firstDayCalendar.value = $('.fc-day').first().data('date')
-  // form.appendChild(firstDayCalendar)
-  //
-  // var lastDayCalendar = document.createElement("input");
-  // lastDayCalendar.name = 'lastDayCalendar'
-  // lastDayCalendar.value = $('.fc-day').last().data('date')
-  // form.appendChild(lastDayCalendar)
-  //
-  // document.body.appendChild(form);
-  // form.submit();
+  $( "#formNewEvent" ).submit(function( e ) {
+    e.preventDefault();
+    checkNewTime();
+  });
+
+  function checkNewTime(){
+    var dayEvents = $('#calendar').fullCalendar( 'clientEvents', function(event){
+      debugger
+      return event
+        //or some way to compare that is the same day
+        //I recommend momentjs lib ex moment(event.start).isSame(date,'day')
+    });
+
+  }
 </script>
 {{/section}}
