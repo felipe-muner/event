@@ -53,8 +53,8 @@
       var currentMonth = curretFullDate.month() + 1
       var currentYear = curretFullDate.year()
       var idRoom = $("#roomID").val()
-      console.log(12321231123);
-      searchEvents()
+      $('#calendar').fullCalendar('removeEvents');
+      if('' !== idRoom) searchEvents()
     })
 
     $('#calendar').fullCalendar({
@@ -70,14 +70,12 @@
       eventColor: '#378006',
       eventBorderColor: '#f00',
       dayClick: function(date, jsEvent, view) {
-        console.log('click in day - ' + date.format('YYYY-MM-DD'));
         ( '' !== $("#roomID").val() ) ? showModalNewEvent() : alert('--click day without room. Please, select the Room.')
-
       },
       eventClick: function(calEvent, jsEvent, view) {
 
       },viewRender: function (view, element) {
-        if( '' !== $("#roomID").val() ) searchEvents(view)
+        if( '' !== $("#roomID").val() ) searchEvents()
       },eventRender: function(event, element) {
         element.find(".fc-event-title").remove();
         element.find(".fc-event-time").remove();
@@ -114,6 +112,7 @@
   }
 
   function showModalNewEvent(){
+    console.log($('#roomID').select2('data')[0].text)
     console.log($('#roomID').select2('data')[0].text)
     $('#modalNewEvent').modal('show')
   }
