@@ -38,17 +38,87 @@
         <input type="hidden" name="roomIDNewEvent" id="roomIDNewEvent">
         <div class="modal-body">
           <div class="container">
-            <div class="col-sm-1">
-              <label for="startTimeNewEvent">Start</label>
-              <input type="time" name="startTimeNewEvent" id="startTimeNewEvent" class="form-control" required>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Main information</div>
+                  <div class="panel-body">
+                    <div class="col-sm-1">
+                      <label for="startTimeNewEvent">Start</label>
+                      <input type="time" name="startTimeNewEvent" id="startTimeNewEvent" class="form-control" required>
+                    </div>
+                    <div class="col-sm-1">
+                      <label for="endTimeNewEvent">End</label>
+                      <input type="time" name="endTimeNewEvent" id="endTimeNewEvent" class="form-control" required>
+                    </div>
+                    <div class="col-sm-4">
+                      <label for="nameNewEvent"> </label>
+                      <input type="text" name="nameNewEvent" id="nameNewEvent" class="form-control" placeholder=" Event Name" required>
+                    </div>
+                    <div class="col-sm-2">
+                      <label for="responsibleNewEvent"> </label>
+                      <input type="text" name="responsibleNewEvent" id="responsibleNewEvent" class="form-control" placeholder=" Responsible by Event" required>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="col-sm-1">
-              <label for="endTimeNewEvent">End</label>
-              <input type="time" name="endTimeNewEvent" id="endTimeNewEvent" class="form-control" required>
-            </div>
-            <div class="col-sm-4">
-              <label for="nameNewEvent"> </label>
-              <input type="text" name="nameNewEvent" id="nameNewEvent" class="form-control" placeholder=" Event Name" required>
+            <div class="row" style="margin-top:5px;">
+              <div class="col-sm-6">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Participants</div>
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-sm-2">
+                        <input type="number" min="0" name="qtdPupilNewEvent" id="qtdPupilNewEvent" class="form-control nParticipant" placeholder=" Nº Pupil">
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="number" min="0" name="qtdParentNewEvent" id="qtdParentNewEvent" class="form-control nParticipant" placeholder=" Nº Parent">
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="number" min="0" name="qtdStaffNewEvent" id="qtdStaffNewEvent" class="form-control nParticipant" placeholder=" Nº Staff">
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="number" min="0" name="qtdVisitorNewEvent" id="qtdVisitorNewEvent" class="form-control nParticipant" placeholder=" Nº Visitor">
+                      </div>
+                      <div class="col-sm-4">
+                        <input type="text" min="0" name="qtdTotalParticipant" id="qtdTotalParticipant" class="form-control" placeholder=" Total" disabled style="text-align: right;">
+                      </div>
+                    </div>
+                    <div class="row" style="margin-top:5px;">
+                      <div class="col-sm-12">
+                        <div class="col-sm-8" style="padding-left:0px;padding-right:6px;">
+                          <input type="text" name="nameParticipantNewEvent" id="nameParticipantNewEvent" class="form-control" placeholder=" Insert names">
+                        </div>
+                        <div class="col-sm-4">
+                          <button type="button" name="button" class="btn btn-info btn-block" style="padding:1px;">Add</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Menu</div>
+                  <div class="panel-body">
+                    <div class="col-sm-8">
+                      <select id="listProduct" name="allProductActive" style="width:100%;height:10px !important;">
+                        <option value="">Select the product</option>
+                        {{#each allProductActive}}
+                          <option value="{{EventProductID}}">{{NameEnglish}} / {{NamePort}} - R${{Price}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+                    <div class="col-sm-2">
+                      <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control">
+                    </div>
+                    <div class="col-sm-2">
+                      <button type="button" name="button">Add</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -63,8 +133,22 @@
 {{#section 'script'}}
 <script type="text/javascript">
 
+  $('.nParticipant').keyup(function(e){
+    let sum = 0
+    $('.nParticipant').each(function(){
+      if('' !== $(this).val()) sum += parseInt($(this).val())
+    })
+    $('#qtdTotalParticipant').val('Total: ' + sum)
+  })
+
+  $('#nameParticipantNewEvent').keypress(function(e){
+    if ( e.which == 13 ) e.preventDefault()
+    alert('vou inserir')
+  });
+
   $(document).ready(function() {
-    $("#roomID").select2();
+    $("#roomID").select2()
+    $("#listProduct").select2()
 
     $("#roomID").change(function(e){
       var curretFullDate = $("#calendar").fullCalendar('getDate');
@@ -146,6 +230,7 @@
     $('#startTimeNewEvent').val('10:00')
     $('#endTimeNewEvent').val('11:00')
     $('#nameNewEvent').val('nome evento teste')
+    $('#responsibleNewEvent').val('nome evento teste')
   }
 
   $( "#formNewEvent" ).submit(function( e ) {
@@ -159,7 +244,8 @@
     let startEvent = moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
     let endEvent = moment($('#dateNewEvent').val() + 'T' + $('#endTimeNewEvent').val())
     var isBetween = $('#calendar').fullCalendar( 'clientEvents', function(event){
-      if(startEvent.isBetween(event.start, event.end, null, []) || endEvent.isBetween(event.start, event.end, null, [])){
+      if(startEvent.isBetween(event.start, event.end, null, [])
+      || endEvent.isBetween(event.start, event.end, null, [])){
         alert('Horário selecionado já está em uso na Room' + $('#roomID').select2('data')[0].text.split('-').pop())
         throw new Error('Time + Room already in use.')
       }

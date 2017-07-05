@@ -21,12 +21,30 @@ function MenuItem(){
                 'FROM '+
                   'EventProduct ep INNER JOIN EventProductUnit epu '+
                 'ON ep.Unit = epu.EventProductUnitID', function(err, result) {
-        // console.log(this.sql);
+        console.log(this.sql);
         con.release();
         if(err){
           res.render('error', { error: err } );
         }else{
           req.allProduct = result
+          next()
+        }
+      });
+    });
+  }
+  this.getAllProductActive = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('SELECT '+
+                  'ep.EventProductID, ep.NameEnglish, ep.NamePort, ep.Price, epu.NameEnglish as NameUnitEngl, epu.NamePort as NameUnitPort, ep.Active '+
+                'FROM '+
+                  'EventProduct ep INNER JOIN EventProductUnit epu '+
+                'ON ep.Unit = epu.EventProductUnitID AND ep.Active = 1', function(err, result) {
+        console.log(this.sql);
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          req.allProductActive = result
           next()
         }
       });
