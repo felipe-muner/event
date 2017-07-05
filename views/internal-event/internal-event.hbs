@@ -150,21 +150,34 @@
 
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault();
-    checkNewTimeDay();
+    checkEndAfterStart()
+    checkNewTimeDay()
+    nextFunction()
   });
 
   function checkNewTimeDay(){
-    let startEvent = moment($('#dateNewEvent').val() + 'T' +  $('#startTimeNewEvent').val())
-    let endEvent = moment($('#dateNewEvent').val() + 'T' +  $('#endTimeNewEvent').val())
+    let startEvent = moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
+    let endEvent = moment($('#dateNewEvent').val() + 'T' + $('#endTimeNewEvent').val())
+    var isBetween = $('#calendar').fullCalendar( 'clientEvents', function(event){
+      if(startEvent.isBetween(event.start, event.end, null, []) || endEvent.isBetween(event.start, event.end, null, [])){
+        alert('Horário selecionado já está em uso na Room' + $('#roomID').select2('data')[0].text.split('-').pop())
+        throw new Error('Time + Room already in use.')
+      }
+    })
+  }
 
-    var dayEvents = $('#calendar').fullCalendar( 'clientEvents', function(event){
-      // return moment(event.start).isSame($('#dateNewEvent').val(),'day')
-      //   && target.isBetween(start, finish, 'days', '[]')
-      //   && target.isBetween(start, finish, 'days', '[]')
-      return startEvent.isBetween(event.start, event.end, null, [])
-          || endEvent.isBetween(event.start, event.end, null, [])
-    });
-    console.log(dayEvents);
+  function checkEndAfterStart(){
+    let startEvent = moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
+    let endEvent = moment($('#dateNewEvent').val() + 'T' + $('#endTimeNewEvent').val())
+    debugger
+    if(startEvent > endEvent){
+      alert('Horário Final deve ser após horário inicial')
+      throw new Error('Time + Room already in use.')
+    }
+  }
+
+  function nextFunction(){
+    alert('passou')
   }
 </script>
 {{/section}}
