@@ -149,7 +149,7 @@
   }
 
   $( "#formNewEvent" ).submit(function( e ) {
-    e.preventDefault();
+    e.preventDefault()
     checkEndAfterStart()
     checkNewTimeDay()
     nextFunction()
@@ -169,8 +169,7 @@
   function checkEndAfterStart(){
     let startEvent = moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
     let endEvent = moment($('#dateNewEvent').val() + 'T' + $('#endTimeNewEvent').val())
-    debugger
-    if(startEvent > endEvent){
+    if(startEvent >= endEvent){
       alert('Horário Final deve ser após horário inicial')
       throw new Error('Time + Room already in use.')
     }
