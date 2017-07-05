@@ -154,8 +154,15 @@
   });
 
   function checkNewTimeDay(){
+    let startEvent = moment($('#dateNewEvent').val() + 'T' +  $('#startTimeNewEvent').val())
+    let endEvent = moment($('#dateNewEvent').val() + 'T' +  $('#endTimeNewEvent').val())
+
     var dayEvents = $('#calendar').fullCalendar( 'clientEvents', function(event){
-      return moment(event.start).isSame($('#dateNewEvent').val(),'day')
+      // return moment(event.start).isSame($('#dateNewEvent').val(),'day')
+      //   && target.isBetween(start, finish, 'days', '[]')
+      //   && target.isBetween(start, finish, 'days', '[]')
+      return startEvent.isBetween(event.start, event.end, null, [])
+          || endEvent.isBetween(event.start, event.end, null, [])
     });
     console.log(dayEvents);
   }

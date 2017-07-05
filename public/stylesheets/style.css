@@ -40,3 +40,6 @@ th{
 .table td{
   padding:4px !important;
 }
+div.modal-body, div.modal-header{
+  padding: 8px;
+}
