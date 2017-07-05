@@ -34,6 +34,8 @@
         <h5 class="modal-title">New Internal Event - <span id="dateTitle"></span> in <span id="roomTitle"></span></h5>
       </div>
       <form id="formNewEvent" action="index.html" method="post">
+        <input type="hidden" name="dateNewEvent" id="dateNewEvent">
+        <input type="hidden" name="roomIDNewEvent" id="roomIDNewEvent">
         <div class="modal-body">
           <div class="container">
             <div class="col-sm-1">
@@ -73,9 +75,7 @@
       if('' !== idRoom) searchEvents()
     })
 
-    setTimeout(function () {
-      $('#roomID').val('551').trigger('change');
-    }, 100);
+    setTimeout(function () { $('#roomID').val('551').trigger('change') }, 100);
 
     $('#calendar').fullCalendar({
       header: {
@@ -132,9 +132,12 @@
   function showModalNewEvent(date){
     $('#roomTitle').text($('#roomID').select2('data')[0].text)
     $('#dateTitle').text(moment(date).format('DD/MM/YYYY'))
+    $('#dateNewEvent').val(moment(date).format('YYYY-MM-DD'))
+    $('#roomIDNewEvent').val($("#roomID").val())
     $('#modalNewEvent').modal('show')
     populateToTest()
   }
+
   $('#modalNewEvent').on('shown.bs.modal', function () {
     $('#startTimeNewEvent').focus();
   })
@@ -147,17 +150,14 @@
 
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault();
-    checkNewTime();
+    checkNewTimeDay();
   });
 
-  function checkNewTime(){
+  function checkNewTimeDay(){
     var dayEvents = $('#calendar').fullCalendar( 'clientEvents', function(event){
-      debugger
-      return event
-        //or some way to compare that is the same day
-        //I recommend momentjs lib ex moment(event.start).isSame(date,'day')
+      return moment(event.start).isSame($('#dateNewEvent').val(),'day')
     });
-
+    console.log(dayEvents);
   }
 </script>
 {{/section}}
