@@ -4,9 +4,27 @@
   {{/each}}
 {{/section}}
 
+{{#section 'head'}}
+  <style media="screen">
+  .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--multiple {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    min-height: 25px;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #73879C;
+    padding-top: 0;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 25px;
+  }
+  </style>
+{{/section}}
+
 <div class="row">
   <div class="col-sm-6">
-    <select id="roomID" class="btn-block" name="getAllSiteBuildingRoom" >
+    <select id="roomID" name="getAllSiteBuildingRoom" style="width:100%;">
       <option value="">SELECT THE ROOM</option>
       {{#each getAllSiteBuildingRoom}}
         <option value="{{RoomID}}">{{unidade}} - {{NameBuilding}} - {{NameRoom}}</option>
@@ -15,7 +33,7 @@
   </div>
 </div>
 
-<div class="row" style="margin-top:5px;">
+<div class="row" style="margin-top:15px;">
   <div class="col-md-12">
     <div class="x_panel">
       <div class="x_content">
@@ -101,7 +119,7 @@
                   <div class="panel-heading">Menu</div>
                   <div class="panel-body">
                     <div class="col-sm-8">
-                      <select id="listProduct" name="allProductActive" style="width:100%;height:10px !important;">
+                      <select id="listProduct" name="allProductActive" style="width:100%;">
                         <option value="">Select the product</option>
                         {{#each allProductActive}}
                           <option value="{{EventProductID}}">{{NameEnglish}} / {{NamePort}} - R${{Price}}</option>
