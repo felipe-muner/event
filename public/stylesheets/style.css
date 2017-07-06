@@ -56,3 +56,10 @@ div.modal-body, div.modal-header, div.panel-body, div.panel-heading{
 .select2-container--default .select2-selection--single .select2-selection__arrow {
   height: 25px;
 }
+table.table th{
+  background-color: #2A3F54;
+  color:white;
+}
+.removePadding{
+  padding: 4px;
+}

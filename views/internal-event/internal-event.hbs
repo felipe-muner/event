@@ -76,10 +76,10 @@
                   <div class="panel-body">
                     <div class="row">
                       <div class="col-sm-2">
-                        <input type="number" min="0" name="qtdPupilNewEvent" id="qtdPupilNewEvent" class="form-control nParticipant" placeholder=" Nº Pupil">
+                        <input type="number" min="0" name="qtdParentNewEvent" id="qtdParentNewEvent" class="form-control nParticipant" placeholder=" Nº Parent" style="padding-right: 2px;">
                       </div>
                       <div class="col-sm-2">
-                        <input type="number" min="0" name="qtdParentNewEvent" id="qtdParentNewEvent" class="form-control nParticipant" placeholder=" Nº Parent">
+                        <input type="number" min="0" name="qtdPupilNewEvent" id="qtdPupilNewEvent" class="form-control nParticipant" placeholder=" Nº Pupil">
                       </div>
                       <div class="col-sm-2">
                         <input type="number" min="0" name="qtdStaffNewEvent" id="qtdStaffNewEvent" class="form-control nParticipant" placeholder=" Nº Staff">
@@ -92,12 +92,43 @@
                       </div>
                     </div>
                     <div class="row" style="margin-top:5px;">
-                        <div class="col-sm-8" style="">
-                          <input type="text" name="nameParticipantNewEvent" id="nameParticipantNewEvent" class="form-control" placeholder=" Insert names">
+                      <div class="col-sm-2">
+                        <select class="form-control" id="listTypeName">
+                          <option data-group-name="parent" value="Parent">Parent</option>
+                          <option data-group-name="pupil" value="Pupil">Pupil</option>
+                          <option data-group-name="staff" value="Staff">Staff</option>
+                          <option data-group-name="visitor" value="Visitor">Visitor</option>
+                        </select>
+                      </div>
+                        <div class="col-sm-10">
+                          <input type="text" name="nameParticipantNewEvent" id="nameParticipantNewEvent" class="form-control" placeholder=" Insert name and press enter">
                         </div>
-                        <div class="col-sm-4">
-                          <button type="button" name="button" class="btn btn-info btn-block" style="padding-top: 1px;padding-bottom: 1px;">Add</button>
+                    </div>
+                    <div class="col-sm-12" style="margin-top:10px;">
+                      <div class="row">
+                        <div class="col-sm-3 text-center">
+                          <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Parent <span id="sumparent" class="badge">0</span></button>
                         </div>
+                        <div class="col-sm-3 text-center">
+                          <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Pupil <span id="sumpupil" class="badge">0</span></button>
+                        </div>
+                        <div class="col-sm-3 text-center">
+                          <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Staff <span id="sumstaff" class="badge">0</span></button>
+                        </div>
+                        <div class="col-sm-3 text-center">
+                          <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Visitor <span id="sumvisitor" class="badge">0</span></button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-3 lineName" data-group-name="parent" style="padding-left:0px;">
+                        </div>
+                        <div class="col-sm-3 lineName" data-group-name="pupil" style="padding-left:0px;">
+                        </div>
+                        <div class="col-sm-3 lineName" data-group-name="staff" style="padding-left:0px;">
+                        </div>
+                        <div class="col-sm-3 lineName" data-group-name="visitor" style="padding-left:0px;">
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -137,6 +168,38 @@
 {{#section 'script'}}
 <script type="text/javascript">
 
+  function addNameListEvent(novo){
+    if ('' === document.getElementById(novo).value) return;
+    let newName = document.getElementById(novo).value
+    let groupPerson = $('#listTypeName').find(':selected').data('group-name')
+
+    if(17 < newName.length) newName = newName.substr(0,15) + '...'
+
+    $('.lineName[data-group-name="'+groupPerson+'"]').append(
+      '<div class="lineGuest new'+groupPerson+'" data-group-name="'+groupPerson+'">'
+        +'<div class="col-sm-10" style="white-space:nowrap;padding-left:0px;padding-right:0px;" title="'+document.getElementById(novo).value+'">'
+          + newName
+        +'</div>'
+        +'<div class="col-sm-2">'
+          +'<i onclick="removeName(this,`'+groupPerson+'`)" class="fa fa-times" aria-hidden="true"></i>'
+        +'</div>'
+      +'</div>'
+    )
+
+    $('#sum'+groupPerson).text($('.new'+groupPerson).size())
+
+    document.getElementById(novo).value = ''
+  }
+
+  function sumTotalListgroup(group){
+
+  }
+
+  function removeName(el,groupPerson){
+    $(el).parent().parent().remove()
+    $('#sum'+groupPerson).text($('.new'+groupPerson).size())
+  }
+
   $('.nParticipant').keyup(function(e){
     let sum = 0
     $('.nParticipant').each(function(){
@@ -146,8 +209,10 @@
   })
 
   $('#nameParticipantNewEvent').keypress(function(e){
-    if ( e.which == 13 ) e.preventDefault()
-    alert('vou inserir')
+    if ( e.which == 13 ){
+      e.preventDefault()
+      addNameListEvent(this.id)
+    }
   });
 
   $(document).ready(function() {
