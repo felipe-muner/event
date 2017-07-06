@@ -137,19 +137,35 @@
                 <div class="panel panel-primary">
                   <div class="panel-heading">Menu</div>
                   <div class="panel-body">
-                    <div class="col-sm-8">
-                      <select id="listProduct" name="allProductActive" style="width:100%;">
-                        <option value="">Select the product</option>
-                        {{#each allProductActive}}
-                          <option value="{{EventProductID}}">{{NameEnglish}} / {{NamePort}} - R${{Price}}</option>
-                        {{/each}}
-                      </select>
+                    <div class="row">
+                      <div class="col-sm-8">
+                        <select id="listProduct" name="allProductActive" style="width:100%;">
+                          <option value="">Select the product</option>
+                          {{#each allProductActive}}
+                            <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
+                          {{/each}}
+                        </select>
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control" style="height:27px;">
+                      </div>
+                      <div class="col-sm-2">
+                        <button type="button" class="btn-block" style="padding-bottom: 4px;padding-top: 4px;" name="button" onclick="addItemEvent();">Add</button>
+                      </div>
                     </div>
-                    <div class="col-sm-2">
-                      <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control">
-                    </div>
-                    <div class="col-sm-2">
-                      <button type="button" name="button">Add</button>
+                    <div class="row" style="margin-top:10px;">
+                      <div class="col-sm-12">
+                        <table class="table" id="tableItemEvent">
+                          <thead>
+                            <th style="width:5%;border-right: 1px solid white;">Remove</th>
+                            <th style="width:65%;border-right: 1px solid white;">Product</th>
+                            <th style="width:10%;border-right: 1px solid white;">Amount</th>
+                            <th style="width:20%;">Total (R$)</th>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -168,16 +184,51 @@
 {{#section 'script'}}
 <script type="text/javascript">
 
+  function addItemEvent(){
+    if ('' === document.getElementById('qtdProduct').value
+    ||  '' === $('#listProduct').find(":selected").val()) return;
+
+    $('.lineTotalGeral').remove()
+
+    let nomeProdIngl = $('#listProduct').find(":selected").data('name-english')
+    let nomeProdPort = $('#listProduct').find(":selected").data('name-port')
+    let unitIngl = $('#listProduct').find(":selected").data('name-unit-engl')
+    let unitPort = $('#listProduct').find(":selected").data('name-unit-port')
+    let priceProd = parseFloat($('#listProduct').find(":selected").data('price'))
+    let qtdProd = parseFloat($('#qtdProduct').val())
+
+    $('#tableItemEvent tbody').append(
+      '<tr>'
+        +'<td class="text-center"><i onclick="removeName(this)" class="fa fa-times" aria-hidden="true"></i></td>'
+        +'<td>'+ nomeProdIngl + '/' + nomeProdPort + '  |  ' + unitIngl + '/' + unitPort +'</td>'
+        +'<td class="text-right">'+ $('#qtdProduct').val() +'</td>'
+        +'<td class="text-right totalProduct">'+ (priceProd * qtdProd).toFixed(2) +'</td>'
+      +'</tr>'
+    )
+
+    let sum = 0;
+    $('.totalProduct').each(function(){
+      sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
+    });
+
+    $('#tableItemEvent tbody').append(
+      '<tr class="lineTotalGeral" style="border-top:1px solid red;">'
+        +'<td class="text-right" colspan="4">'+ sum.toFixed(2).replace('.',',') +'</td>'
+      +'</tr>'
+    )
+
+
+  }
+
   function addNameListEvent(novo){
     if ('' === document.getElementById(novo).value) return;
     let newName = document.getElementById(novo).value
+
     let groupPerson = $('#listTypeName').find(':selected').data('group-name')
-
     if(17 < newName.length) newName = newName.substr(0,15) + '...'
-
     $('.lineName[data-group-name="'+groupPerson+'"]').append(
       '<div class="lineGuest new'+groupPerson+'" data-group-name="'+groupPerson+'">'
-        +'<div class="col-sm-10" style="white-space:nowrap;padding-left:0px;padding-right:0px;" title="'+document.getElementById(novo).value+'">'
+        +'<div class="col-sm-10" style="white-space:nowrap;padding-left:0px;padding-right:0px;" data-toggle="tooltip" title="'+document.getElementById(novo).value+'">'
           + newName
         +'</div>'
         +'<div class="col-sm-2">'
@@ -185,14 +236,9 @@
         +'</div>'
       +'</div>'
     )
-
+    $('[data-toggle="tooltip"]').tooltip();
     $('#sum'+groupPerson).text($('.new'+groupPerson).size())
-
     document.getElementById(novo).value = ''
-  }
-
-  function sumTotalListgroup(group){
-
   }
 
   function removeName(el,groupPerson){
