@@ -139,7 +139,7 @@
                   <div class="panel-body">
                     <div class="row">
                       <div class="col-sm-8">
-                        <select id="listProduct" name="allProductActive" style="width:100%;">
+                        <select id="listProduct" name="allProductActive" style="width:100%;" multiple="multiple">
                           <option value="">Select the product</option>
                           {{#each allProductActive}}
                             <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
@@ -190,21 +190,23 @@
 
     $('.lineTotalGeral').remove()
 
-    let nomeProdIngl = $('#listProduct').find(":selected").data('name-english')
-    let nomeProdPort = $('#listProduct').find(":selected").data('name-port')
-    let unitIngl = $('#listProduct').find(":selected").data('name-unit-engl')
-    let unitPort = $('#listProduct').find(":selected").data('name-unit-port')
-    let priceProd = parseFloat($('#listProduct').find(":selected").data('price'))
-    let qtdProd = parseFloat($('#qtdProduct').val())
+    $("#listProduct").select2().find(":selected").each(function(){
+      let nomeProdIngl = $(this).data('name-english')
+      let nomeProdPort = $(this).data('name-port')
+      let unitIngl = $(this).data('name-unit-engl')
+      let unitPort = $(this).data('name-unit-port')
+      let priceProd = parseFloat($(this).data('price'))
+      let qtdProd = parseFloat($('#qtdProduct').val())
 
-    $('#tableItemEvent tbody').append(
-      '<tr>'
-        +'<td class="text-center"><i onclick="removeName(this)" class="fa fa-times" aria-hidden="true"></i></td>'
-        +'<td>'+ nomeProdIngl + '/' + nomeProdPort + '  |  ' + unitIngl + '/' + unitPort +'</td>'
-        +'<td class="text-right">'+ $('#qtdProduct').val() +'</td>'
-        +'<td class="text-right totalProduct">'+ (priceProd * qtdProd).toFixed(2) +'</td>'
-      +'</tr>'
-    )
+      $('#tableItemEvent tbody').append(
+        '<tr>'
+          +'<td class="text-center"><i onclick="removeItemEvent(this)" class="fa fa-times" aria-hidden="true"></i></td>'
+          +'<td>'+ nomeProdIngl + '/' + nomeProdPort + '  |  ' + unitIngl + '/' + unitPort +'</td>'
+          +'<td class="text-right">'+ $('#qtdProduct').val() +'</td>'
+          +'<td class="text-right totalProduct">'+ (priceProd * qtdProd).toFixed(2) +'</td>'
+        +'</tr>'
+      )
+    })
 
     let sum = 0;
     $('.totalProduct').each(function(){
@@ -216,8 +218,6 @@
         +'<td class="text-right" colspan="4">'+ sum.toFixed(2).replace('.',',') +'</td>'
       +'</tr>'
     )
-
-
   }
 
   function addNameListEvent(novo){
@@ -246,6 +246,15 @@
     $('#sum'+groupPerson).text($('.new'+groupPerson).size())
   }
 
+  function removeItemEvent(el){
+    $(el).parent().parent().remove()
+    let sum = 0;
+    $('.totalProduct').each(function(){
+      sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
+    });
+    $('.lineTotalGeral td').text(sum.toFixed(2).replace('.',','))
+  }
+
   $('.nParticipant').keyup(function(e){
     let sum = 0
     $('.nParticipant').each(function(){
@@ -264,6 +273,7 @@
   $(document).ready(function() {
     $("#roomID").select2()
     $("#listProduct").select2()
+
 
     $("#roomID").change(function(e){
       var curretFullDate = $("#calendar").fullCalendar('getDate');
