@@ -138,19 +138,16 @@
                   <div class="panel-heading">Menu</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-8">
+                      <div class="col-sm-10">
                         <select id="listProduct" name="allProductActive" style="width:100%;" multiple="multiple">
-                          <option value="">Select the product</option>
+                          <option value="" disabled>Select the product</option>
                           {{#each allProductActive}}
                             <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
                           {{/each}}
                         </select>
                       </div>
                       <div class="col-sm-2">
-                        <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control" style="height:27px;">
-                      </div>
-                      <div class="col-sm-2">
-                        <button type="button" class="btn-block" style="padding-bottom: 4px;padding-top: 4px;" name="button" onclick="addItemEvent();">Add</button>
+                        <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control" style="height:33px;">
                       </div>
                     </div>
                     <div class="row" style="margin-top:10px;">
@@ -191,6 +188,7 @@
     $('.lineTotalGeral').remove()
 
     $("#listProduct").select2().find(":selected").each(function(){
+      debugger
       let nomeProdIngl = $(this).data('name-english')
       let nomeProdPort = $(this).data('name-port')
       let unitIngl = $(this).data('name-unit-engl')
@@ -219,6 +217,14 @@
       +'</tr>'
     )
   }
+
+  $('#qtdProduct').keypress(function(e){
+    if ( e.which == 13 ){
+      e.preventDefault()
+      addItemEvent();
+    }
+  });
+
 
   function addNameListEvent(novo){
     if ('' === document.getElementById(novo).value) return;
