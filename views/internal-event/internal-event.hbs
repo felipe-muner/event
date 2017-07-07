@@ -143,7 +143,7 @@
                       <div class="col-sm-10">
                         <select id="listProduct" name="allProductActive" style="width:100%;" multiple="multiple">
                           {{#each allProductActive}}
-                            <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
+                            <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} data-event-product-id="{{EventProductID}}" value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
                           {{/each}}
                         </select>
                       </div>
@@ -153,7 +153,7 @@
                     </div>
                     <div class="row" style="margin-top:10px;">
                       <div class="col-sm-12">
-                        <table class="table" id="tableItemEvent">
+                        <table class="table" id="tableItemEvent" style="margin-bottom: 0px;">
                           <thead>
                             <th style="width:5%;border-right: 1px solid white;">Remove</th>
                             <th style="width:65%;border-right: 1px solid white;">Product</th>
@@ -189,6 +189,7 @@
     $('.lineTotalGeral').remove()
 
     $("#listProduct").select2().find(":selected").each(function(){
+      let eventProductID = $(this).data('event-product-id')
       let nomeProdIngl = $(this).data('name-english')
       let nomeProdPort = $(this).data('name-port')
       let unitIngl = $(this).data('name-unit-engl')
@@ -197,10 +198,12 @@
       let qtdProd = parseFloat($('#qtdProduct').val())
 
       $('#tableItemEvent tbody').append(
-        '<tr>'
+        '<tr data-product-id="'+eventProductID+'" data-price-prod="'+priceProd+'">'
           +'<td class="text-center"><i onclick="removeItemEvent(this)" class="fa fa-times" aria-hidden="true"></i></td>'
           +'<td>'+ nomeProdIngl + '/' + nomeProdPort + '  |  ' + unitIngl + '/' + unitPort +'</td>'
-          +'<td class="text-right">'+ $('#qtdProduct').val() +'</td>'
+          +'<td class="text-right">'
+            +'<input onkeyup="updateValueAmont(this);" type="number" min="1" value="'+ $('#qtdProduct').val() +'"'
+          +'</td>'
           +'<td class="text-right totalProduct">'+ (priceProd * qtdProd).toFixed(2) +'</td>'
         +'</tr>'
       )
@@ -224,6 +227,20 @@
       addItemEvent();
     }
   });
+
+  function updateValueAmont(el){
+    if($(el).val() === '') $(el).val(0)
+    let newValue = parseFloat($(el).val()) * parseFloat($(el).closest('tr').data('price-prod'))
+    $(el).closest('tr').find('.totalProduct').text(newValue)
+
+    let sum = 0;
+    $('.totalProduct').each(function(){
+      sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
+    });
+    debugger
+    $('.lineTotalGeral').find('td').text(sum.toFixed(2))
+
+  }
 
 
   function addNameListEvent(novo){
