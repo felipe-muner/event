@@ -13,7 +13,9 @@ const nodemailer = require('nodemailer');
 const mailSender = require(process.env.PWD + '/util/MailSender')
 
 var conn = require('./conn');
+var connPurchasing = require('./conn-purchasing');
 conn.init()
+connPurchasing.init()
 
 var index = require('./routes/index');
 var createInternalEvent = require('./routes/InternalEvent');

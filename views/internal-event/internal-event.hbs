@@ -68,7 +68,7 @@
                       <div class="col-sm-3">
                         <label for="responsibleNewEvent"></label>
                         <select id="responsibleNewEvent" name="responsibleNewEvent" style="width:100%;">
-                          <option value="">SELECT THE USER</option>
+                          <option value="">RESPONSIVE BY EVENT</option>
                           {{#each allActiveUser}}
                             <option value="{{idusuario}}">{{nomeusuario}}</option>
                           {{/each}}
@@ -160,7 +160,15 @@
                   <div class="panel-heading">Menu</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-10">
+                      <div class="col-sm-4">
+                        <select id="id_budget" name="id_budget" style="width:100%;">
+                          <option></option>
+                          <!-- {{#each allProductActive}}
+                            <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} data-event-product-id="{{EventProductID}}" value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
+                          {{/each}} -->
+                        </select>
+                      </div>
+                      <div class="col-sm-6">
                         <select id="listProduct" name="allProductActive" multiple style="width:100%;">
                           <option></option>
                           {{#each allProductActive}}

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const conn = require(process.env.PWD + '/conn');
+const connPurchasing = require(process.env.PWD + '/conn-purchasing');
 const Util = require(process.env.PWD + '/util/Util')
 const mailSender = require(process.env.PWD + '/util/MailSender')
 const ie = require(process.env.PWD + '/model/InternalEvent')
