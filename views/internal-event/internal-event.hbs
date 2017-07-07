@@ -6,7 +6,9 @@
 
 {{#section 'head'}}
   <style media="screen">
-
+    .select2-search__field{
+      width: 450px !important;
+    }
   </style>
 {{/section}}
 
@@ -140,7 +142,6 @@
                     <div class="row">
                       <div class="col-sm-10">
                         <select id="listProduct" name="allProductActive" style="width:100%;" multiple="multiple">
-                          <option value="" disabled>Select the product</option>
                           {{#each allProductActive}}
                             <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
                           {{/each}}
@@ -183,12 +184,11 @@
 
   function addItemEvent(){
     if ('' === document.getElementById('qtdProduct').value
-    ||  '' === $('#listProduct').find(":selected").val()) return;
+     || '' === $('#listProduct').find(":selected").val()) return;
 
     $('.lineTotalGeral').remove()
 
     $("#listProduct").select2().find(":selected").each(function(){
-      debugger
       let nomeProdIngl = $(this).data('name-english')
       let nomeProdPort = $(this).data('name-port')
       let unitIngl = $(this).data('name-unit-engl')
@@ -278,8 +278,7 @@
 
   $(document).ready(function() {
     $("#roomID").select2()
-    $("#listProduct").select2()
-
+    $("#listProduct").select2({placeholder:' Choose all products, press tab to insert amount then hit enter to save'})
 
     $("#roomID").change(function(e){
       var curretFullDate = $("#calendar").fullCalendar('getDate');
@@ -368,7 +367,7 @@
     e.preventDefault()
     checkEndAfterStart()
     checkNewTimeDay()
-    nextFunction()
+    passou()
   });
 
   function checkNewTimeDay(){
@@ -392,7 +391,7 @@
     }
   }
 
-  function nextFunction(){
+  function passou(){
     alert('passou')
   }
 </script>
