@@ -60,11 +60,11 @@
                       <input type="time" name="endTimeNewEvent" id="endTimeNewEvent" class="form-control" required>
                     </div>
                     <div class="col-sm-4">
-                      <label for="nameNewEvent"> </label>
+                      <label for="nameNewEvent"></label>
                       <input type="text" name="nameNewEvent" id="nameNewEvent" class="form-control" placeholder=" Event Name" required>
                     </div>
                     <div class="col-sm-2">
-                      <label for="responsibleNewEvent"> </label>
+                      <label for="responsibleNewEvent"></label>
                       <input type="text" name="responsibleNewEvent" id="responsibleNewEvent" class="form-control" placeholder=" Responsible by Event" required>
                     </div>
                   </div>
@@ -229,8 +229,8 @@
   });
 
   function updateValueAmont(el){
-    if($(el).val() === '') $(el).val(0)
     let newValue = parseFloat($(el).val()) * parseFloat($(el).closest('tr').data('price-prod'))
+    if($(el).val() === '') newValue = 0
     $(el).closest('tr').find('.totalProduct').text(newValue)
 
     let sum = 0;
