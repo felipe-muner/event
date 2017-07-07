@@ -6,9 +6,9 @@
 
 {{#section 'head'}}
   <style media="screen">
-    .select2-search__field{
+    /*.select2-search__field{
       width: 450px !important;
-    }
+    }*/
   </style>
 {{/section}}
 
@@ -51,21 +51,40 @@
                 <div class="panel panel-primary">
                   <div class="panel-heading">Main information</div>
                   <div class="panel-body">
-                    <div class="col-sm-1">
-                      <label for="startTimeNewEvent">Start</label>
-                      <input type="time" name="startTimeNewEvent" id="startTimeNewEvent" class="form-control" required>
+                    <div class="row">
+                      <div class="col-sm-1">
+                        <label for="startTimeNewEvent">Start</label>
+                        <input type="time" name="startTimeNewEvent" id="startTimeNewEvent" class="form-control" required>
+                      </div>
+                      <div class="col-sm-1">
+                        <label for="endTimeNewEvent">End</label>
+                        <input type="time" name="endTimeNewEvent" id="endTimeNewEvent" class="form-control" required>
+                      </div>
+                      <div class="col-sm-4">
+                        <label for="nameNewEvent"></label>
+                        <input type="text" name="nameNewEvent" id="nameNewEvent" class="form-control" placeholder=" Event Name" required>
+                      </div>
+                      <div class="col-sm-3">
+                        <label for="responsibleNewEvent"></label>
+                        <select id="responsibleNewEvent" name="responsibleNewEvent" style="width:100%;">
+                          <option value="">SELECT THE USER</option>
+                          {{#each allActiveUser}}
+                            <option value="{{idusuario}}">{{nomeusuario}}</option>
+                          {{/each}}
+                        </select>
+                      </div>
+                      <div class="col-sm-3">
+                        <label for="iddepartamento"></label>
+                        <select id="iddepartamento" name="iddepartamento" style="width:100%;">
+                          <option value="">SELECT THE DEPARTAMENT</option>
+                          {{#each allDepartament}}
+                            <option value="{{iddepartamento}}">{{nomedepartamento}}</option>
+                          {{/each}}
+                        </select>
+                      </div>
                     </div>
-                    <div class="col-sm-1">
-                      <label for="endTimeNewEvent">End</label>
-                      <input type="time" name="endTimeNewEvent" id="endTimeNewEvent" class="form-control" required>
-                    </div>
-                    <div class="col-sm-4">
-                      <label for="nameNewEvent"></label>
-                      <input type="text" name="nameNewEvent" id="nameNewEvent" class="form-control" placeholder=" Event Name" required>
-                    </div>
-                    <div class="col-sm-2">
-                      <label for="responsibleNewEvent"></label>
-                      <input type="text" name="responsibleNewEvent" id="responsibleNewEvent" class="form-control" placeholder=" Responsible by Event" required>
+                    <div class="row">
+
                     </div>
                   </div>
                 </div>
@@ -78,16 +97,16 @@
                   <div class="panel-body">
                     <div class="row">
                       <div class="col-sm-2">
-                        <input type="number" min="0" name="qtdParentNewEvent" id="qtdParentNewEvent" class="form-control nParticipant" placeholder=" Nº Parent" style="padding-right: 2px;">
+                        <input type="number" min="0" name="qtdParentNewEvent" id="qtdParentNewEvent" class="form-control nParticipant" placeholder=" Nº Parent" style="padding-right: 2px;" data-toggle="tooltip" title="Nº Parent">
                       </div>
                       <div class="col-sm-2">
-                        <input type="number" min="0" name="qtdPupilNewEvent" id="qtdPupilNewEvent" class="form-control nParticipant" placeholder=" Nº Pupil">
+                        <input type="number" min="0" name="qtdPupilNewEvent" id="qtdPupilNewEvent" class="form-control nParticipant" placeholder=" Nº Pupil" data-toggle="tooltip" title="Nº Pupil">
                       </div>
                       <div class="col-sm-2">
-                        <input type="number" min="0" name="qtdStaffNewEvent" id="qtdStaffNewEvent" class="form-control nParticipant" placeholder=" Nº Staff">
+                        <input type="number" min="0" name="qtdStaffNewEvent" id="qtdStaffNewEvent" class="form-control nParticipant" placeholder=" Nº Staff" data-toggle="tooltip" title="Nº Staff">
                       </div>
                       <div class="col-sm-2">
-                        <input type="number" min="0" name="qtdVisitorNewEvent" id="qtdVisitorNewEvent" class="form-control nParticipant" placeholder=" Nº Visitor">
+                        <input type="number" min="0" name="qtdVisitorNewEvent" id="qtdVisitorNewEvent" class="form-control nParticipant" placeholder=" Nº Visitor" data-toggle="tooltip" title="Nº Visitor">
                       </div>
                       <div class="col-sm-4">
                         <input type="text" min="0" name="qtdTotalParticipant" id="qtdTotalParticipant" class="form-control" placeholder=" Total" disabled style="text-align: right;">
@@ -148,7 +167,7 @@
                         </select>
                       </div>
                       <div class="col-sm-2">
-                        <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control" style="height:33px;">
+                        <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control" style="height:33px;" title="Insert amount and press enter" data-toggle="tooltip">
                       </div>
                     </div>
                     <div class="row" style="margin-top:10px;">
@@ -215,7 +234,7 @@
     });
 
     $('#tableItemEvent tbody').append(
-      '<tr class="lineTotalGeral" style="border-top:1px solid red;">'
+      '<tr class="lineTotalGeral">'
         +'<td class="text-right" colspan="4">'+ sum.toFixed(2).replace('.',',') +'</td>'
       +'</tr>'
     )
@@ -231,7 +250,7 @@
   function updateValueAmont(el){
     let newValue = parseFloat($(el).val()) * parseFloat($(el).closest('tr').data('price-prod'))
     if($(el).val() === '') newValue = 0
-    $(el).closest('tr').find('.totalProduct').text(newValue)
+    $(el).closest('tr').find('.totalProduct').text(newValue.toFixed(2))
 
     let sum = 0;
     $('.totalProduct').each(function(){
@@ -295,7 +314,10 @@
 
   $(document).ready(function() {
     $("#roomID").select2()
-    $("#listProduct").select2({placeholder:' Choose all products, press tab to insert amount then hit enter to save'})
+    $("#responsibleNewEvent").select2()
+    $("#iddepartamento").select2()
+    $("#listProduct").select2()
+    $('[data-toggle="tooltip"]').tooltip();
 
     $("#roomID").change(function(e){
       var curretFullDate = $("#calendar").fullCalendar('getDate');
@@ -377,7 +399,6 @@
     $('#startTimeNewEvent').val('10:00')
     $('#endTimeNewEvent').val('11:00')
     $('#nameNewEvent').val('nome evento teste')
-    $('#responsibleNewEvent').val('nome evento teste')
   }
 
   $( "#formNewEvent" ).submit(function( e ) {
