@@ -15,9 +15,9 @@ const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allActive, function(req, res, next) {
-  console.log(req.allDepartament);
-  console.log(req.allActiveUser);
-
+  // console.log(req.allDepartament);
+  // console.log(req.allActiveUser);
+  console.log('felipe entrei ------');
   res.render('internal-event/internal-event',{
     sess:req.session,
     getAllSiteBuildingRoom: req.getAllSiteBuildingRoom,
@@ -28,6 +28,12 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
 }).post('/search-events', ie.searchEventTwoDate, function(req, res, next) {
   console.log(req.allEvents);
   res.json(req.allEvents)
+}).post('/create-event', function(req, res, next) {
+  debugger
+  for(var abc in JSON.parse(req.body.products)){
+    console.log(JSON.parse(req.body.products)[abc])
+  }
+  res.json(req.body)
 })
 
 module.exports = router;
