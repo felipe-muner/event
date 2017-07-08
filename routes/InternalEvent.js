@@ -28,8 +28,8 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
 }).post('/search-events', ie.searchEventTwoDate, function(req, res, next) {
   console.log(req.allEvents);
   res.json(req.allEvents)
-}).post('/create-event', function(req, res, next) {
-  debugger
+}).post('/create-event', ie.createEvent, function(req, res, next) {
+  console.log(req.solution);
   for(var abc in JSON.parse(req.body.products)){
     console.log(JSON.parse(req.body.products)[abc])
   }

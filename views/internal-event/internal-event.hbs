@@ -426,16 +426,15 @@
 
     data.push({name: 'guests', value: serializeGuest()});
     data.push({name: 'products', value: JSON.stringify(serializeTableProduct())});
-    
+
     $.ajax({
       url: '/internal-event/create-event',
       type: 'POST',
       data,
       dataType:'json',
       success: function(data) {
-
-        $('#calendar').fullCalendar('removeEvents');
-        $('#calendar').fullCalendar('addEventSource', data)
+        alert('Gravado com Sucesso')
+        searchEvents()
       }
     })
   });

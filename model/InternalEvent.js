@@ -111,6 +111,35 @@ function InternalEvent(){
       });
     });
   }
+  this.createEvent = function(req, res, next){
+
+    let StartEvent = moment(req.body.dateNewEvent + 'T' + req.body.startTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
+    let EndEvent = moment(req.body.dateNewEvent + 'T' + req.body.endTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
+    // console.log(StartEvent.format('YYYY-MM-DD HH:mm:ss'));
+    // console.log(EndEvent);
+
+    let event = {
+      Type:'I',
+      StartEvent,
+      EndEvent,
+      Name: req.body.nameNewEvent,
+      Room_ID: req.body.roomIDNewEvent
+    }
+    // for(var propName in EndEvent) console.log(propName + ' ------- Valor:' +  EndEvent[propName])
+    // moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
+    conn.acquire(function(err,con){
+      con.query('INSERT INTO Event SET ?', [event], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          console.log(this.sql);
+          req.solution = result
+          next()
+        }
+      });
+    });
+  }
 }
 
 module.exports = new InternalEvent()
