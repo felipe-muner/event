@@ -281,7 +281,7 @@
     let groupPerson = $('#listTypeName').find(':selected').data('group-name')
     if(17 < newName.length) newName = newName.substr(0,15) + '...'
     $('.lineName[data-group-name="'+groupPerson+'"]').append(
-      '<div class="lineGuest new'+groupPerson+'" data-group-name="'+groupPerson+'">'
+      '<div class="lineGuest new'+groupPerson+'" data-group-name="'+groupPerson+'" data-yourname="'+document.getElementById(novo).value+'">'
         +'<div class="col-sm-10" style="white-space:nowrap;padding-left:0px;padding-right:0px;" data-toggle="tooltip" title="'+document.getElementById(novo).value+'">'
           + newName
         +'</div>'
@@ -425,8 +425,8 @@
 
     let data = $('#formNewEvent').serializeArray()
 
-    data.push({name: 'guests', value: serializeGuest()});
-    data.push({name: 'products', value: JSON.stringify(serializeTableProduct())});
+    data.push({name: 'guests', value: serializeGuest()})
+    data.push({name: 'products', value: JSON.stringify(serializeTableProduct())})
 
     $.ajax({
       url: '/internal-event/create-event',
@@ -449,7 +449,15 @@
   }
 
   function serializeGuest(){
-    return 'guest still with nothing'
+    let arrayGuest = []
+    $('.lineGuest').each(function(e){
+      arrayGuest.push({
+        type: $(this).data('group-name'),
+        name:$(this).data('yourname')
+      })
+    })
+    console.log(arrayGuest);
+    return arrayGuest
   }
 
   function checkNewTimeDay(){

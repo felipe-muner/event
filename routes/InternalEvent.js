@@ -29,7 +29,7 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
   console.log(req.allEvents);
   res.json(req.allEvents)
 }).post('/create-event', ie.createEvent, function(req, res, next) {
-  console.log(req.solution);
+  console.log(req.resultCreated);
   for(var abc in JSON.parse(req.body.products)){
     console.log(JSON.parse(req.body.products)[abc])
   }

@@ -132,7 +132,7 @@ function InternalEvent(){
           res.render('error', { error: err } );
         }else{
           console.log(this.sql);
-          req.solution = result
+          req.resultCreated = result
           next()
         }
       });
