@@ -115,8 +115,6 @@ function InternalEvent(){
 
     let StartEvent = moment(req.body.dateNewEvent + 'T' + req.body.startTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
     let EndEvent = moment(req.body.dateNewEvent + 'T' + req.body.endTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
-    // console.log(StartEvent.format('YYYY-MM-DD HH:mm:ss'));
-    // console.log(EndEvent);
 
     let event = {
       Type:'I',

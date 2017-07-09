@@ -1,6 +1,6 @@
 const conn = require(process.env.PWD + '/conn');
 
-function ConnOldDataBase(){
+function OldDataBase(){
   this.findBudgetUser = function(req, res, next){
     conn.acquire(function(err,con){
       con.query('SELECT
@@ -24,4 +24,4 @@ function ConnOldDataBase(){
   }
 }
 
-module.exports = new ConnOldDataBase()
+module.exports = new OldDataBase()
