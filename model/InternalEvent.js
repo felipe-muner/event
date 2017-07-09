@@ -113,6 +113,8 @@ function InternalEvent(){
   }
   this.createEvent = function(req, res, next){
 
+    console.log(JSON.stringify(JSON.parse(req.body.guests),null,2));
+
     let StartEvent = moment(req.body.dateNewEvent + 'T' + req.body.startTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
     let EndEvent = moment(req.body.dateNewEvent + 'T' + req.body.endTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
 

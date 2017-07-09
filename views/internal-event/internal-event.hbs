@@ -425,7 +425,7 @@
 
     let data = $('#formNewEvent').serializeArray()
 
-    data.push({name: 'guests', value: serializeGuest()})
+    data.push({name: 'guests', value: JSON.stringify(serializeGuest())})
     data.push({name: 'products', value: JSON.stringify(serializeTableProduct())})
 
     $.ajax({
