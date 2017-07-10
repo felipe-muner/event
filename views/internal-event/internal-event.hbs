@@ -203,7 +203,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <input type="submit" value="Create" class="btn btn-success">
+          <input type="submit" value="Create" class="btn btn-success" id="submitFormNewEvent">
         </div>
       </form>
     </div>
@@ -356,7 +356,7 @@
       displayEventEnd: true,
       allDaySlot:false,
       dayClick: function(date, jsEvent, view) {
-        ( '' !== $("#roomID").val() ) ? showModalNewEvent(date) : alert('--click day without room. Please, select the Room.')
+        ( '' !== $("#roomID").val() ) ? showModalNewEvent(date) : swal("Select the room!", "First, select the room!", "info")
       },
       eventClick: function(calEvent, jsEvent, view) {
 
@@ -434,8 +434,10 @@
       data,
       dataType:'json',
       success: function(data) {
-        alert('Gravado com Sucesso')
+        $('#submitFormNewEvent').prop("disabled",false);
+        $('#submitFormNewEvent').prop("value",'Create');
         searchEvents()
+        swal("Saved successfully", "", "success")
       }
     })
   });
@@ -466,7 +468,8 @@
     var isBetween = $('#calendar').fullCalendar( 'clientEvents', function(event){
       if(startEvent.isBetween(event.start, event.end, null, [])
       || endEvent.isBetween(event.start, event.end, null, [])){
-        alert('Horário selecionado já está em uso na Room' + $('#roomID').select2('data')[0].text.split('-').pop())
+        // alert('Horário selecionado já está em uso na Room' + $('#roomID').select2('data')[0].text.split('-').pop())
+        swal("Time already selected", "In " + $('#roomID').select2('data')[0].text.split('-').pop(), "error")
         throw new Error('Time + Room already in use.')
       }
     })
@@ -476,13 +479,17 @@
     let startEvent = moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
     let endEvent = moment($('#dateNewEvent').val() + 'T' + $('#endTimeNewEvent').val())
     if(startEvent >= endEvent){
-      alert('Horário Final deve ser após horário inicial')
+
+      swal("End time must be later than initial", "", "error")
+      // alert('Horário Final deve ser após horário inicial')
       throw new Error('Time + Room already in use.')
     }
   }
 
   function passou(){
-    alert('passou')
+    $('#submitFormNewEvent').prop("disabled",true);
+    $('#submitFormNewEvent').prop("value",'...creating');
+    // alert('passou')
   }
 </script>
 {{/section}}
