@@ -43,19 +43,19 @@ function InternalEvent(){
     });
   }
 
-  this.searchEvents = function(req, res, next){
-    conn.acquire(function(err,con){
-      con.query('SELECT EventID, Name, StartingDate, StartingTime, EndTime FROM Event WHERE YEAR(StartingDate) = ? AND MONTH(StartingDate) = ?', [req.body.currentYear, req.body.currentMonth],function(err, result) {
-        con.release();
-        if(err){
-          res.render('error', { error: err } );
-        }else{
-          req.allEvents = result
-          next()
-        }
-      });
-    });
-  }
+  // this.searchEvents = function(req, res, next){
+  //   conn.acquire(function(err,con){
+  //     con.query('SELECT EventID, Name, StartingDate, StartingTime, EndTime FROM Event WHERE YEAR(StartingDate) = ? AND MONTH(StartingDate) = ?', [req.body.currentYear, req.body.currentMonth],function(err, result) {
+  //       con.release();
+  //       if(err){
+  //         res.render('error', { error: err } );
+  //       }else{
+  //         req.allEvents = result
+  //         next()
+  //       }
+  //     });
+  //   });
+  // }
 
   this.searchEventTwoDate = function(req, res, next){
     conn.acquire(function(err,con){
@@ -124,7 +124,7 @@ function InternalEvent(){
 
   this.createEvent = function(req, res, next){
 
-    console.log(JSON.stringify(JSON.parse(req.body.guests),null,2));
+    console.log(req.body);
 
     let StartEvent = moment(req.body.dateNewEvent + 'T' + req.body.startTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
     let EndEvent = moment(req.body.dateNewEvent + 'T' + req.body.endTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')

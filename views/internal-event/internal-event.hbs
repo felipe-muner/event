@@ -369,9 +369,9 @@
         event.id = event.EventID
         var tooltip = '<div class="text-left">Nome do Evento: XXXX teste' + '<br />'
                       + '<span style="color:yellow;">Date: XXXX teste</span>' + '<br />'
-                      + 'Start Time: 10:00' + '<br />'
-                      + 'End Time: 12:00' + '<br />'
-                      + 'EventID: ' + event.EventID + '<br />'
+                      + 'Start Time: ' + event.start.format('HH:mm') + '<br />'
+                      + 'End Time: ' + event.end.format('HH:mm') + '<br />'
+                      + 'EventID: ' + event.EventCode + '<br />'
                       + 'Nome do Evento: XXXX teste</div>'
         $(element).attr("data-original-title", tooltip)
         $(element).tooltip({ container: "body",html:'true'})
