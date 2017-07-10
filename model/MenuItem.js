@@ -111,7 +111,7 @@ function MenuItem(){
     });
   }
   this.bulkItemEvent = function(req, res, next){
-    if(JSON.parse(req.body.guests).length === 0){
+    if(JSON.parse(req.body.products).length === 0){
        next()
     }else {
       let bulkQuery = JSON.parse(req.body.products).map(function(e){

@@ -29,12 +29,14 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
 }).post('/search-events', ie.searchEventTwoDate, function(req, res, next) {
   console.log(req.allEvents);
   res.json(req.allEvents)
-}).post('/create-event', ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, function(req, res, next) {
+}).post('/create-event',ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, function(req, res, next) {
   console.log(req.resultCreated);
   for(var abc in JSON.parse(req.body.products)){
     console.log(JSON.parse(req.body.products)[abc])
   }
   res.json(req.body)
+}).get('/teste-muner', ie.getLastEvent, function(req, res, next) {
+  res.json(req.nextEventCode)
 })
 
 module.exports = router;

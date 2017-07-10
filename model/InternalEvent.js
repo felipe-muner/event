@@ -60,7 +60,7 @@ function InternalEvent(){
   this.searchEventTwoDate = function(req, res, next){
     conn.acquire(function(err,con){
       console.log(req.body);
-      con.query('SELECT EventID, Name as title, StartEvent as start, EndEvent as end FROM Event '+
+      con.query('SELECT EventID, EventCode, Name as title, StartEvent as start, EndEvent as end FROM Event '+
       'WHERE Date(StartEvent) >= ? AND Date(StartEvent) < ? AND '+
       'Room_ID = ?', [req.body.firstDay, req.body.lastDay, req.body.roomID],function(err, result) {
         con.release();
@@ -111,6 +111,23 @@ function InternalEvent(){
       });
     });
   }
+
+  this.getLastEvent = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('SELECT EventID, EventCode FROM event WHERE YEAR(CreatedAt) = YEAR(CURDATE()) order by eventId desc limit 1',function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          let eventCode = '';
+          (result.length === 0) ? eventCode = parseInt(new Date().getFullYear() + '0001') : eventCode = result[0].EventCode + 1
+          req.nextEventCode = eventCode
+          next()
+        }
+      });
+    });
+  }
+
   this.createEvent = function(req, res, next){
 
     console.log(JSON.stringify(JSON.parse(req.body.guests),null,2));
@@ -120,6 +137,7 @@ function InternalEvent(){
 
     let event = {
       Type:'I',
+      EventCode:req.nextEventCode,
       StartEvent,
       EndEvent,
       Name: req.body.nameNewEvent,
