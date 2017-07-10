@@ -7,6 +7,7 @@ const mailSender = require(process.env.PWD + '/util/MailSender')
 const ie = require(process.env.PWD + '/model/InternalEvent')
 const mi = require(process.env.PWD + '/model/MenuItem')
 const d = require(process.env.PWD + '/model/Departament')
+const g = require(process.env.PWD + '/model/Guest')
 const u = require(process.env.PWD + '/model/User')
 const fs = require('fs');
 const moment = require('moment');
@@ -28,7 +29,7 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
 }).post('/search-events', ie.searchEventTwoDate, function(req, res, next) {
   console.log(req.allEvents);
   res.json(req.allEvents)
-}).post('/create-event', ie.createEvent, function(req, res, next) {
+}).post('/create-event', ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, function(req, res, next) {
   console.log(req.resultCreated);
   for(var abc in JSON.parse(req.body.products)){
     console.log(JSON.parse(req.body.products)[abc])
