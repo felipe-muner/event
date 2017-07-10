@@ -111,7 +111,7 @@ function MenuItem(){
     });
   }
   this.bulkItemEvent = function(req, res, next){
-    console.log(JSON.parse(req.body.products))
+        
     let bulkQuery = JSON.parse(req.body.products).map(function(e){
       let item = []
       new Array().push.call(item, req.resultCreated.insertId, e.productId, e.priceProd, e.qtd)
