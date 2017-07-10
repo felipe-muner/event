@@ -116,7 +116,7 @@ function MenuItem(){
     }else {
       let bulkQuery = JSON.parse(req.body.products).map(function(e){
         let item = []
-        new Array().push.call(item, req.resultCreated.insertId, e.productId, e.priceProd, e.qtd)
+        new Array().push.call(item, req.nextEventCode, e.productId, e.priceProd, e.qtd)
         return item
       })
       conn.acquire(function(err,con){

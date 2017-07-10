@@ -7,7 +7,7 @@ function Guest(){
     }else {
       let bulkQuery = JSON.parse(req.body.guests).map(function(e){
         let item = []
-        new Array().push.call(item, req.resultCreated.insertId, e.type, e.name)
+        new Array().push.call(item, req.nextEventCode, e.type, e.name)
         return item
       })
       conn.acquire(function(err,con){

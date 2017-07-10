@@ -67,13 +67,7 @@ function InternalEvent(){
         if(err){
           res.render('error', { error: err } );
         }else{
-          // console.log('qwe');
           console.log(this.sql);
-          // result = result.map(function(e){
-          //   e.start = moment(e.StartingDate).format('YYYY-MM-DD')
-          //   return e
-          // })
-          // console.log(result);
           req.allEvents = result
           next()
         }
