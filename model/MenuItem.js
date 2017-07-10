@@ -111,25 +111,27 @@ function MenuItem(){
     });
   }
   this.bulkItemEvent = function(req, res, next){
-        
-    let bulkQuery = JSON.parse(req.body.products).map(function(e){
-      let item = []
-      new Array().push.call(item, req.resultCreated.insertId, e.productId, e.priceProd, e.qtd)
-      return item
-    })
-
-    conn.acquire(function(err,con){
-      con.query('INSERT INTO EventItem(Event_ID, EventProduct_ID, Price, Amount) VALUES ?', [bulkQuery], function(err, result) {
-        con.release();
-        if(err){
-          res.render('error', { error: err } );
-        }else{
-          console.log('gravei os produtos no evento');
-          console.log(result);
-          next()
-        }
+    if(JSON.parse(req.body.guests).length === 0){
+       next()
+    }else {
+      let bulkQuery = JSON.parse(req.body.products).map(function(e){
+        let item = []
+        new Array().push.call(item, req.resultCreated.insertId, e.productId, e.priceProd, e.qtd)
+        return item
+      })
+      conn.acquire(function(err,con){
+        con.query('INSERT INTO EventItem(Event_ID, EventProduct_ID, Price, Amount) VALUES ?', [bulkQuery], function(err, result) {
+          con.release();
+          if(err){
+            res.render('error', { error: err } );
+          }else{
+            console.log('gravei os produtos no evento');
+            console.log(result);
+            next()
+          }
+        });
       });
-    });
+    }
   }
 }
 
