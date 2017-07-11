@@ -1,3 +1,10 @@
+{{#section 'functionality'}}
+  {{#each sess.functionalityProfile}}
+    <li><a href="{{Action}}"><i class="fa {{Icon}}"></i> {{Name}} </a></li>
+  {{/each}}
+{{/section}}
+
+
 <h1>{{message}}</h1>
 <h2>{{error.status}}</h2>
 <pre>{{error.stack}}</pre>
