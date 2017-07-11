@@ -84,56 +84,68 @@
                         </select>
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Equipaments</div>
+                  <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-3">
-                        <div class="col-sm-7" style="padding:0px;">
-                          Need Computer/Notebook ?
-                        </div>
-                        <div class="col-sm-5">
-                           <input type="radio" name="needcomputer" value=""> Yes <input type="radio" name="needcomputer" value=""> No
-                        </div>
+                      <div class="col-sm-8">
+                        Need Computer/Notebook ?
+                      </div>
+                      <div class="col-sm-4 text-right">
+                         <input type="radio" name="needcomputer" value=""> No <input style="margin-left: 5px;" type="radio" name="needcomputer" value=""> Yes
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <div class="col-sm-7" style="padding:0px;">
-                          Need Datashow ?
-                        </div>
-                        <div class="col-sm-5">
-                           <input type="radio" name="needprojetor" value=""> Yes <input type="radio" name="needprojetor" value=""> No
-                        </div>
+                    <div class="row" style="margin-top:7px;">
+                      <div class="col-sm-7">
+                        Need DataShow ?
+                      </div>
+                      <div class="col-sm-5 text-right">
+                         <input type="radio" name="needprojetor" value=""> No <input style="margin-left: 5px;" type="radio" name="needprojetor" value=""> Yes
                       </div>
                     </div>
-                    <div class="col-sm-6">
-                      <div class="col-sm-3">
-                        Video Conference ?
+                    <div class="row" style="margin-top:7px;">
+                      <div class="col-sm-5">
+                        Video Conference
                       </div>
-                      <div class="col-sm-3">
-                        From:
-                        <select class="" name="">
-                          <option value=""></option>
-                          <option value="1">Botafogo</option>
-                          <option value="2">Urca</option>
-                          <option value="3">Barra</option>
-                          <option value="*">Todas</option>
-                        </select>
-                      </div>
-                      <div class="col-sm-3">
-                        To:
-                        <select class="" name="">
-                          <option value=""></option>
-                          <option value="1">Botafogo</option>
-                          <option value="2">Urca</option>
-                          <option value="3">Barra</option>
-                          <option value="*">Todas</option>
-                        </select>
+                      <div class="col-sm-7 text-right">
+
+                          From:
+                          <select class="" name="">
+                            <option value=""></option>
+                            <option value="1">Botafogo</option>
+                            <option value="2">Urca</option>
+                            <option value="3">Barra</option>
+                            <option value="*">Todas</option>
+                          </select>
+                          To:
+                          <select class="" name="">
+                            <option value=""></option>
+                            <option value="1">Botafogo</option>
+                            <option value="2">Urca</option>
+                            <option value="3">Barra</option>
+                            <option value="*">Todas</option>
+                          </select>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div class="col-sm-8">
+                <div class="panel panel-primary">
+                  <div class="panel-heading">Equipaments</div>
+                  <div class="panel-body">
+                    <textarea name="additionalInformation" rows="3" class="form-control btn-block"></textarea>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="row" style="margin-top:5px;">
+            <div class="row">
               <div class="col-sm-6">
                 <div class="panel panel-primary">
                   <div class="panel-heading">Participants</div>
@@ -416,7 +428,7 @@
                       + 'EventID: ' + event.EventCode + '<br />'
                       + 'Nome do Evento: XXXX teste</div>'
         $(element).attr("data-original-title", tooltip)
-        $(element).tooltip({ container: "body",html:'true'})
+        $(element).tooltip({container: "body",html:'true'})
       }
     })
    });

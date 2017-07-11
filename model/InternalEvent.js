@@ -110,8 +110,8 @@ function InternalEvent(){
     console.log(req.body);
     conn.acquire(function(err,con){
       con.query('SELECT EventID, EventCode FROM event WHERE YEAR(StartEvent) = YEAR(?) order by eventId desc limit 1', [req.body.dateNewEvent], function(err, result) {
-        console.log('______________________________');
-        console.log(this.sql);
+        // console.log('______________________________');
+        // console.log(this.sql);
         con.release();
         if(err){
           console.log(err);
