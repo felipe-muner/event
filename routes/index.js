@@ -235,6 +235,7 @@ router.post('/email-forget-password', function(req, res, next) {
 
 router.get('/panel', function(req, res, next) {
   console.log('entrei panel');
+  console.log('Matricula: ' + req.session.matricula);
   console.log('Nome Usuario: ' + req.session.nomeusuario);
   console.log('Perfil: ' + req.session.profile);
   console.log('Unidade: ' + req.session.idunidade);

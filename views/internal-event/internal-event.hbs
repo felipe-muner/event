@@ -70,7 +70,7 @@
                         <select id="responsibleNewEvent" name="responsibleNewEvent" style="width:100%;">
                           <option value="">RESPONSIVE BY EVENT</option>
                           {{#each allActiveUser}}
-                            <option value="{{idusuario}}">{{pad matricula 4 0}} - {{toTitleCase nomeusuario}}</option>
+                            <option value="{{matricula}}">{{pad matricula 4 0}} - {{toTitleCase nomeusuario}}</option>
                           {{/each}}
                         </select>
                       </div>
@@ -119,17 +119,17 @@
                           <label for="videoFrom">From:</label>
                           <select class="" name="videoFrom" id="videoFrom">
                             <option value=""></option>
-                            <option value="1">Botafogo</option>
-                            <option value="2">Urca</option>
-                            <option value="3">Barra</option>
+                            <option value="Botafogo">Botafogo</option>
+                            <option value="Urca">Urca</option>
+                            <option value="Barra">Barra</option>
                           </select>
                           <label for="videoTo">To:</label>
                           <select class="" name="videoTo" id="videoTo">
                             <option value=""></option>
-                            <option value="1">Botafogo</option>
-                            <option value="2">Urca</option>
-                            <option value="3">Barra</option>
-                            <option value="all">Todas</option>
+                            <option value="Botafogo">Botafogo</option>
+                            <option value="Urca">Urca</option>
+                            <option value="Barra">Barra</option>
+                            <option value="all">All</option>
                           </select>
                       </div>
                     </div>
@@ -424,7 +424,7 @@
         ( '' !== $("#roomID").val() ) ? showModalNewEvent(date) : swal("Select the room!", "First, select the room!", "info")
       },
       eventClick: function(calEvent, jsEvent, view) {
-
+        alert(calEvent)
       },viewRender: function (view, element) {
         if( '' !== $("#roomID").val() ) searchEvents()
       },eventRender: function(event, element) {

@@ -127,8 +127,8 @@ function InternalEvent(){
   }
 
   this.createEvent = function(req, res, next){
-
-    // console.log(req.body);
+    console.log('vou criar');
+    console.log(req.session);
 
     let StartEvent = moment(req.body.dateNewEvent + 'T' + req.body.startTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
     let EndEvent = moment(req.body.dateNewEvent + 'T' + req.body.endTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
@@ -138,18 +138,32 @@ function InternalEvent(){
       EventCode:req.nextEventCode,
       StartEvent,
       EndEvent,
+      Room_ID: req.body.roomIDNewEvent,
       Name: req.body.nameNewEvent,
-      Room_ID: req.body.roomIDNewEvent
+      NeedComputer: req.body.needcomputer || null,
+      NeedDataShow: req.body.needDataShow || null,
+      VideoFrom: req.body.videoFrom || null,
+      VideoTo: req.body.videoTo || null,
+      AdditionalInformation: req.body.additionalInformation || null,
+      Nparent: parseInt(req.body.qtdParentNewEvent) || null,
+      Npupil: parseInt(req.body.qtdPupilNewEvent) || null,
+      Nstaff: parseInt(req.body.qtdStaffNewEvent) || null,
+      Nvisitor: parseInt(req.body.qtdVisitorNewEvent) || null,
+      Budget_ID: parseInt(req.body.id_budget) || null,
+      CreateBy: req.session.matricula,
+      ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || null,
     }
     // for(var propName in EndEvent) console.log(propName + ' ------- Valor:' +  EndEvent[propName])
     // moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
     conn.acquire(function(err,con){
       con.query('INSERT INTO Event SET ?', [event], function(err, result) {
+        console.log(this.sql);
         con.release();
         if(err){
+          console.log(err);
           res.render('error', { error: err } );
         }else{
-          // console.log(this.sql);
+          console.log(this.sql);
           req.resultCreated = result
           next()
         }
