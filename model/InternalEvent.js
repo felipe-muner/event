@@ -107,14 +107,18 @@ function InternalEvent(){
   }
 
   this.getLastEvent = function(req, res, next){
+    console.log(req.body);
     conn.acquire(function(err,con){
-      con.query('SELECT EventID, EventCode FROM event WHERE YEAR(CreatedAt) = YEAR(CURDATE()) order by eventId desc limit 1',function(err, result) {
+      con.query('SELECT EventID, EventCode FROM event WHERE YEAR(StartEvent) = YEAR(?) order by eventId desc limit 1', [req.body.dateNewEvent], function(err, result) {
+        console.log('______________________________');
+        console.log(this.sql);
         con.release();
         if(err){
+          console.log(err);
           res.render('error', { error: err } );
         }else{
           let eventCode = '';
-          (result.length === 0) ? eventCode = parseInt(new Date().getFullYear() + '0001') : eventCode = result[0].EventCode + 1
+          (result.length === 0) ? eventCode = parseInt(moment(req.body.dateNewEvent).year() + '0001') : eventCode = result[0].EventCode + 1
           req.nextEventCode = eventCode
           next()
         }
