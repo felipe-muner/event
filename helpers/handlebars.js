@@ -31,6 +31,7 @@ function hbsHelpers(hbs) {
         return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
       },
       toTitleCase: function(str) {
+        str = str || ''
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
       },
       addDecimalCases: function(num) {
