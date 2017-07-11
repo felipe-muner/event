@@ -114,22 +114,20 @@
                         Video Conference
                       </div>
                       <div class="col-sm-7 text-right">
-
-                          From:
-                          <select class="" name="">
+                          <span>From:</span>
+                          <select class="" name="videoFrom" id="videoFrom">
                             <option value=""></option>
                             <option value="1">Botafogo</option>
                             <option value="2">Urca</option>
                             <option value="3">Barra</option>
-                            <option value="*">Todas</option>
                           </select>
-                          To:
-                          <select class="" name="">
+                          <span>To:</span>
+                          <select class="" name="videoTo" id="videoTo">
                             <option value=""></option>
                             <option value="1">Botafogo</option>
                             <option value="2">Urca</option>
                             <option value="3">Barra</option>
-                            <option value="*">Todas</option>
+                            <option value="all">Todas</option>
                           </select>
                       </div>
                     </div>
@@ -266,6 +264,15 @@
 
 {{#section 'script'}}
 <script type="text/javascript">
+
+  $('#videoFrom').change(function(e){
+    $('#videoTo option').attr('disabled',false)
+    document.getElementById('videoTo')
+      .options[this.options.selectedIndex]
+      .setAttribute('disabled',true)
+    $('#videoTo').val('')
+  })
+
 
   function addItemEvent(){
     if ('' === document.getElementById('qtdProduct').value
