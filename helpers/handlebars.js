@@ -30,8 +30,11 @@ function hbsHelpers(hbs) {
         n = n + '';
         return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
       },
-      toTitleCase: function(n, width, z) {
+      toTitleCase: function(str) {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      },
+      addDecimalCases: function(num) {
+        return  num.toFixed(2)
       }
     }
   });

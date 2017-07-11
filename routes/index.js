@@ -235,12 +235,12 @@ router.post('/email-forget-password', function(req, res, next) {
 
 router.get('/panel', function(req, res, next) {
   console.log('entrei panel');
-  res.render('panel', {sess: req.session})
   console.log('Nome Usuario: ' + req.session.nomeusuario);
   console.log('Perfil: ' + req.session.profile);
   console.log('Unidade: ' + req.session.idunidade);
   console.log(req.session.functionalityProfile);
   console.log('----budgets' + JSON.stringify(req.session.budgets,null,2));
+  res.render('panel', {sess: req.session})
 });
 
 module.exports = router;

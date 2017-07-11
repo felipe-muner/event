@@ -70,7 +70,7 @@
                         <select id="responsibleNewEvent" name="responsibleNewEvent" style="width:100%;">
                           <option value="">RESPONSIVE BY EVENT</option>
                           {{#each allActiveUser}}
-                            <option value="{{idusuario}}">{{nomeusuario}}</option>
+                            <option value="{{idusuario}}">{{pad matricula 4 0}} - {{toTitleCase nomeusuario}}</option>
                           {{/each}}
                         </select>
                       </div>
@@ -79,7 +79,7 @@
                         <select id="iddepartamento" name="iddepartamento" style="width:100%;">
                           <option value="">SELECT THE DEPARTAMENT</option>
                           {{#each allDepartament}}
-                            <option value="{{iddepartamento}}">{{nomedepartamento}}</option>
+                            <option value="{{iddepartamento}}">{{toTitleCase nomedepartamento}}</option>
                           {{/each}}
                         </select>
                       </div>
@@ -212,15 +212,17 @@
                   <div class="panel-heading">Menu</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-2">
+                      <div class="col-sm-12">
                         <select id="id_budget" name="id_budget" style="width:100%;">
-                          <option></option>
-                          <!-- {{#each allProductActive}}
-                            <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} data-event-product-id="{{EventProductID}}" value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
-                          {{/each}} -->
+                          <option value="">Please, select the budget.</option>
+                          {{#each sess.budgets}}
+                            <option data-setor="{{setor}}" data-grupo="{{grupo}}" data-conta="{{conta}}" data-ncont="{{ncont}}" value="{{id_orca}}">{{pad setor 3 0}} {{pad grupo 3 0}} {{conta}} {{ncont}} - R${{addDecimalCases saldo}}</option>
+                          {{/each}}
                         </select>
                       </div>
-                      <div class="col-sm-8">
+                    </div>
+                    <div class="row" style="margin-top:5px;">
+                      <div class="col-sm-10">
                         <select id="listProduct" name="allProductActive" multiple style="width:100%;">
                           <option></option>
                           {{#each allProductActive}}
