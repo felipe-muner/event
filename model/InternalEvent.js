@@ -59,7 +59,7 @@ function InternalEvent(){
 
   this.searchEventTwoDate = function(req, res, next){
     conn.acquire(function(err,con){
-      console.log(req.body);
+      // console.log(req.body);
       con.query('SELECT EventID, EventCode, Name as title, StartEvent as start, EndEvent as end FROM Event '+
       'WHERE Date(StartEvent) >= ? AND Date(StartEvent) < ? AND '+
       'Room_ID = ?', [req.body.firstDay, req.body.lastDay, req.body.roomID],function(err, result) {
@@ -67,7 +67,7 @@ function InternalEvent(){
         if(err){
           res.render('error', { error: err } );
         }else{
-          console.log(this.sql);
+          // console.log(this.sql);
           req.allEvents = result
           next()
         }
@@ -98,7 +98,7 @@ function InternalEvent(){
         if(err){
           res.render('error', { error: err } );
         }else{
-          console.log(this.sql);
+          // console.log(this.sql);
           req.getAllSiteBuildingRoom = result
           next()
         }
@@ -128,7 +128,7 @@ function InternalEvent(){
 
   this.createEvent = function(req, res, next){
 
-    console.log(req.body);
+    // console.log(req.body);
 
     let StartEvent = moment(req.body.dateNewEvent + 'T' + req.body.startTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
     let EndEvent = moment(req.body.dateNewEvent + 'T' + req.body.endTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
@@ -149,7 +149,7 @@ function InternalEvent(){
         if(err){
           res.render('error', { error: err } );
         }else{
-          console.log(this.sql);
+          // console.log(this.sql);
           req.resultCreated = result
           next()
         }

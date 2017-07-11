@@ -125,8 +125,8 @@ function MenuItem(){
           if(err){
             res.render('error', { error: err } );
           }else{
-            console.log('gravei os produtos no evento');
-            console.log(result);
+            // console.log('gravei os produtos no evento');
+            // console.log(result);
             next()
           }
         });

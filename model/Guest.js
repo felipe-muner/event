@@ -16,8 +16,8 @@ function Guest(){
           if(err){
             res.render('error', { error: err } );
           }else{
-            console.log('gravei os convidados no guest');
-            console.log(result);
+            // console.log('gravei os convidados no guest');
+            // console.log(result);
             next()
           }
         });

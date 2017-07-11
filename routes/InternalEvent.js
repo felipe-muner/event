@@ -27,10 +27,10 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
     allActiveUser:req.allActiveUser
   })
 }).post('/search-events', ie.searchEventTwoDate, function(req, res, next) {
-  console.log(req.allEvents);
+  //console.log(req.allEvents);
   res.json(req.allEvents)
 }).post('/create-event',ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, function(req, res, next) {
-  console.log(req.resultCreated);  
+  //console.log(req.resultCreated);
   res.json(req.body)
 }).get('/teste-muner', ie.getLastEvent, function(req, res, next) {
   res.json(req.nextEventCode)
