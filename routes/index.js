@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const conn = require(process.env.PWD + '/conn');
+const connPurchasing = require(process.env.PWD + '/conn-purchasing');
 const Util = require(process.env.PWD + '/util/Util')
 const mailSender = require(process.env.PWD + '/util/MailSender')
 const fs = require('fs');
@@ -33,6 +34,8 @@ router.post('/login', function(req, res, next) {
   conn.acquire(function(err,con){
     con.query('SELECT '+
                 'u.matricula,'+
+                'u.Tipo,'+
+                'u.Purchasing_ID,'+
                 'u.nomeusuario,'+
                 'u.AttemptLogin,'+
                 'u.senha,'+
@@ -62,7 +65,7 @@ router.post('/login', function(req, res, next) {
                 's.idsistema = 7 '+
               'AND '+
                 'matricula = ?', ['qtd_dia_alter_senha', parseInt(req.body.matricula)], function(err, result) {
-      //console.log('query GETUSER: ' + this.sql)
+      console.log('query GETUSER: ' + this.sql)
       con.release();
       if(err){ res.render('error', { error: err } );}
       else{
@@ -103,7 +106,42 @@ router.post('/login', function(req, res, next) {
                 req.session.idunidade = result[0].idunidade
                 req.session.profile = result[0].id_perfil_sistema
                 req.session.functionalityProfile = functionality
-                res.redirect('/panel')
+                if('A' === result[0].Tipo){
+                  let budgets = [{
+                    id_orca: '999999',
+                    setor: '001',
+                    grupo: '001',
+                    conta: '00WS',
+                    nomecont: 'Whole School',
+                    saldo: 10000000
+                  }]
+                  req.session.budgets = budgets
+                  console.log('---ADMINSITRATIVO');
+                  res.redirect('/panel')
+                }else{
+                  console.log('---EDUUUUUUUUUUUU');
+                  connPurchasing.acquire(function(err,con){
+                    con.query('SELECT '+
+                                'o.id_orca, '+
+                                'o.setor, '+
+                                'o.grupo, '+
+                                'o.conta, '+
+                                'o.nomecont, '+
+                                'o.saldo '+
+                                'FROM '+
+                                'orcamento AS o '+
+                                'Inner Join user_view_budget AS uvb ON uvb.id_budget = o.id_orca '+
+                                'Inner Join tblusers AS u ON uvb.id_user = u.ID_USER '+
+                                'WHERE '+
+                                'u.ID_USER = ?', [result[0].Purchasing_ID], function(err, budgets) {
+                      con.release();
+                      console.log('BUDGETS ASSOCIADOS: ' + this.sql);
+                      console.log('BUDGETS ASSOCIADOS: ' + budgets);
+                      req.session.budgets = budgets
+                      res.redirect('/panel')
+                    })
+                  })
+                }
               })
             })
           }
@@ -202,6 +240,7 @@ router.get('/panel', function(req, res, next) {
   console.log('Perfil: ' + req.session.profile);
   console.log('Unidade: ' + req.session.idunidade);
   console.log(req.session.functionalityProfile);
+  console.log('----budgets' + JSON.stringify(req.session.budgets,null,2));
 });
 
 module.exports = router;
