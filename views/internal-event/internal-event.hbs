@@ -98,7 +98,8 @@
                         Need Computer/Notebook ?
                       </div>
                       <div class="col-sm-4 text-right">
-                         <input type="radio" name="needcomputer" value=""> No <input style="margin-left: 5px;" type="radio" name="needcomputer" value=""> Yes
+                         <input id="needcomputerN" type="radio" name="needcomputer" value="No"> <label for="needcomputerN">No</label>
+                         <input id="needcomputerS" style="margin-left: 5px;" type="radio" name="needcomputer" value="Yes"> <label for="needcomputerS">Yes</label>
                       </div>
                     </div>
                     <div class="row" style="margin-top:7px;">
@@ -106,7 +107,8 @@
                         Need DataShow ?
                       </div>
                       <div class="col-sm-5 text-right">
-                         <input type="radio" name="needprojetor" value=""> No <input style="margin-left: 5px;" type="radio" name="needprojetor" value=""> Yes
+                         <input id="needprojetorN" type="radio" name="needprojetor" value=""> <label for="needprojetorN">No</label>
+                         <input id="needprojetorS" style="margin-left: 5px;" type="radio" name="needprojetor" value=""> <label for="needprojetorS">Yes</label>
                       </div>
                     </div>
                     <div class="row" style="margin-top:7px;">
@@ -114,14 +116,14 @@
                         Video Conference
                       </div>
                       <div class="col-sm-7 text-right">
-                          <span>From:</span>
+                          <label for="videoFrom">From:</label>
                           <select class="" name="videoFrom" id="videoFrom">
                             <option value=""></option>
                             <option value="1">Botafogo</option>
                             <option value="2">Urca</option>
                             <option value="3">Barra</option>
                           </select>
-                          <span>To:</span>
+                          <label for="videoTo">To:</label>
                           <select class="" name="videoTo" id="videoTo">
                             <option value=""></option>
                             <option value="1">Botafogo</option>
@@ -214,7 +216,7 @@
                     <div class="row">
                       <div class="col-sm-12">
                         <select id="id_budget" name="id_budget" style="width:100%;">
-                          <option value="">Please, select the budget.</option>
+                          <option value="">SELECT THE BUDGET</option>
                           {{#each sess.budgets}}
                             <option data-setor="{{setor}}" data-grupo="{{grupo}}" data-conta="{{conta}}" data-ncont="{{ncont}}" value="{{id_orca}}">{{pad setor 3 0}} {{pad grupo 3 0}} {{conta}} {{ncont}} - R${{addDecimalCases saldo}}</option>
                           {{/each}}
