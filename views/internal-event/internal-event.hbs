@@ -432,12 +432,10 @@
         element.find(".fc-event-time").remove();
         event.description = 'This is a cool event'
         event.id = event.EventID
-        var tooltip = '<div class="text-left">Nome do Evento: XXXX teste' + '<br />'
-                      + '<span style="color:yellow;">Date: XXXX teste</span>' + '<br />'
+        var tooltip = '<div class="text-left">' + event.title + '<br />'
                       + 'Start Time: ' + event.start.format('HH:mm') + '<br />'
                       + 'End Time: ' + event.end.format('HH:mm') + '<br />'
                       + 'EventID: ' + event.EventCode + '<br />'
-                      + 'Nome do Evento: XXXX teste</div>'
         $(element).attr("data-original-title", tooltip)
         $(element).tooltip({container: "body",html:'true'})
       }
