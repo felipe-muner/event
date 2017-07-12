@@ -10,8 +10,17 @@
     .select2-container .select2-search__field {
         width: 100% !important;
     }
-    div.tooltip-inner {
-      width: 800px;
+    .popover-content{
+      height: 100px;
+      padding: 4px;
+      font-size: 11px;
+      width: 500px; /* Max Width of the popover (depending on the container!) */
+    }
+    .popover-title{
+      text-align: left;
+      background-color: #2A3F54;
+      border-color: #2A3F54;
+      color: white;
     }
   </style>
 {{/section}}
@@ -435,13 +444,22 @@
         element.find(".fc-event-time").remove();
         event.description = 'This is a cool event'
         event.id = event.EventID
-        var tooltip = '<div class="text-left">' + event.title + '<br />'
-                      + 'Start Time: ' + event.start.format('HH:mm') + '<br />'
-                      + 'End Time: ' + event.end.format('HH:mm') + '<br />'
-                      + '<span class="label label-primary">Primary Label</span>'
-                      + 'EventID: ' + event.EventCode + '<br />'
-        $(element).attr("data-content", tooltip)
-        $(element).popover({html:'true',placement:'top',container: 'body'})
+        var contentPopover = '<div class="row">'
+                             + '<div class="col-sm-10 tex-left">'
+                             + 'dados'
+                             + '</div>'
+                             + '<div class="col-sm-2 text-right">'
+                               + '<div>'
+                                + '<button class="btn btn-danger btn-xs">Cancel</button>'
+                               + '</div>'
+                               + '<div style="margin-top:5px;">'
+                               + '<button class="btn btn-success btn-xs">Approve</button>'
+                               + '</div>'
+                             + '</div>'
+                           + '</div>'
+
+        $(element).popover({html:'true', placement: 'top', container: 'body', title: event.EventCode + ' - ' + event.EventStatus_ID, content:contentPopover})
+        .addClass('mysuperpopover')
         .on("mouseenter", function () {
             var _this = this;
             $(this).popover("show");
@@ -455,7 +473,9 @@
                     $(_this).popover("hide");
                 }
             }, 0);
-        });
+        }).on("show.bs.popover", function(){
+          $(this).data("bs.popover").tip().css('maxWidth',"600px")
+        })
       }
     })
    });

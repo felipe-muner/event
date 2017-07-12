@@ -60,7 +60,7 @@ function InternalEvent(){
   this.searchEventTwoDate = function(req, res, next){
     conn.acquire(function(err,con){
       // console.log(req.body);
-      con.query('SELECT EventID, EventCode, Name as title, StartEvent as start, EndEvent as end FROM Event '+
+      con.query('SELECT EventID, EventStatus_ID, EventCode, Name as title, StartEvent as start, EndEvent as end FROM Event '+
       'WHERE Date(StartEvent) >= ? AND Date(StartEvent) < ? AND '+
       'Room_ID = ?', [req.body.firstDay, req.body.lastDay, req.body.roomID],function(err, result) {
         con.release();
@@ -151,7 +151,7 @@ function InternalEvent(){
       Nvisitor: parseInt(req.body.qtdVisitorNewEvent) || null,
       Budget_ID: parseInt(req.body.id_budget) || null,
       CreateBy: req.session.matricula,
-      ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || null,
+      ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || null
     }
     // for(var propName in EndEvent) console.log(propName + ' ------- Valor:' +  EndEvent[propName])
     // moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())

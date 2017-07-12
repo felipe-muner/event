@@ -14,6 +14,19 @@ function Approve(){
       });
     });
   }
+  this.aproveEvent = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('UPDATE Event SET EventStatus_ID = ?, ApprovedAt = NOW(), ApprovedBy = ? WHERE EventCode = ?', [,], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          req.allDepartament = result
+          next()
+        }
+      });
+    });
+  }
 }
 
 module.exports = new Approve()
