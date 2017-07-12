@@ -133,9 +133,33 @@ function MenuItem(){
       });
     }
   }
+
   this.productOfEvent = function(req, res, next){
-    req.productOfEvent = 'produtos of event'
-    next()
+    conn.acquire(function(err,con){
+      con.query('SELECT '+
+                  'EventItem.Price, '+
+                  'EventItem.Amount, '+
+                  'EventProduct.NameEnglish, '+
+                  'EventProduct.NamePort, '+
+                  'EventProductUnit.NameEnglish, '+
+                  'EventProductUnit.NamePort '+
+                'FROM '+
+                  'EventItem '+
+                'Inner Join EventProduct ON EventItem.EventProduct_ID = EventProduct.EventProductID '+
+                'Inner Join EventProductUnit ON EventProduct.Unit = EventProductUnit.EventProductUnitID '+
+                'WHERE '+
+                  'EventItem.Event_ID =  ?', [req.body.EventCode], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          console.log(result);
+          console.log('fields from products');
+          req.findEventByCode.products = result
+          next()
+        }
+      });
+    });
   }
 }
 

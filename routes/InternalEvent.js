@@ -33,8 +33,7 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
   //console.log(req.resultCreated);
   res.json(req.body)
 }).post('/find-event-by-code',ie.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req,res,next){
-
-  res.json(req.guestOfEvent)
+  res.json(req.findEventByCode)
 })
 
 module.exports = router;
