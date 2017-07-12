@@ -133,6 +133,10 @@ function MenuItem(){
       });
     }
   }
+  this.productOfEvent = function(req, res, next){
+    req.productOfEvent = 'produtos of event'
+    next()
+  }
 }
 
 module.exports = new MenuItem()

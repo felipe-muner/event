@@ -436,7 +436,7 @@
         ( '' !== $("#roomID").val() ) ? showModalNewEvent(date) : swal("Select the room!", "First, select the room!", "info")
       },
       eventClick: function(calEvent, jsEvent, view) {
-        alert(calEvent)
+        findEventByCode(calEvent.EventCode)
       },viewRender: function (view, element) {
         if( '' !== $("#roomID").val() ) searchEvents()
       },eventRender: function(event, element) {
@@ -648,6 +648,19 @@
     $('#submitFormNewEvent').prop("disabled",true);
     $('#submitFormNewEvent').prop("value",'...creating');
     // alert('passou')
+  }
+
+  function findEventByCode(EventCode){
+    let data = {EventCode}
+    $.ajax({
+      url: '/internal-event/find-event-by-code',
+      type: 'POST',
+      data,
+      dataType:'json',
+      success: function(data) {
+        console.log(data)
+      }
+    })
   }
 </script>
 {{/section}}

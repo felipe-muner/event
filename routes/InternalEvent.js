@@ -32,8 +32,9 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
 }).post('/create-event',ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, function(req, res, next) {
   //console.log(req.resultCreated);
   res.json(req.body)
-}).get('/teste-muner', ie.getLastEvent, function(req, res, next) {
-  res.json(req.nextEventCode)
+}).post('/find-event-by-code',ie.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req,res,next){
+
+  res.json(req.guestOfEvent)
 })
 
 module.exports = router;

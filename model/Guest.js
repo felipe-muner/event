@@ -24,6 +24,10 @@ function Guest(){
       });
     }
   }
+  this.guestOfEvent = function(req, res, next){
+    req.guestOfEvent = 'guest of event'
+    next()
+  }
 }
 
 module.exports = new Guest()
