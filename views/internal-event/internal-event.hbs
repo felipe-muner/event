@@ -22,6 +22,9 @@
       border-color: #2A3F54;
       color: white;
     }
+    .campoMoreInfo{
+      font-weight: bold;
+    }
   </style>
 {{/section}}
 
@@ -274,6 +277,70 @@
           <input type="submit" value="Create" class="btn btn-success" id="submitFormNewEvent">
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<div id="modalInfoEvent" class="modal fade" role="dialog">
+  <div class="modal-dialog" style="width:90%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="row">
+        <h4 class="modal-title">
+            <div class="col-sm-11">
+              <span id="EventCodeMoreInfo"></span> -
+              <span id="EventTitleMoreInfo"></span>
+            </div>
+        </h4>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-4">
+              <span class="campoMoreInfo">Event Status:</span> <span class="valorMoreInfo" id="EventStatusMoreInfo"></span>
+            </div>
+            <div class="col-sm-4">
+              <span class="campoMoreInfo">Creator of event:</span> <span class="valorMoreInfo" id="CreatorOfEventMoreInfo"></span>
+            </div>
+            <div class="col-sm-4">
+              <span class="campoMoreInfo">Responsible of event:</span> <span class="valorMoreInfo" id="ResponsibleOfEventMoreInfo"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+              <span class="campoMoreInfo">Need Computer:</span> <span class="valorMoreInfo" id="NeedComputerMoreInfo"></span>
+            </div>
+            <div class="col-sm-4">
+              <span class="campoMoreInfo">Need DataShow:</span> <span class="valorMoreInfo" id="NeedDataShowMoreInfo"></span>
+            </div>
+            <div class="col-sm-4">
+              <span class="campoMoreInfo">Video Conference:</span> <span class="valorMoreInfo" id="VideoConferenceMoreInfo"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+              <span class="campoMoreInfo">Nº Parent:</span> <span class="valorMoreInfo" id="felpParent"></span>
+            </div>
+            <div class="col-sm-3">
+              <span class="campoMoreInfo">Nº Pupil:</span> <span class="valorMoreInfo" id="felpPupil"></span>
+            </div>
+            <div class="col-sm-3">
+              <span class="campoMoreInfo">Nº Staff:</span> <span class="valorMoreInfo" id="felpStaff"></span>
+            </div>
+            <div class="col-sm-3">
+              <span class="campoMoreInfo">Nº Visitor:</span> <span class="valorMoreInfo" id="felpVisitor"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+              <span class="campoMoreInfo">Additional Information:</span> <span class="valorMoreInfo" id="additionalInformationMoreInfo"></span>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
@@ -658,7 +725,28 @@
       data,
       dataType:'json',
       success: function(data) {
-        console.log(data)
+        console.log(data);
+        $('#EventCodeMoreInfo').text('Event ' + data.EventCode)
+        $('#EventTitleMoreInfo').text(toTitleCase(data.title))
+        $('#EventStatusMoreInfo').text(data.StatusName)
+        $('#CreatorOfEventMoreInfo').text(data.CreatedByName)
+        $('#ResponsibleOfEventMoreInfo').text(data.ResponsibleByName)
+        $('#NeedComputerMoreInfo').text(data.NeedComputer)
+        $('#NeedDataShowMoreInfo').text(data.NeedDataShow)
+
+        $('#felpParent').text(data.Nparent)
+        $('#felpPupil').text(data.Npupil)
+        $('#felpStaff').text(data.Nstaff)
+        $('#felpVisitor').text(data.Nvisitor)
+
+        $('#additionalInformationMoreInfo').text(data.AdditionalInformation)
+
+        if(data.VideoFrom){
+          $('#VideoConferenceMoreInfo').text(data.VideoFrom + ' to ' + data.VideoTo)
+        }else{
+          $('#VideoConferenceMoreInfo').text('Not Report')
+        }
+        $('#modalInfoEvent').modal('show')
       }
     })
   }

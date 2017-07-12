@@ -113,6 +113,10 @@ function InternalEvent(){
                   'e.NeedDataShow, '+
                   'e.VideoFrom, '+
                   'e.VideoTo, '+
+                  'e.Nparent, '+
+                  'e.Npupil, '+
+                  'e.Nstaff, '+
+                  'e.Nvisitor, '+
                   'e.AdditionalInformation, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
                   'u1.nomeusuario AS CreatedByName '+
