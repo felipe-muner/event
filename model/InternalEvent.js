@@ -60,10 +60,32 @@ function InternalEvent(){
   this.searchEventTwoDate = function(req, res, next){
     conn.acquire(function(err,con){
       // console.log(req.body);
-      con.query('SELECT EventID, EventStatus_ID, EventCode, Name as title, StartEvent as start, EndEvent as end FROM Event '+
-      'WHERE Date(StartEvent) >= ? AND Date(StartEvent) < ? AND '+
-      'Room_ID = ?', [req.body.firstDay, req.body.lastDay, req.body.roomID],function(err, result) {
+      con.query('SELECT '+
+                  'e.EventID, '+
+                  'e.EventCode, '+
+                  'e.CreateBy, '+
+                  'e.ResponsibleByEvent, '+
+                  'e.Name AS title, '+
+                  'e.StartEvent AS start, '+
+                  'e.EndEvent AS end, '+
+                  'es.StatusName, '+
+                  'e.NeedComputer, '+
+                  'e.NeedDataShow, '+
+                  'e.VideoFrom, '+
+                  'e.VideoTo, '+
+                  'u2.nomeusuario AS ResponsibleByName, '+
+                  'u1.nomeusuario AS CreatedByName '+
+                'FROM '+
+                  'Event AS e '+
+                  'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
+                  'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
+                  'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
+                'WHERE '+
+                  'Date(StartEvent) >= ? AND '+
+                  'Date(StartEvent) < ? AND '+
+                  'e.Room_ID =  ?', [req.body.firstDay, req.body.lastDay, req.body.roomID],function(err, result) {
         con.release();
+        console.log(this.sql);
         if(err){
           res.render('error', { error: err } );
         }else{

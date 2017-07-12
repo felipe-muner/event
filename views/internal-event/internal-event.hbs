@@ -14,7 +14,7 @@
       height: 100px;
       padding: 4px;
       font-size: 11px;
-      width: 500px; /* Max Width of the popover (depending on the container!) */
+      width: 400px; /* Max Width of the popover (depending on the container!) */
     }
     .popover-title{
       text-align: left;
@@ -141,7 +141,7 @@
                             <option value="Botafogo">Botafogo</option>
                             <option value="Urca">Urca</option>
                             <option value="Barra">Barra</option>
-                            <option value="all">All</option>
+                            <option value="All">All</option>
                           </select>
                       </div>
                     </div>
@@ -444,21 +444,78 @@
         element.find(".fc-event-time").remove();
         event.description = 'This is a cool event'
         event.id = event.EventID
+
+        if(!event.ResponsibleByName) event.ResponsibleByName = 'Not Reported'
+        if(!event.NeedComputer) event.NeedComputer = 'Not Reported'
+        if(!event.NeedDataShow) event.NeedDataShow = 'Not Reported'
+        if(!event.VideoFrom){
+          event.VideoConference = 'Not Reported'
+        }else{
+          event.VideoConference = event.VideoFrom + ' to ' + event.VideoTo
+        }
+
         var contentPopover = '<div class="row">'
-                             + '<div class="col-sm-10 tex-left">'
-                             + 'dados'
-                             + '</div>'
-                             + '<div class="col-sm-2 text-right">'
-                               + '<div>'
-                                + '<button class="btn btn-danger btn-xs">Cancel</button>'
+                             + '<div class="col-sm-9">'
+                               + '<div class="row">'
+                                  + '<div class="col-sm-5">'
+                                  + 'Event Name:'
+                                  + '</div>'
+                                  + '<div class="col-sm-7">'
+                                  + toTitleCase(event.title)
+                                  + '</div>'
                                + '</div>'
-                               + '<div style="margin-top:5px;">'
-                               + '<button class="btn btn-success btn-xs">Approve</button>'
+                               + '<div class="row">'
+                                  + '<div class="col-sm-5">'
+                                  + 'Created By:'
+                                  + '</div>'
+                                  + '<div class="col-sm-7">'
+                                  + toTitleCase(event.CreatedByName)
+                                  + '</div>'
+                               + '</div>'
+                               + '<div class="row">'
+                                  + '<div class="col-sm-5">'
+                                  + 'Responsible By:'
+                                  + '</div>'
+                                  + '<div class="col-sm-7">'
+                                  + toTitleCase(event.ResponsibleByName)
+                                  + '</div>'
+                               + '</div>'
+                               + '<div class="row">'
+                                  + '<div class="col-sm-5">'
+                                  + 'Need Computer:'
+                                  + '</div>'
+                                  + '<div class="col-sm-7">'
+                                  + event.NeedComputer
+                                  + '</div>'
+                               + '</div>'
+                               + '<div class="row">'
+                                  + '<div class="col-sm-5">'
+                                  + 'Need DataShow:'
+                                  + '</div>'
+                                  + '<div class="col-sm-7">'
+                                  + event.NeedDataShow
+                                  + '</div>'
+                               + '</div>'
+                               + '<div class="row">'
+                                  + '<div class="col-sm-5">'
+                                  + 'Video Conference:'
+                                  + '</div>'
+                                  + '<div class="col-sm-7">'
+                                  + event.VideoConference
+                                  + '</div>'
                                + '</div>'
                              + '</div>'
+                            //  + '<div class="col-sm-3 text-right">'
+                            //    + '<div>'
+                            //     + '<button class="btn btn-danger btn-xs">Cancel</button>'
+                            //    + '</div>'
+                            //    + '<div style="margin-top:5px;">'
+                            //    + '<button class="btn btn-success btn-xs">Approve</button>'
+                            //    + '</div>'
+                            //  + '</div>'
                            + '</div>'
 
-        $(element).popover({html:'true', placement: 'top', container: 'body', title: event.EventCode + ' - ' + event.EventStatus_ID, content:contentPopover})
+        $(element).popover({html:'true', placement: 'top', container: 'body', title: event.EventCode + ' - ' + event.StatusName, content:contentPopover})
         .addClass('mysuperpopover')
         .on("mouseenter", function () {
             var _this = this;
