@@ -724,42 +724,42 @@
   }
 
   function findEventByCode(EventCode){
-    $.get('/show-more-info-internal.hbs', function (data) {
-      console.log(data);
-        var template = Handlebars.compile(data);
-        //$(target).html(template({jsonData}));
-        console.log(template({nome:'felipe'}));
-        $('#munerteste').html(template({nome:'ewqeqwewq'}))
-        $('#myModal').modal('show')
-    }, 'html')
     let data = {EventCode}
     $.ajax({
       url: '/internal-event/find-event-by-code',
       type: 'POST',
       data,
       dataType:'json',
-      success: function(data) {
+      success: function(eventData) {
+        $.get('/show-more-info-internal.hbs', function (data) {
+          console.log(data);
+            var template = Handlebars.compile(data);
+            //$(target).html(template({jsonData}));
+            console.log(template({eventData: eventData}));
+            $('#munerteste').html(template(eventData))
+            $('#myModal').modal('show')
+        }, 'html')
         console.log(data);
-        $('#EventCodeMoreInfo').text('Event ' + data.EventCode)
-        $('#EventTitleMoreInfo').text(toTitleCase(data.title))
-        $('#EventStatusMoreInfo').text(data.StatusName)
-        $('#CreatorOfEventMoreInfo').text(data.CreatedByName)
-        $('#ResponsibleOfEventMoreInfo').text(data.ResponsibleByName)
-        $('#NeedComputerMoreInfo').text(data.NeedComputer)
-        $('#NeedDataShowMoreInfo').text(data.NeedDataShow)
-
-        $('#felpParent').text(data.Nparent)
-        $('#felpPupil').text(data.Npupil)
-        $('#felpStaff').text(data.Nstaff)
-        $('#felpVisitor').text(data.Nvisitor)
-
-        $('#additionalInformationMoreInfo').text(data.AdditionalInformation)
-
-        if(data.VideoFrom){
-          $('#VideoConferenceMoreInfo').text(data.VideoFrom + ' to ' + data.VideoTo)
-        }else{
-          $('#VideoConferenceMoreInfo').text('Not Report')
-        }
+        // $('#EventCodeMoreInfo').text('Event ' + data.EventCode)
+        // $('#EventTitleMoreInfo').text(toTitleCase(data.title))
+        // $('#EventStatusMoreInfo').text(data.StatusName)
+        // $('#CreatorOfEventMoreInfo').text(data.CreatedByName)
+        // $('#ResponsibleOfEventMoreInfo').text(data.ResponsibleByName)
+        // $('#NeedComputerMoreInfo').text(data.NeedComputer)
+        // $('#NeedDataShowMoreInfo').text(data.NeedDataShow)
+        //
+        // $('#felpParent').text(data.Nparent)
+        // $('#felpPupil').text(data.Npupil)
+        // $('#felpStaff').text(data.Nstaff)
+        // $('#felpVisitor').text(data.Nvisitor)
+        //
+        // $('#additionalInformationMoreInfo').text(data.AdditionalInformation)
+        //
+        // if(data.VideoFrom){
+        //   $('#VideoConferenceMoreInfo').text(data.VideoFrom + ' to ' + data.VideoTo)
+        // }else{
+        //   $('#VideoConferenceMoreInfo').text('Not Report')
+        // }
         // $('#modalInfoEvent').modal('show')
       }
     })
