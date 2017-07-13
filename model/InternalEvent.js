@@ -1,5 +1,6 @@
 const conn = require(process.env.PWD + '/conn');
 const moment = require('moment')
+const fs = require('fs');
 
 function InternalEvent(){
   this.getAllSite = function(req, res, next){
@@ -236,6 +237,18 @@ function InternalEvent(){
       });
     });
   }
+
+  this.getTemplateMoreInfo = function(req, res, next){
+    fs.readFile(process.env.PWD + '/views/internal-event/show-more-info-internal.hbs', 'utf8', function (err,data) {
+      if (err) {
+        return console.log(err);
+      }
+      // console.log(req.findEventByCode);
+      req.findEventByCode.template = data
+      next()
+    });
+  }
+
 }
 
 module.exports = new InternalEvent()

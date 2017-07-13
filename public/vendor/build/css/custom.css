@@ -972,8 +972,8 @@ table.tile_info td i {
 table.tile_info td:first-child {
   width: 83%; }
 
-td span {
-  line-height: 28px; }
+/*td span {
+  line-height: 28px; }*/
 
 .sidebar-widget {
   overflow: hidden; }

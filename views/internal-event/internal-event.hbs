@@ -347,8 +347,7 @@
     </div>
   </div>
 </div> -->
-<div id="munerteste">
-
+<div id="divModalMoreInfo">
 </div>
 
 {{#section 'script'}}
@@ -731,36 +730,12 @@
       data,
       dataType:'json',
       success: function(eventData) {
-        $.get('/show-more-info-internal.hbs', function (data) {
-          console.log(data);
-            var template = Handlebars.compile(data);
-            //$(target).html(template({jsonData}));
-            console.log(template({eventData: eventData}));
-            $('#munerteste').html(template(eventData))
-            $('#myModal').modal('show')
-        }, 'html')
+        console.log(eventData.template);
+        var template = Handlebars.compile(eventData.template);
+        $('#divModalMoreInfo').html(template(eventData))
+        $('#modalMoreInfoInternal').modal('show')
+        console.log(template);
         console.log(data);
-        // $('#EventCodeMoreInfo').text('Event ' + data.EventCode)
-        // $('#EventTitleMoreInfo').text(toTitleCase(data.title))
-        // $('#EventStatusMoreInfo').text(data.StatusName)
-        // $('#CreatorOfEventMoreInfo').text(data.CreatedByName)
-        // $('#ResponsibleOfEventMoreInfo').text(data.ResponsibleByName)
-        // $('#NeedComputerMoreInfo').text(data.NeedComputer)
-        // $('#NeedDataShowMoreInfo').text(data.NeedDataShow)
-        //
-        // $('#felpParent').text(data.Nparent)
-        // $('#felpPupil').text(data.Npupil)
-        // $('#felpStaff').text(data.Nstaff)
-        // $('#felpVisitor').text(data.Nvisitor)
-        //
-        // $('#additionalInformationMoreInfo').text(data.AdditionalInformation)
-        //
-        // if(data.VideoFrom){
-        //   $('#VideoConferenceMoreInfo').text(data.VideoFrom + ' to ' + data.VideoTo)
-        // }else{
-        //   $('#VideoConferenceMoreInfo').text('Not Report')
-        // }
-        // $('#modalInfoEvent').modal('show')
       }
     })
   }
