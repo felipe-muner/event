@@ -281,7 +281,7 @@
   </div>
 </div>
 
-<div id="modalInfoEvent" class="modal fade" role="dialog">
+<!-- <div id="modalInfoEvent" class="modal fade" role="dialog">
   <div class="modal-dialog" style="width:90%;">
     <div class="modal-content">
       <div class="modal-header">
@@ -346,6 +346,9 @@
       </div>
     </div>
   </div>
+</div> -->
+<div id="munerteste">
+
 </div>
 
 {{#section 'script'}}
@@ -724,8 +727,10 @@
     $.get('/show-more-info-internal.hbs', function (data) {
       console.log(data);
         var template = Handlebars.compile(data);
-        $('#modalInfoEvent').html(template({nome:'felipe'}));
-        // $('#modalInfoEvent').modal('show')
+        //$(target).html(template({jsonData}));
+        console.log(template({nome:'felipe'}));
+        $('#munerteste').html(template({nome:'ewqeqwewq'}))
+        $('#myModal').modal('show')
     }, 'html')
     let data = {EventCode}
     $.ajax({
