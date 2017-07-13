@@ -15,8 +15,11 @@
     border-bottom-right-radius: 10px;
   }
   #modalMoreInfoInternal .contentDataReport{
-    padding: 2px 4px 4px 4px;
-    /*text-align: right;*/
+    padding: 2px 4px 2px 4px;
+    text-align: right;
+  }
+  .myBold{
+    font-weight: bold;
   }
 </style>
 
@@ -26,52 +29,104 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title">{{EventCode}} - {{StatusName}} - {{title}}</h4>
       </div>
       <div class="modal-body">
         <table style="width:100%;">
           <tr>
             <td style="width:25%;">
               <div class="titleDataReport">
-                <span>Nome</span>
+                <span>Created By</span>
               </div>
               <div class="contentDataReport">
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
+                {{CreatedByName}}
               </div>
             </td>
             <td style="width:25%;">
               <div class="titleDataReport">
-                <span>Nome</span>
+                <span>Responsible By Event</span>
               </div>
               <div class="contentDataReport">
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
+                {{ResponsibleByName}}
               </div>
             </td>
             <td style="width:25%;">
               <div class="titleDataReport">
-                <span>Responsible by Event</span>
+                <span>Departament</span>
               </div>
               <div class="contentDataReport">
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
+                inserir departamento
               </div>
             </td>
             <td style="width:25%;">
               <div class="titleDataReport">
-                <span>Nome</span>
+                <span>Start/End Time</span>
               </div>
               <div class="contentDataReport">
-                cunha felipe cunha felipe cunha felipe cunha felipe cunha felipe
+                {{start}} - {{end}}
               </div>
             </td>
+          </tr>
+          <tr>
+            <td style="width:25%;">
+              <div class="titleDataReport">
+                <span>Nº Parent</span>
+              </div>
+              <div class="contentDataReport">
+                {{Nparent}}
+              </div>
+            </td>
+            <td style="width:25%;">
+              <div class="titleDataReport">
+                <span>Nº Pupil</span>
+              </div>
+              <div class="contentDataReport">
+                {{Npupil}}
+              </div>
+            </td>
+            <td style="width:25%;">
+              <div class="titleDataReport">
+                <span>Nº Staff</span>
+              </div>
+              <div class="contentDataReport">
+                {{Nstaff}}
+              </div>
+            </td>
+            <td style="width:25%;">
+              <div class="titleDataReport">
+                <span>Nº Visitor</span>
+              </div>
+              <div class="contentDataReport">
+                {{Nvisitor}}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="width:25%;">
+              <div class="titleDataReport">
+                <span>Need Computer?</span>
+              </div>
+              <div class="contentDataReport">
+                {{NeedComputer}}
+              </div>
+            </td>
+            <td style="width:25%;">
+              <div class="titleDataReport">
+                <span>Need DataShow?</span>
+              </div>
+              <div class="contentDataReport">
+                {{NeedDataShow}}
+              </div>
+            </td>
+            <td style="width:25%;">
+              <div class="titleDataReport">
+                <span>Video Conference</span>
+              </div>
+              <div class="contentDataReport">
+                From: {{VideoFrom}}, To: {{VideoTo}}
+              </div>
+            </td>
+
           </tr>
         </table>
       </div>

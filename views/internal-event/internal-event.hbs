@@ -730,12 +730,10 @@
       data,
       dataType:'json',
       success: function(eventData) {
-        console.log(eventData.template);
         var template = Handlebars.compile(eventData.template);
         $('#divModalMoreInfo').html(template(eventData))
         $('#modalMoreInfoInternal').modal('show')
-        console.log(template);
-        console.log(data);
+        console.log(eventData);
       }
     })
   }
