@@ -297,6 +297,9 @@
       </div>
       <div class="modal-body">
         <div class="row">
+          {{nome}}
+        </div>
+        <div class="row">
             <div class="col-sm-4">
               <span class="campoMoreInfo">Event Status:</span> <span class="valorMoreInfo" id="EventStatusMoreInfo"></span>
             </div>
@@ -718,6 +721,12 @@
   }
 
   function findEventByCode(EventCode){
+    $.get('/show-more-info-internal.hbs', function (data) {
+      console.log(data);
+        var template = Handlebars.compile(data);
+        $('#modalInfoEvent').html(template({nome:'felipe'}));
+        // $('#modalInfoEvent').modal('show')
+    }, 'html')
     let data = {EventCode}
     $.ajax({
       url: '/internal-event/find-event-by-code',
@@ -746,7 +755,7 @@
         }else{
           $('#VideoConferenceMoreInfo').text('Not Report')
         }
-        $('#modalInfoEvent').modal('show')
+        // $('#modalInfoEvent').modal('show')
       }
     })
   }
