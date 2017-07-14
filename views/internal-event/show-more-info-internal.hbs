@@ -1,15 +1,18 @@
 <style media="screen">
   #modalMoreInfoInternal table td{
-    border: 1px solid black;
+    border: 1px solid #adadad;
     vertical-align:top;
   }
   #modalMoreInfoInternal .titleDataReport{
     font-size: 10px;
   }
   #modalMoreInfoInternal .titleDataReport span{
-    border-right: 1px solid #adadad;
-    border-bottom: 1px solid #adadad;
+    color: white;
+    background-color: #73879C;
+    border-right: 1px solid #73879C;
+    border-bottom: 1px solid #73879C;
     padding: 1px 3px 2px 2px;
+    font-weight: bold;
     -webkit-border-bottom-right-radius: 10px;
     -moz-border-radius-bottomright: 10px;
     border-bottom-right-radius: 10px;
@@ -17,9 +20,19 @@
   #modalMoreInfoInternal .contentDataReport{
     padding: 2px 4px 2px 4px;
     text-align: right;
+    min-height: 15px;
   }
-  .myBold{
-    font-weight: bold;
+  #modalMoreInfoInternal .headerTable{
+    background-color: #adadad;
+    height: 30px;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    vertical-align: middle;
+  }
+  #modalMoreInfoInternal table:not(:first-child){
+    width: 100%;
+    margin-top: 10px;
   }
 </style>
 
@@ -29,10 +42,18 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">{{EventCode}} - {{StatusName}} - {{title}}</h4>
+        <div class="col-sm-9">
+          <h4 class="modal-title">{{EventCode}} - {{StatusName}} - {{title}}</h4>
+        </div>
+        <div class="col-sm-2 text-right">
+          <span onclick="downloadPDF()" class="label label-danger">Download PDF</span>
+        </div>
       </div>
       <div class="modal-body">
         <table style="width:100%;">
+          <tr>
+            <td colspan="4" class="headerTable">Main Information</td>
+          </tr>
           <tr>
             <td style="width:25%;">
               <div class="titleDataReport">
@@ -63,7 +84,7 @@
                 <span>Start/End Time</span>
               </div>
               <div class="contentDataReport">
-                {{start}} - {{end}}
+                  {{start}} - {{end}}
               </div>
             </td>
           </tr>
@@ -107,7 +128,11 @@
                 <span>Need Computer?</span>
               </div>
               <div class="contentDataReport">
-                {{NeedComputer}}
+                {{#if NeedComputer}}
+                  {{NeedComputer}}
+                  {{else}}
+                  No Reported
+                {{/if}}
               </div>
             </td>
             <td style="width:25%;">
@@ -115,7 +140,11 @@
                 <span>Need DataShow?</span>
               </div>
               <div class="contentDataReport">
-                {{NeedDataShow}}
+                {{#if NeedDataShow}}
+                  {{NeedDataShow}}
+                  {{else}}
+                  No Reported
+                {{/if}}
               </div>
             </td>
             <td style="width:25%;">
@@ -123,19 +152,113 @@
                 <span>Video Conference</span>
               </div>
               <div class="contentDataReport">
-                From: {{VideoFrom}}, To: {{VideoTo}}
+                {{#if VideoFrom}}
+                  From: {{VideoFrom}}, To: {{VideoTo}}
+                  {{else}}
+                  No Reported
+                {{/if}}
               </div>
             </td>
-
           </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td colspan="5" class="headerTable">Products</td>
+          </tr>
+          {{#each products}}
+            <tr>
+              <td style="width:70%;">
+                <div class="titleDataReport">
+                  <span>Name</span>
+                </div>
+                <div class="contentDataReport">
+                  {{ProductNameEnglish}}/{{ProductNamePort}} ({{UnitInEnglish}}/{{UnitInPort}})
+                </div>
+              </td>
+              <td style="width:10%;">
+                <div class="titleDataReport">
+                  <span>Amount</span>
+                </div>
+                <div class="contentDataReport">
+                  {{Amount}}
+                </div>
+              </td>
+              <td style="width:10%;">
+                <div class="titleDataReport">
+                  <span>Price</span>
+                </div>
+                <div class="contentDataReport">
+                  {{Price}}
+                </div>
+              </td>
+              <td style="width:10%;">
+                <div class="titleDataReport">
+                  <span>SubTotal</span>
+                </div>
+                <div class="contentDataReport">
+                  {{TotalProd}}
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+          {{#if products}}
+          <tr>
+            <td style="border:0px;"></td>
+            <td style="border:0px;"></td>
+            <td style="border:0px;"></td>
+            <td>
+              <div class="titleDataReport">
+                <span>Total + 14%</span>
+              </div>
+              <div class="contentDataReport">
+                R$ {{TotalGeralProduct}}
+              </div>
+            </td>
+          </tr>
+          {{else}}
+          <tr style="height:30px;">
+            <td colspan="4" style="vertical-align:middle;text-align:center;">Don't have products</td>
+          </tr>
+          {{/if}}
+        </table>
+
+        <table>
+          <tr>
+            <td colspan="4" class="headerTable">Guests</td>
+          </tr>
+          {{#if products}}
+          {{#each guests}}
+            <tr>
+              <td style="width:50%;">
+                <div class="titleDataReport">
+                  <span>Type</span>
+                </div>
+                <div class="contentDataReport">
+                  {{Type}}
+                </div>
+              </td>
+              <td style="width:50%;">
+                <div class="titleDataReport">
+                  <span>Name</span>
+                </div>
+                <div class="contentDataReport">
+                  {{NameGuest}}
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+          {{else}}
+          <tr style="height:30px;">
+            <td colspan="4" style="vertical-align:middle;text-align:center;">Don't have guests</td>
+          </tr>
+          {{/if}}
         </table>
       </div>
 
-      {{this}}
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
-
   </div>
 </div>

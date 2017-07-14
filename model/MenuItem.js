@@ -139,10 +139,11 @@ function MenuItem(){
       con.query('SELECT '+
                   'EventItem.Price, '+
                   'EventItem.Amount, '+
-                  'EventProduct.NameEnglish, '+
-                  'EventProduct.NamePort, '+
-                  'EventProductUnit.NameEnglish, '+
-                  'EventProductUnit.NamePort '+
+                  'EventItem.Amount * EventItem.Price as TotalProd, '+
+                  'EventProduct.NameEnglish as ProductNameEnglish,  '+
+                  'EventProduct.NamePort as ProductNamePort, '+
+                  'EventProductUnit.NameEnglish as UnitInEnglish, '+
+                  'EventProductUnit.NamePort as UnitInPort '+
                 'FROM '+
                   'EventItem '+
                 'Inner Join EventProduct ON EventItem.EventProduct_ID = EventProduct.EventProductID '+
@@ -150,7 +151,10 @@ function MenuItem(){
                 'WHERE '+
                   'EventItem.Event_ID =  ?', [req.body.EventCode], function(err, result) {
         con.release();
+        console.log(this.sql);
         if(err){
+          console.log('error');
+          console.log(err);
           res.render('error', { error: err } );
         }else{
           console.log(result);

@@ -8,13 +8,15 @@ var A4option = require(process.env.PWD + '/views/report/A4config')
 
 module.exports = {
   randomAlphaNumeric: function (length) {
-      let chars = '0123456789abcdefghij'
-      var result = '';
-      for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-      return result;
+    let chars = '0123456789abcdefghij'
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+  },
+  toTitleCase: function (str) {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})
   },
   generateHTMLReport: function(res, query, fields) {
-
     fs.readFile(process.env.PWD + '/views/report/RepUser.html', {encoding: 'utf-8'}, function (err, html) {
       if (err) {
           throw err;
