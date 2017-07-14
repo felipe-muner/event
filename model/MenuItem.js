@@ -149,16 +149,13 @@ function MenuItem(){
                 'Inner Join EventProduct ON EventItem.EventProduct_ID = EventProduct.EventProductID '+
                 'Inner Join EventProductUnit ON EventProduct.Unit = EventProductUnit.EventProductUnitID '+
                 'WHERE '+
-                  'EventItem.Event_ID =  ?', [req.body.EventCode], function(err, result) {
+                  'EventItem.Event_ID =  ?', [req.findEventByCode.EventCode], function(err, result) {
         con.release();
-        console.log(this.sql);
         if(err){
-          console.log('error');
-          console.log(err);
           res.render('error', { error: err } );
         }else{
-          console.log(result);
           console.log('fields from products');
+          console.log(result);
           req.findEventByCode.products = result
           next()
         }

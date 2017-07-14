@@ -9,6 +9,7 @@ const mi = require(process.env.PWD + '/model/MenuItem')
 const d = require(process.env.PWD + '/model/Departament')
 const g = require(process.env.PWD + '/model/Guest')
 const u = require(process.env.PWD + '/model/User')
+const HtmlPDF = require(process.env.PWD + '/model/HtmlPDF')
 const fs = require('fs');
 const moment = require('moment');
 const md5 = require('md5');
@@ -33,16 +34,13 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
   //console.log(req.resultCreated);
   res.json(req.body)
 }).post('/find-event-by-code',ie.searchEventByCode, ie.getTemplateMoreInfo, g.guestOfEvent, mi.productOfEvent, function(req,res,next){
-  req.findEventByCode.start = moment(req.findEventByCode.start).format('HH:mm')
-  req.findEventByCode.end = moment(req.findEventByCode.end).format('HH:mm')
-
+  req.findEventByCode.start = moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm')
+  req.findEventByCode.end = moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm')
   req.findEventByCode.guests.map((e) => e.Type = Util.toTitleCase(e.Type))
   req.findEventByCode.guests.map((e) => e.NameGuest = Util.toTitleCase(e.NameGuest))
-
   req.findEventByCode.TotalGeralProduct = req.findEventByCode.products.reduce((acc,ele) => acc + (ele.Price * ele.Amount),0)
   req.findEventByCode.TotalGeralProduct = (req.findEventByCode.TotalGeralProduct * 1.14).toFixed(2)
-
   res.json(req.findEventByCode)
-})
+}).get('/downloadPDF', ie.searchEventByCode, g.guestOfEvent, mi.productOfEvent, HtmlPDF.genPDF)
 
 module.exports = router;

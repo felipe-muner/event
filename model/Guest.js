@@ -26,14 +26,12 @@ function Guest(){
   }
   this.guestOfEvent = function(req, res, next){
     conn.acquire(function(err,con){
-      con.query('SELECT Type, NameGuest FROM EventGuest WHERE Event_ID = ?', [req.body.EventCode], function(err, result) {
+      con.query('SELECT Type, NameGuest FROM EventGuest WHERE Event_ID = ?', [req.findEventByCode.EventCode], function(err, result) {
         con.release();
         if(err){
           res.render('error', { error: err } );
         }else{
-          console.log(result);
           console.log('fields from guest');
-          debugger
           req.findEventByCode.guests = result
           console.log(req.findEventByCode.guests);
           next()

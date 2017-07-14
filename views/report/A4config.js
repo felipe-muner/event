@@ -11,7 +11,7 @@ module.exports = {
     "contents": {
       //"first": "Cover page",
       //"2": "Second Page",
-      "default": '<div style="text-align:right;"><span style="color: #aaa;">qweqw{{page}}</span>/<span>{{pages}}</span></div>',
+      "default": '<div style="text-align:right;"><span>Page {{page}}</span>/<span>{{pages}}</span></div>',
       //"last": "Last Page"
     }
   }

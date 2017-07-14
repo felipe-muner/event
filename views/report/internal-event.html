@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title id="title">PDF - User</title>
+    <style media="screen">
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 10px;
+    }
+    table, td {
+      border: 1px solid black;
+    }
+    .titleData{
+      font-weight: bold;
+    }
+    .contentData{
+      padding-left: 3px;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="contentReport">
+      <table>
+        <tbody id="bodyTable">
+          <tr>
+            <td class="titleData" colspan="2" style="width:30%;">Event Name</td>
+            <td class="contentData" colspan="6" style="width:70%" id="eventName"></td>
+          </tr>
+          <tr>
+            <td class="titleData" colspan="2" style="width:15%;">Event Number</td>
+            <td class="contentData" colspan="2" style="width:35%" id="eventcode"></td>
+            <td class="titleData" colspan="2" style="width:15%">Event Status</td>
+            <td class="contentData" colspan="2" style="width:35%" id="eventstatus"></td>
+          </tr>
+          <tr>
+            <td class="titleData" colspan="2" style="width:15%">Creator of Event</td>
+            <td class="contentData" colspan="2" style="width:35%" id="createdBy"></td>
+            <td class="titleData" colspan="2" style="width:15%">Responsible</td>
+            <td class="contentData" colspan="2" style="width:35%" id="responsibleBy"></td>
+          </tr>
+          <tr>
+            <td class="titleData" colspan="2" style="width:15%">Departament</td>
+            <td class="contentData" colspan="2" style="width:35%" id="departamento"></td>
+            <td class="titleData" colspan="2" style="width:15%">Start/EndTime</td>
+            <td class="contentData" colspan="2" style="width:35%" id="startendtime"></td>
+          </tr>
+          <tr>
+            <td class="titleData" colspan="2" style="width:15%">Need Computer?</td>
+            <td class="contentData" colspan="2" style="width:35%" id="needComputer">b</td>
+            <td class="titleData" colspan="2" style="width:15%">Video Conference</td>
+            <td class="contentData" colspan="2" style="width:35%" id="videoConferencia">d</td>
+          </tr>
+          <tr>
+            <td class="titleData" colspan="2" style="width:15%">Need DataShow?</td>
+            <td class="contentData" colspan="2" style="width:35%" id="needDataShow">b</td>
+            <td class="titleData" colspan="2" style="width:15%">Campo sobrando ?</td>
+            <td class="contentData" colspan="2" style="width:35%">d</td>
+          </tr>
+          <tr>
+            <td class="titleData" style="width:10%">Nº Parent</td>
+            <td class="contentData" style="width:15%">b</td>
+            <td class="titleData" style="width:10%">Nº Pupil</td>
+            <td class="contentData" style="width:15%">d</td>
+            <td class="titleData" style="width:10%">Nº Staff</td>
+            <td class="contentData" style="width:15%">b</td>
+            <td class="titleData" style="width:10%">Nº Visitor</td>
+            <td class="contentData" style="width:15%">d</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
