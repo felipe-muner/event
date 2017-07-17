@@ -25,19 +25,25 @@ function HtmlPDF(){
             $('#createdBy').text(Util.toTitleCase(req.findEventByCode.CreatedByName))
             $('#responsibleBy').text(Util.toTitleCase(req.findEventByCode.ResponsibleByName))
             $('#departamento').text(Util.toTitleCase('departamento buscar'))
-            $('#startendtime').text(moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm') + '\n' +  moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm'))
+
+            $('#startTime').text(moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm'))
+            $('#endTime').text(moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm'))
+            // $('#startendtime').text(moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm') + '\n' +  moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm'))
 
             $('#needDataShow').text(Util.toTitleCase(req.findEventByCode.NeedDataShow))
             $('#needComputer').text(Util.toTitleCase(req.findEventByCode.NeedComputer))
-            $('#videoConferencia').text('From: ' + req.findEventByCode.VideoFrom + ' To: ' + req.findEventByCode.VideoTo)
+            if (null !== req.findEventByCode.VideoFrom){
+              $('#videoConferencia').text('From: ' + req.findEventByCode.VideoFrom + ' To: ' + req.findEventByCode.VideoTo)
+            }else {
+              $('#videoConferencia').text('Not Reported')
+            }
 
-            $('#Nparent').text(req.findEventByCode.Nparent)
-            $('#Npupil').text(req.findEventByCode.Npupil)
-            $('#Nstaff').text(req.findEventByCode.Nstaff)
-            $('#Nvisitor').text(req.findEventByCode.Nvisitor)
+            $('#Nparent').text(req.findEventByCode.Nparent || '')
+            $('#Npupil').text(req.findEventByCode.Npupil || '')
+            $('#Nstaff').text(req.findEventByCode.Nstaff || '')
+            $('#Nvisitor').text(req.findEventByCode.Nvisitor || '')
 
             $('#AdditionalInformation').text(Util.toTitleCase(req.findEventByCode.AdditionalInformation))
-
 
             //prod
             let products = req.findEventByCode.products.reduce(function(acc,ele){
@@ -52,8 +58,12 @@ function HtmlPDF(){
             },{tabelaProd:'',total:0})
             let footerTableProd = '<tr style="line-height: 15px;"><td colspan="4" style="padding-right:3px;text-align:right;">'+ (products.total).toFixed(2) +'</td></tr>'
             products.tabelaProd = products.tabelaProd + footerTableProd
-            $('#bodyProducts').html(products.tabelaProd)
 
+            if(req.findEventByCode.products.length > 0){
+              $('#bodyProducts').html(products.tabelaProd)
+            }else{
+              $('#bodyProducts').html('<tr style="line-height: 15px;text-align:center;"><td colspan="4">Don\'t have products</td></tr>')
+            }
 
             //guest
             let guests = req.findEventByCode.guests.reduce(function(acc,ele){
@@ -64,19 +74,30 @@ function HtmlPDF(){
               return acc
             },{tabelaGuest:''})
 
-            $('#bodyGuests').html(guests.tabelaGuest)
+            if(req.findEventByCode.products.length > 0){
+              $('#bodyGuests').html(guests.tabelaGuest)
+            }else{
+              $('#bodyGuests').html('<tr style="line-height: 15px;text-align:center;"><td colspan="4">Don\'t have guests</td></tr>')
+            }
 
 
-            fs.readFile(process.env.PWD + '/views/report/headerTemplate.html', {encoding: 'utf-8'}, function (err, header) {
-              A4option.header.contents = header
-              fs.readFile(process.env.PWD + '/views/report/footerTemplate.html', {encoding: 'utf-8'}, function (err, footer) {
-                A4option.footer.contents.default = footer
-                pdf.create($.html(), A4option).toFile(function(err, pdfFile) {
-                  if (err) return console.log(err);
-                  res.download(pdfFile.filename, new Date() + 'report.pdf')                  
-                });
-              })
-            })
+
+
+            pdf.create($.html(), A4option).toFile(function(err, pdfFile) {
+              if (err) return console.log(err);
+              res.download(pdfFile.filename, new Date() + 'report.pdf')
+            });
+
+            // fs.readFile(process.env.PWD + '/views/report/headerTemplate.html', {encoding: 'utf-8'}, function (err, header) {
+            //   A4option.header.contents = header
+            //   fs.readFile(process.env.PWD + '/views/report/footerTemplate.html', {encoding: 'utf-8'}, function (err, footer) {
+            //     A4option.footer.contents.default = footer
+            //     pdf.create($.html(), A4option).toFile(function(err, pdfFile) {
+            //       if (err) return console.log(err);
+            //       res.download(pdfFile.filename, new Date() + 'report.pdf')
+            //     });
+            //   })
+            // })
           })
       }
     })

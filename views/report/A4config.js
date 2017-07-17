@@ -3,8 +3,8 @@ module.exports = {
   "orientation": "portrait",
   "border": "0",
   "header": {
-    "height": "10mm",
-    "contents": '<div id="cabecalho" style="text-align: center;">Felipe Muner '+`${new Date().toDateString()}`+'</div>'
+    "height": "50px",
+    "contents": ''
   },
   "footer": {
     "height": "10mm",
