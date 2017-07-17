@@ -14,6 +14,7 @@ module.exports = {
     return result;
   },
   toTitleCase: function (str) {
+    if (!str) str = ''
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})
   },
   generateHTMLReport: function(res, query, fields) {

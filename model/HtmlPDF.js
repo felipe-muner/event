@@ -19,31 +19,31 @@ function HtmlPDF(){
           .then(function(processedSource) {
             const $ = cheerio.load(processedSource)
 
-            $('#eventName').text(Util.toTitleCase(req.findEventByCode.title))
+            $('#eventName').text(Util.toTitleCase(req.findEventByCode.title || 'Not Reported'))
             $('#eventcode').text(req.findEventByCode.EventCode)
-            $('#eventstatus').text(Util.toTitleCase(req.findEventByCode.StatusName))
-            $('#createdBy').text(Util.toTitleCase(req.findEventByCode.CreatedByName))
-            $('#responsibleBy').text(Util.toTitleCase(req.findEventByCode.ResponsibleByName))
+            $('#eventstatus').text(Util.toTitleCase(req.findEventByCode.StatusName || 'Not Reported'))
+            $('#createdBy').text(Util.toTitleCase(req.findEventByCode.CreatedByName || 'Not Reported'))
+            $('#responsibleBy').text(Util.toTitleCase(req.findEventByCode.ResponsibleByName || 'Not Reported'))
             $('#departamento').text(Util.toTitleCase('departamento buscar'))
 
             $('#startTime').text(moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm'))
             $('#endTime').text(moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm'))
             // $('#startendtime').text(moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm') + '\n' +  moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm'))
 
-            $('#needDataShow').text(Util.toTitleCase(req.findEventByCode.NeedDataShow))
-            $('#needComputer').text(Util.toTitleCase(req.findEventByCode.NeedComputer))
+            $('#needDataShow').text(Util.toTitleCase(req.findEventByCode.NeedDataShow || 'Not Reported'))
+            $('#needComputer').text(Util.toTitleCase(req.findEventByCode.NeedComputer || 'Not Reported'))
             if (null !== req.findEventByCode.VideoFrom){
               $('#videoConferencia').text('From: ' + req.findEventByCode.VideoFrom + ' To: ' + req.findEventByCode.VideoTo)
             }else {
               $('#videoConferencia').text('Not Reported')
             }
 
-            $('#Nparent').text(req.findEventByCode.Nparent || '')
-            $('#Npupil').text(req.findEventByCode.Npupil || '')
-            $('#Nstaff').text(req.findEventByCode.Nstaff || '')
-            $('#Nvisitor').text(req.findEventByCode.Nvisitor || '')
+            $('#Nparent').text(req.findEventByCode.Nparent || 'Not Reported')
+            $('#Npupil').text(req.findEventByCode.Npupil || 'Not Reported')
+            $('#Nstaff').text(req.findEventByCode.Nstaff || 'Not Reported')
+            $('#Nvisitor').text(req.findEventByCode.Nvisitor || 'Not Reported')
 
-            $('#AdditionalInformation').text(Util.toTitleCase(req.findEventByCode.AdditionalInformation))
+            $('#AdditionalInformation').text(Util.toTitleCase(req.findEventByCode.AdditionalInformation || 'Not Reported'))
 
             //prod
             let products = req.findEventByCode.products.reduce(function(acc,ele){
@@ -80,11 +80,9 @@ function HtmlPDF(){
               $('#bodyGuests').html('<tr style="line-height: 15px;text-align:center;"><td colspan="4">Don\'t have guests</td></tr>')
             }
 
-
-
-
             pdf.create($.html(), A4option).toFile(function(err, pdfFile) {
               if (err) return console.log(err);
+              console.log(pdfFile);
               res.download(pdfFile.filename, new Date() + 'report.pdf')
             });
 
