@@ -4,6 +4,173 @@
   {{/each}}
 {{/section}}
 
-ola
+<div class="row">
+  <div class="col-sm-2">
+    <label for="firstDayFind">From:</label>
+    <input type="date" name="firstDayFind" id="firstDayFind" value="" class="form-control">
+  </div>
+  <div class="col-sm-2">
+    <label for="lastDayFind">To:</label>
+    <input type="date" name="lastDayFind" id="lastDayFind" value="" class="form-control">
+  </div>
+</div>
 
-{{dados}}
+<div class="row" style="margin-top:15px;">
+  <div class="col-md-12">
+    <div class="x_panel">
+      <div class="x_content">
+        <div id="calendarExternal"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{#section 'script'}}
+
+  <script type="text/javascript">
+  $(document).ready(function(e){
+    initializeDatesSearch();
+
+  $('#calendarExternal').fullCalendar({
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: ''
+    },
+    timezone:'local',
+    timeFormat: 'H(:mm)',
+    defaultView:'listMonth',
+    displayEventEnd: true,
+    allDaySlot:false,
+    dayClick: function(date, jsEvent, view) {
+      ( '' !== $("#roomID").val() ) ? showModalNewEvent(date) : swal("Select the room!", "First, select the room!", "info")
+    },
+    eventClick: function(calEvent, jsEvent, view) {
+      findEventByCode(calEvent.EventCode)
+    },viewRender: function (view, element) {
+      if( '' !== $("#roomID").val() ) searchEvents()
+    },eventRender: function(event, element) {
+      element.find(".fc-event-title").remove();
+      element.find(".fc-event-time").remove();
+      event.description = 'This is a cool event'
+      event.id = event.EventID
+
+      if(!event.ResponsibleByName) event.ResponsibleByName = 'Not Reported'
+      if(!event.NeedComputer) event.NeedComputer = 'Not Reported'
+      if(!event.NeedDataShow) event.NeedDataShow = 'Not Reported'
+      if(!event.VideoFrom){
+        event.VideoConference = 'Not Reported'
+      }else{
+        event.VideoConference = event.VideoFrom + ' to ' + event.VideoTo
+      }
+
+      var contentPopover = '<div class="row">'
+                           + '<div class="col-sm-9">'
+                             + '<div class="row">'
+                                + '<div class="col-sm-5">'
+                                + 'Event Name:'
+                                + '</div>'
+                                + '<div class="col-sm-7">'
+                                + toTitleCase(event.title)
+                                + '</div>'
+                             + '</div>'
+                             + '<div class="row">'
+                                + '<div class="col-sm-5">'
+                                + 'Created By:'
+                                + '</div>'
+                                + '<div class="col-sm-7">'
+                                + toTitleCase(event.CreatedByName)
+                                + '</div>'
+                             + '</div>'
+                             + '<div class="row">'
+                                + '<div class="col-sm-5">'
+                                + 'Responsible By:'
+                                + '</div>'
+                                + '<div class="col-sm-7">'
+                                + toTitleCase(event.ResponsibleByName)
+                                + '</div>'
+                             + '</div>'
+                             + '<div class="row">'
+                                + '<div class="col-sm-5">'
+                                + 'Need Computer:'
+                                + '</div>'
+                                + '<div class="col-sm-7">'
+                                + event.NeedComputer
+                                + '</div>'
+                             + '</div>'
+                             + '<div class="row">'
+                                + '<div class="col-sm-5">'
+                                + 'Need DataShow:'
+                                + '</div>'
+                                + '<div class="col-sm-7">'
+                                + event.NeedDataShow
+                                + '</div>'
+                             + '</div>'
+                             + '<div class="row">'
+                                + '<div class="col-sm-5">'
+                                + 'Video Conference:'
+                                + '</div>'
+                                + '<div class="col-sm-7">'
+                                + event.VideoConference
+                                + '</div>'
+                             + '</div>'
+                           + '</div>'
+                          //  + '<div class="col-sm-3 text-right">'
+                          //    + '<div>'
+                          //     + '<button class="btn btn-danger btn-xs">Cancel</button>'
+                          //    + '</div>'
+                          //    + '<div style="margin-top:5px;">'
+                          //    + '<button class="btn btn-success btn-xs">Approve</button>'
+                          //    + '</div>'
+                          //  + '</div>'
+                         + '</div>'
+
+        $(element).popover({html:'true', placement: 'top', container: 'body', title: event.EventCode + ' - ' + event.StatusName, content:contentPopover})
+        .addClass('mysuperpopover')
+        .on("mouseenter", function () {
+            var _this = this;
+            $(this).popover("show");
+            $(".popover").on("mouseleave", function () {
+                $(_this).popover('hide');
+            });
+        }).on("mouseleave", function () {
+            var _this = this;
+            setTimeout(function () {
+                if (!$(".popover:hover").length) {
+                    $(_this).popover("hide");
+                }
+            }, 0);
+        }).on("show.bs.popover", function(){
+          $(this).data("bs.popover").tip().css('maxWidth',"600px")
+        })
+      }
+    })
+  })
+
+  function searchEvents(){
+    let dataSend = {
+      firstDay: $('#firstDayFind').val(),
+      lastDay: $('#lastDayFind').val()
+    }
+    $.ajax({
+        url: '/external-event/search-events',
+        type: 'POST',
+        data: dataSend,
+        dataType:'json',
+        success: function(data) {
+          $('#calendarExternal').fullCalendar('removeEvents');
+          $('#calendarExternal').fullCalendar('addEventSource', data)
+        }
+    })
+  }
+
+  function initializeDatesSearch(){
+    $('#firstDayFind').val(moment().subtract(60, 'days').format('YYYY-MM-DD'))
+    $('#lastDayFind').val(moment().add(60, 'days').format('YYYY-MM-DD'))
+
+
+  }
+
+</script>
+
+{{/section}}
