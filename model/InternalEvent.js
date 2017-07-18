@@ -244,7 +244,6 @@ function InternalEvent(){
       if (err) {
         return console.log(err);
       }
-      // console.log(req.findEventByCode);
       req.findEventByCode.template = data
       next()
     });

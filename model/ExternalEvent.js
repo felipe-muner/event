@@ -16,10 +16,7 @@ function ExternalEvent(){
                   'e.StartEvent AS start, '+
                   'e.EndEvent AS end, '+
                   'es.StatusName, '+
-                  'e.NeedComputer, '+
-                  'e.NeedDataShow, '+
-                  'e.VideoFrom, '+
-                  'e.VideoTo, '+
+                  'e.DepartureFrom, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
                   'u1.nomeusuario AS CreatedByName '+
                 'FROM '+
@@ -30,9 +27,11 @@ function ExternalEvent(){
                 'WHERE '+
                   'e.Type = ? AND '+
                   'Date(StartEvent) >= ? AND '+
-                  'Date(StartEvent) < ?', ['E', req.body.firstDay, req.body.lastDay],function(err, result) {
+                  'Date(EndEvent) <= ? '+
+                  'ORDER BY EventCode DESC', ['E', req.body.firstDay, req.body.lastDay],function(err, result) {
         con.release();
         console.log(this.sql);
+
         if(err){
           res.render('error', { error: err } );
         }else{
@@ -91,16 +90,16 @@ function ExternalEvent(){
   this.getLastEvent = function(req, res, next){
     console.log(req.body);
     conn.acquire(function(err,con){
-      con.query('SELECT EventID, EventCode FROM event WHERE YEAR(StartEvent) = YEAR(?) order by eventId desc limit 1', [req.body.dateNewEvent], function(err, result) {
-        // console.log('______________________________');
-        // console.log(this.sql);
+      con.query('SELECT EventID, EventCode FROM event WHERE YEAR(StartEvent) = YEAR(?) order by EventId desc limit 1', [req.body.StartEvent], function(err, result) {
+        console.log('______________________________');
+        console.log(this.sql);
         con.release();
         if(err){
           console.log(err);
           res.render('error', { error: err } );
         }else{
           let eventCode = '';
-          (result.length === 0) ? eventCode = parseInt(moment(req.body.dateNewEvent).year() + '0001') : eventCode = result[0].EventCode + 1
+          (result.length === 0) ? eventCode = parseInt(moment(req.body.StartEvent).year() + '0001') : eventCode = result[0].EventCode + 1
           req.nextEventCode = eventCode
           next()
         }
@@ -117,15 +116,14 @@ function ExternalEvent(){
 
     let event = {
       Type:'E',
-      EventCode:req.nextEventCode,
-      StartEvent,
-      EndEvent,
-      Room_ID: req.body.roomIDNewEvent,
+      EventCode: req.nextEventCode,
+      StartEvent: req.body.StartEvent,
+      EndEvent: req.body.EndEvent,
       Name: req.body.nameNewEvent,
-      NeedComputer: req.body.needcomputer || null,
-      NeedDataShow: req.body.needDataShow || null,
-      VideoFrom: req.body.videoFrom || null,
-      VideoTo: req.body.videoTo || null,
+      DepartureFrom: req.body.departureFrom,
+      AmountPerson: req.body.qtdPerson,
+      TransportWaitAvenue: req.body.transportWaitVenue,
+      MeansOfTransport: req.body.meansOfTransport || null,
       AdditionalInformation: req.body.additionalInformation || null,
       Nparent: parseInt(req.body.qtdParentNewEvent) || null,
       Npupil: parseInt(req.body.qtdPupilNewEvent) || null,
@@ -133,7 +131,9 @@ function ExternalEvent(){
       Nvisitor: parseInt(req.body.qtdVisitorNewEvent) || null,
       Budget_ID: parseInt(req.body.id_budget) || null,
       CreateBy: req.session.matricula,
-      ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || null
+      ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || null,
+      LocationEvent: req.body.locationEvent,
+      LeavingFromEvent: req.body.LeavingFromEvent
     }
     // for(var propName in EndEvent) console.log(propName + ' ------- Valor:' +  EndEvent[propName])
     // moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())

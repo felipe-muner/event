@@ -56,6 +56,7 @@ function HtmlPDF(){
                                         '</tr>'
               return acc
             },{tabelaProd:'',total:0})
+
             let footerTableProd = '<tr style="line-height: 15px;"><td colspan="4" style="padding-right:3px;text-align:right;">'+ (products.total).toFixed(2) +'</td></tr>'
             products.tabelaProd = products.tabelaProd + footerTableProd
 
