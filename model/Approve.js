@@ -34,18 +34,28 @@ function Approve(){
     });
   }
 
-  this.aproveEvent = function(req, res, next){
-    conn.acquire(function(err,con){
-      con.query('UPDATE Event SET EventStatus_ID = ?, ApprovedAt = NOW(), ApprovedBy = ? WHERE EventCode = ?', [,], function(err, result) {
-        con.release();
-        if(err){
-          res.render('error', { error: err } );
-        }else{
-          req.allEventAvaliados = result
-          next()
-        }
-      });
-    });
+  this.evaluateEvents = function(req, res, next){
+    debugger
+    if (!req.body.selectedEvent){
+      req.session.flashMsg = {type:'alert-danger', events:'Please select at least 1 event'}
+      res.redirect('/approve')
+    }
+    else{
+      conn.acquire(function(err,con){
+        con.query('UPDATE Event SET EventStatus_ID = ?, ApprovedAt = NOW(), ApprovedBy = ? WHERE EventCode IN (?)', [req.body.statusToUpdate, req.session.matricula, req.body.selectedEvent], function(err, result) {
+          console.log(this.sql);
+          con.release();
+          if(err){
+            console.log(err);
+            res.render('error', { error: err } );
+          }else{
+            console.log(result);
+            req.allEventsEvaluated = result
+            next()
+          }
+        })
+      })
+    }
   }
 }
 
