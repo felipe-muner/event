@@ -149,7 +149,7 @@ function MenuItem(){
                 'Inner Join EventProduct ON EventItem.EventProduct_ID = EventProduct.EventProductID '+
                 'Inner Join EventProductUnit ON EventProduct.Unit = EventProductUnit.EventProductUnitID '+
                 'WHERE '+
-                  'EventItem.Event_ID =  ?', [req.findEventByCode.EventCode], function(err, result) {
+                  'EventItem.Event_ID = ?', [req.findEventByCode.EventCode], function(err, result) {
         con.release();
         if(err){
           res.render('error', { error: err } );
