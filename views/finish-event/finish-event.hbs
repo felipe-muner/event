@@ -4,6 +4,103 @@
   {{/each}}
 {{/section}}
 
-finish-event
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-sm-12">
+        Finish Event
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-12">
+        {{#if flashMsg}}
+          <div class="alert {{flashMsg.type}}">
+            <strong>{{flashMsg.statusName}} </strong> {{flashMsg.events}}
+          </div>
+        {{/if}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Event Number</th>
+              <th>Type</th>
+              <th>Creator</th>
+              <th>Responsible</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Event Name</th>
+              <th>More Info</th>
+              <th>Finish Event</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each allEventToFinish}}
+              <tr data-event-code="{{EventCode}}" data-title="{{title}}" data-created-by="{{CreatedByName}}" data-responsible-by="{{ResponsibleByName}}">
+                <td class="text-center">{{EventCode}}</td>
+                <td>{{Type}}</td>
+                <td>{{CreatedByName}}</td>
+                <td>{{ResponsibleByName}}</td>
+                <td class="text-center">{{start}}</td>
+                <td class="text-center">{{end}}</td>
+                <td>{{title}}</td>
+                <td style="text-align:center;">
+                  <i onclick="loadMoreInfo(this);" class="fa fa-search-plus" aria-hidden="true"></i>
+                </td>
+                <td style="text-align:center;">
+                  <i onclick="loadPageWriteDown(this);" class="fa fa-sign-in" aria-hidden="true"></i>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 
-{{dados}}
+<form action="/finish-event/write-down-page" method="post" id="formWriteDown" style="display:none;"></form>
+
+{{#section 'script'}}
+
+  <script type="text/javascript">
+    function loadPageWriteDown(el){
+      debugger
+      $('#formWriteDown').empty()
+
+      $('<input />', {
+        type: 'hidden',
+        name: 'EventCode',
+        value: $(el).closest('tr').data('event-code')
+        }).appendTo('#formWriteDown')
+
+      $('<input />', {
+        type: 'hidden',
+        name: 'Title',
+        value: $(el).closest('tr').data('title')
+        }).appendTo('#formWriteDown')
+
+      $('<input />', {
+        type: 'hidden',
+        name: 'CreatedByName',
+        value: $(el).closest('tr').data('created-by')
+        }).appendTo('#formWriteDown')
+
+      $('<input />', {
+        type: 'hidden',
+        name: 'ResponsibleByName',
+        value: $(el).closest('tr').data('responsible-by')
+        }).appendTo('#formWriteDown')
+
+      debugger
+
+      $('#formWriteDown').submit()
+
+    }
+  </script>
+
+{{/section}}

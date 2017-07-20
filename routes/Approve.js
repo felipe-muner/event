@@ -11,7 +11,8 @@ const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', approve.getEventToApprove ,function(req, res, next) {
-
+  let flashMsg = req.session.flashMsg
+  if(flashMsg) delete req.session.flashMsg
   req.allEventToApprove.map(e => {
     e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
@@ -23,10 +24,13 @@ router.get('/', approve.getEventToApprove ,function(req, res, next) {
 
   res.render('approve/approve', {
     sess:req.session,
-    allEventToApprove:req.allEventToApprove
+    allEventToApprove:req.allEventToApprove,
+    flashMsg
   })
-}).post('/approve-event', function(req, res, next) {
-  console.log(req.body);
+}).post('/approve-event', approve.evaluateEvents, function(req, res, next) {
+  let statusName = (parseInt(req.body.statusToUpdate) === 2) ? 'Approved: ' : 'Cancelled: '
+  let events = (Object.prototype.toString.call( req.body.selectedEvent ) === '[object Array]') ? req.body.selectedEvent.join(', ') : req.body.selectedEvent
+  req.session.flashMsg = {statusName, events, type: 'alert-info'}
   res.redirect('/approve')
 })
 

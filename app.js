@@ -24,6 +24,7 @@ var finishEvent = require('./routes/finishEvent');
 var menuItem = require('./routes/menuItem');
 var manageProfile = require('./routes/manage-profile');
 var approve = require('./routes/Approve');
+var find = require('./routes/Find');
 var user = require('./routes/user');
 
 var app = express();
@@ -52,6 +53,7 @@ app.use('/finish-event', finishEvent);
 app.use('/menu-item', menuItem);
 app.use('/user', user);
 app.use('/approve', approve);
+app.use('/find', find);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
