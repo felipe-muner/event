@@ -36,6 +36,7 @@ function FinishEvent(){
   this.productOfEvent = function(req, res, next){
     conn.acquire(function(err,con){
       con.query('SELECT '+
+                  'EventItem.EventProduct_ID, '+
                   'EventItem.Price, '+
                   'EventItem.Amount, '+
                   'EventItem.Amount * EventItem.Price as TotalProd, '+
@@ -48,7 +49,25 @@ function FinishEvent(){
                 'Inner Join EventProduct ON EventItem.EventProduct_ID = EventProduct.EventProductID '+
                 'Inner Join EventProductUnit ON EventProduct.Unit = EventProductUnit.EventProductUnitID '+
                 'WHERE '+
-                  'EventItem.Event_ID = ?', [req.query.eventcode], function(err, result) {
+                  'EventItem.Event_ID = ?', [req.body.EventCode], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          console.log('fields from products');
+          console.log(result);
+          req.products = result
+          next()
+        }
+      });
+    });
+  }
+
+  this.updateFinishEvent = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query(''+
+                'WHERE '+
+                  'EventItem.Event_ID = ?', [], function(err, result) {
         con.release();
         if(err){
           res.render('error', { error: err } );

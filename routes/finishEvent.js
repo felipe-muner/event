@@ -26,12 +26,13 @@ router.get('/', fe.getAllFinishEvent, function(req, res, next) {
     sess:req.session,
     allEventToFinish:req.allEventToFinish
   })
-}).get('/write-down-page', fe.productOfEvent, function(req,res,next){
-  console.log(req.query);
+}).post('/write-down-page', fe.productOfEvent, function(req,res,next){
+  console.log(req.body);
+  console.log('____________________----')
   res.render('finish-event/write-down-page',{
     sess:req.session,
-    camposAproveitados:req.query,
-    products
+    camposAproveitados:req.body,
+    products: req.products
   })
 })
 

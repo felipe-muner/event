@@ -15,47 +15,47 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-sm-12">
-        {{#if flashMsg}}
-          <div class="alert {{flashMsg.type}}">
-            <strong>{{flashMsg.statusName}} </strong> {{flashMsg.events}}
-          </div>
-        {{/if}}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12">
         <table class="table table-hover table-striped">
           <thead>
+          </thead>
+          <tbody>
             <tr>
-              <th>Event Number</th>
-              <th>Type</th>
-              <th>Creator</th>
-              <th>Responsible</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Event Name</th>
-              <th>More Info</th>
-              <th>Finish Event</th>
+              <td style="width:15%;font-weight:bold;">Event Code</td>
+              <td>{{camposAproveitados.EventCode}}</td>
+            </tr>
+            <tr>
+              <td style="width:15%;font-weight:bold;">Event Name</td>
+              <td>{{camposAproveitados.Title}}</td>
+            </tr>
+            <tr>
+              <td style="width:15%;font-weight:bold;">Created By</td>
+              <td>{{camposAproveitados.CreatedByName}}</td>
+            </tr>
+            <tr>
+              <td style="width:15%;font-weight:bold;">Responsible By</td>
+              <td>{{camposAproveitados.ResponsibleByName}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table table-hover table-striped table-bordered" style="margin-bottom:0px;">
+          <thead>
+            <tr>
+              <th style="">Name</th>
+              <th style="">Amount Used / Amount Requested</th>
             </tr>
           </thead>
           <tbody>
-            {{#each allEventToFinish}}
-              <tr data-event-code="{{EventCode}}">
-                <td class="text-center">{{EventCode}}</td>
-                <td>{{Type}}</td>
-                <td>{{CreatedByName}}</td>
-                <td>{{ResponsibleByName}}</td>
-                <td class="text-center">{{start}}</td>
-                <td class="text-center">{{end}}</td>
-                <td>{{title}}</td>
-                <td style="text-align:center;">
-                  <i class="fa fa-search-plus" aria-hidden="true"></i>
-                </td>
-                <td style="text-align:center;">
-                  <a href="/finish-event/write-down-page?eventcode={{EventCode}}&eventname={{title}}&createdby={{CreatedByName}}&responsibleby={{ResponsibleByName}}"><i class="fa fa-sign-in" aria-hidden="true"></i></a>
-                </td>
+            {{#each products}}
+              <tr data-event-code={{../camposAproveitados.EventCode}} data-event-product-id="{{EventProduct_ID}}" data-amount="{{Amount}}" class="lineProduct">
+                <td style="text-align:right;">{{ProductNameEnglish}} / {{ProductNamePort}} - {{UnitInEnglish}} / {{UnitInPort}}</td>
+                <td><input style="text-align:right;" min="0" step="1" type="number" name="amountUsed" value="{{Amount}}" class="amountUsed"> / <span class="amountRequested">{{Amount}}</span> </td>
               </tr>
             {{/each}}
+              <tr>
+                <td colspan="2" class="text-right">
+                  <input type="button" name="" value="Close Event" class="btn btn-primary btn-xs" onclick="closeEvent()">
+                </td>
+              </tr>
           </tbody>
         </table>
       </div>
@@ -63,12 +63,21 @@
   </div>
 </div>
 
-<!-- <form action="/approve/approve-event" method="post" id="approveEvent" style="display:none;"></form> -->
+<form action="/finish-event/close-event" method="post" id="formCloseEvent">
 
 {{#section 'script'}}
 
   <script type="text/javascript">
-
+    function closeEvent(){
+      let arrayBaixa = []
+      $('.lineProduct').each(function(e){              
+        let eventcode = $(this).data('event-code')
+        let amountUsed = $(this).find('.amountUsed').val()
+        let amountRequested = $(this).find('.amountRequested').text()
+        arrayBaixa.push({eventcode,amountUsed,amountRequested})
+      })
+      console.log(arrayBaixa);
+    }
   </script>
 
 {{/section}}

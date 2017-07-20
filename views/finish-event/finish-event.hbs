@@ -40,7 +40,7 @@
           </thead>
           <tbody>
             {{#each allEventToFinish}}
-              <tr data-event-code="{{EventCode}}">
+              <tr data-event-code="{{EventCode}}" data-title="{{title}}" data-created-by="{{CreatedByName}}" data-responsible-by="{{ResponsibleByName}}">
                 <td class="text-center">{{EventCode}}</td>
                 <td>{{Type}}</td>
                 <td>{{CreatedByName}}</td>
@@ -49,10 +49,10 @@
                 <td class="text-center">{{end}}</td>
                 <td>{{title}}</td>
                 <td style="text-align:center;">
-                  <i class="fa fa-search-plus" aria-hidden="true"></i>
+                  <i onclick="loadMoreInfo(this);" class="fa fa-search-plus" aria-hidden="true"></i>
                 </td>
                 <td style="text-align:center;">
-                  <a href="/finish-event/write-down-page?eventcode={{EventCode}}&eventname={{title}}&createdby={{CreatedByName}}&responsibleby={{ResponsibleByName}}"><i class="fa fa-sign-in" aria-hidden="true"></i></a>
+                  <i onclick="loadPageWriteDown(this);" class="fa fa-sign-in" aria-hidden="true"></i>
                 </td>
               </tr>
             {{/each}}
@@ -63,12 +63,44 @@
   </div>
 </div>
 
-<!-- <form action="/approve/approve-event" method="post" id="approveEvent" style="display:none;"></form> -->
+<form action="/finish-event/write-down-page" method="post" id="formWriteDown" style="display:none;"></form>
 
 {{#section 'script'}}
 
   <script type="text/javascript">
+    function loadPageWriteDown(el){
+      debugger
+      $('#formWriteDown').empty()
 
+      $('<input />', {
+        type: 'hidden',
+        name: 'EventCode',
+        value: $(el).closest('tr').data('event-code')
+        }).appendTo('#formWriteDown')
+
+      $('<input />', {
+        type: 'hidden',
+        name: 'Title',
+        value: $(el).closest('tr').data('title')
+        }).appendTo('#formWriteDown')
+
+      $('<input />', {
+        type: 'hidden',
+        name: 'CreatedByName',
+        value: $(el).closest('tr').data('created-by')
+        }).appendTo('#formWriteDown')
+
+      $('<input />', {
+        type: 'hidden',
+        name: 'ResponsibleByName',
+        value: $(el).closest('tr').data('responsible-by')
+        }).appendTo('#formWriteDown')
+
+      debugger
+
+      $('#formWriteDown').submit()
+
+    }
   </script>
 
 {{/section}}
