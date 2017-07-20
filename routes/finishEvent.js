@@ -27,13 +27,16 @@ router.get('/', fe.getAllFinishEvent, function(req, res, next) {
     allEventToFinish:req.allEventToFinish
   })
 }).post('/write-down-page', fe.productOfEvent, function(req,res,next){
-  console.log(req.body);
-  console.log('____________________----')
   res.render('finish-event/write-down-page',{
     sess:req.session,
     camposAproveitados:req.body,
     products: req.products
   })
+}).post('/close-event', function(req,res,next){
+
+  console.log(JSON.parse(req.body.darBaixa)[0])
+  console.log('____________________----')
+  res.redirect('/finish-event')
 })
 
 module.exports = router;

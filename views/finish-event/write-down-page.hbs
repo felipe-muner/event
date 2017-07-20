@@ -69,14 +69,29 @@
 
   <script type="text/javascript">
     function closeEvent(){
+
+      $('#formCloseEvent').empty()
       let arrayBaixa = []
-      $('.lineProduct').each(function(e){              
+
+      $('.lineProduct').each(function(e){
         let eventcode = $(this).data('event-code')
+        let EventProduct_ID = $(this).data('event-product-id')
         let amountUsed = $(this).find('.amountUsed').val()
         let amountRequested = $(this).find('.amountRequested').text()
-        arrayBaixa.push({eventcode,amountUsed,amountRequested})
+        arrayBaixa.push({
+          eventcode,
+          EventProduct_ID,
+          amountUsed,
+          amountRequested
+        })
       })
-      console.log(arrayBaixa);
+
+      $('<input />', {
+        type: 'hidden',
+        name: 'darBaixa',
+        value: JSON.stringify(arrayBaixa)}).appendTo('#formCloseEvent')
+
+      $('#formCloseEvent').submit();
     }
   </script>
 
