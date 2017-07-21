@@ -36,6 +36,7 @@ function FinishEvent(){
   this.productOfEvent = function(req, res, next){
     conn.acquire(function(err,con){
       con.query('SELECT '+
+                  'EventItem.EventItemID, '+
                   'EventItem.EventProduct_ID, '+
                   'EventItem.Price, '+
                   'EventItem.Amount, '+
@@ -63,11 +64,9 @@ function FinishEvent(){
     });
   }
 
-  this.updateFinishEvent = function(req, res, next){
+  this.updateStatusEvent = function(req, res, next){
     conn.acquire(function(err,con){
-      con.query(''+
-                'WHERE '+
-                  'EventItem.Event_ID = ?', [], function(err, result) {
+      con.query('UPDATE Event set EventStatus_ID = 3, FinishedByMatricula_ID = ? WHERE EventCode = ?', [req.session.matricula, req.body.EventCode], function(err, result) {
         con.release();
         if(err){
           res.render('error', { error: err } );
@@ -79,6 +78,34 @@ function FinishEvent(){
         }
       });
     });
+  }
+
+  this.updateItemsFinishEvent = function(req, res, next){
+    if(0 === JSON.parse(req.body.darBaixa).length){
+       next()
+    }else {
+      conn.acquire(function(err,con){
+        console.log(JSON.parse(req.body.darBaixa))
+        let bulkUpdate = JSON.parse(req.body.darBaixa).reduce(function(acc, e){
+          return acc + 'UPDATE EventItem SET UsedAmount = '+ e.amountUsed +', Matricula_ID = '+ req.session.matricula +' WHERE EventItemID = '+ e.EventItemID + ';'
+        },'')
+        console.log('bulupdate');
+        console.log(bulkUpdate);
+
+        con.query(bulkUpdate, function(err, result) {
+          con.release();
+          if(err){
+            console.log(err);
+            res.render('error', { error: err } );
+          }else{
+            console.log('atualizei os valores dos itens usados no evento');
+            console.log(result);
+            req.baixas = result
+            next()
+          }
+        })
+      })
+    }
   }
 }
 

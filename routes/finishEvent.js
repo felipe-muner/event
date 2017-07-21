@@ -32,10 +32,8 @@ router.get('/', fe.getAllFinishEvent, function(req, res, next) {
     camposAproveitados:req.body,
     products: req.products
   })
-}).post('/close-event', function(req,res,next){
-
-  console.log(JSON.parse(req.body.darBaixa)[0])
-  console.log('____________________----')
+}).post('/close-event', fe.updateItemsFinishEvent, fe.updateStatusEvent, function(req,res,next){
+  console.log(req.body);
   res.redirect('/finish-event')
 })
 

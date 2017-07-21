@@ -69,7 +69,6 @@
 
   <script type="text/javascript">
     function loadPageWriteDown(el){
-      debugger
       $('#formWriteDown').empty()
 
       $('<input />', {
@@ -95,8 +94,6 @@
         name: 'ResponsibleByName',
         value: $(el).closest('tr').data('responsible-by')
         }).appendTo('#formWriteDown')
-
-      debugger
 
       $('#formWriteDown').submit()
 
