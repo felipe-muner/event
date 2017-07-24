@@ -154,8 +154,8 @@ function MenuItem(){
         if(err){
           res.render('error', { error: err } );
         }else{
-          console.log('fields from products');
-          console.log(result);
+          // console.log('fields from products');
+          // console.log(result);
           req.findEventByCode.products = result
           next()
         }

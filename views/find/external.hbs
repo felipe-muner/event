@@ -1,0 +1,129 @@
+{{#section 'functionality'}}
+  {{#each sess.functionalityProfile}}
+    <li><a href="{{Action}}"><i class="fa {{Icon}}"></i> {{Name}} </a></li>
+  {{/each}}
+{{/section}}
+
+{{#section 'head'}}
+  <style media="screen">
+    .mytable{
+      background-color: #eee;
+      font-weight: bold;
+    }
+  </style>
+{{/section}}
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    More Information
+  </div>
+  <div class="panel-body">
+    <table class="table table-bordered" style="margin-bottom:10px;">
+      <tr>
+        <td colspan="1" class="mytable">Event Code</td>
+        <td colspan="1">{{EventFound.EventCode}}</td>
+        <td colspan="1" class="mytable">Type</td>
+        <td colspan="1">{{EventFound.Type}}</td>
+        <td colspan="2" class="mytable">Event Name</td>
+        <td colspan="2">{{EventFound.title}}</td>
+      </tr>
+      <tr>
+        <td colspan="2" class="mytable">Create By</td>
+        <td colspan="2">{{EventFound.CreatedByName}}</td>
+        <td colspan="2" class="mytable">Responsible By</td>
+        <td colspan="2">{{EventFound.ResponsibleByName}}</td>
+      </tr>
+      <tr>
+        <td colspan="2" class="mytable">Start</td>
+        <td colspan="2">{{EventFound.start}}</td>
+        <td colspan="2" class="mytable">End</td>
+        <td colspan="2">{{EventFound.end}}</td>
+      </tr>
+      <tr>
+        <td class="mytable">Departure From</td>
+        <td>{{EventFound.DepartureFrom}}</td>
+        <td class="mytable">Person Amount Transport?</td>
+        <td>{{EventFound.AmountPerson}}</td>
+        <td class="mytable">Transport Will Wait in Avenue</td>
+        <td>{{EventFound.TransportWaitAvenue}}</td>
+        <td class="mytable">Event Status</td>
+        <td>{{EventFound.StatusName}}</td>
+      </tr>
+      <tr>
+        <td class="mytable">Means of Transport</td>
+        <td>{{EventFound.MeansOfTransport}}</td>
+        <td class="mytable">Location Event</td>
+        <td>{{EventFound.LocationEvent}}</td>
+        <td class="mytable">Leaving From Event</td>
+        <td>{{EventFound.LeavingFromEvent}}</td>
+      </tr>
+      <tr>
+        <td class="mytable">Nº Parent</td>
+        <td>{{EventFound.Nparent}}</td>
+        <td class="mytable">Nº Pupil</td>
+        <td>{{EventFound.Npupil}}</td>
+        <td class="mytable">Nº Staff</td>
+        <td>{{EventFound.Nstaff}}</td>
+        <td class="mytable">Nº Visitor</td>
+        <td>{{EventFound.Nvisitor}}</td>
+      </tr>
+      <tr>
+        <td style="vertical-align:middle;" class="mytable">Additonal Information</td>
+        <td colspan="7">{{EventFound.AdditionalInformation}}</td>
+      </tr>
+    </table>
+
+    <table class="table table-bordered">
+      <tr>
+        <td class="mytable text-center" colspan="4">Products</td>
+      </tr>
+      <tr>
+        <td class="mytable text-center">Name</td>
+        <td class="mytable text-center">Amount</td>
+        <td class="mytable text-center">Price</td>
+        <td class="mytable text-center">Subtotal + 14%</td>
+      </tr>
+      {{#if EventFound.products}}
+        {{#each EventFound.products}}
+          <tr>
+            <td>{{ProductNameEnglish}}/{{ProductNamePort}} - {{UnitInEnglish}}/{{UnitInPort}}</td>
+            <td class="text-right">{{Amount}}</td>
+            <td class="text-right">{{Price}}</td>
+            <td class="text-right">{{TotalProd}}</td>
+          </tr>
+        {{/each}}
+        <tr>
+          <td colspan="4" class="text-right">{{EventFound.TotalFinalProd}}</td>
+        </tr>
+      {{else}}
+      <tr>
+        <td colspan="4">Don't have products.</td>
+      </tr>
+      {{/if}}
+    </table>
+
+    <table class="table table-bordered">
+      <tr>
+        <td class="mytable text-center" colspan="2">Guest</td>
+      </tr>
+      <tr>
+        <td class="mytable text-center">Type</td>
+        <td class="mytable text-center">Name</td>
+      </tr>
+      {{#if EventFound.guests}}
+        {{#each EventFound.guests}}
+          <tr>
+            <td>{{this.Type}}</td>
+            <td>{{this.NameGuest}}</td>
+          </tr>
+        {{/each}}
+
+      {{else}}
+      <tr>
+        <td colspan="4">Don't have guests.</td>
+      </tr>
+      {{/if}}
+    </table>
+
+  </div>
+</div>

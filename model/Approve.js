@@ -30,8 +30,8 @@ function Approve(){
           req.allEventToApprove = result
           next()
         }
-      });
-    });
+      })
+    })
   }
 
   this.evaluateEvents = function(req, res, next){

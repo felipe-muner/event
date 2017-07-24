@@ -24,6 +24,7 @@ function Guest(){
       });
     }
   }
+
   this.guestOfEvent = function(req, res, next){
     conn.acquire(function(err,con){
       con.query('SELECT Type, NameGuest FROM EventGuest WHERE Event_ID = ?', [req.findEventByCode.EventCode], function(err, result) {
@@ -31,9 +32,9 @@ function Guest(){
         if(err){
           res.render('error', { error: err } );
         }else{
-          console.log('fields from guest');
+          // console.log('fields from guest');
           req.findEventByCode.guests = result
-          console.log(req.findEventByCode.guests);
+          // console.log(req.findEventByCode.guests);
           next()
         }
       });
