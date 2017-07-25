@@ -68,6 +68,23 @@
 {{#section 'script'}}
 
   <script type="text/javascript">
+
+    function loadMoreInfo(el){
+       let form = document.createElement("form")
+       form.method = "POST"
+       form.action = "/find/search-event-by-code"
+
+       var campo1 = document.createElement("input")
+       campo1.name= 'EventCode'
+       campo1.value= $(el).closest('tr').data('event-code')
+
+       form.appendChild(campo1)
+
+       document.body.appendChild(form)
+
+       form.submit()
+    }
+
     function loadPageWriteDown(el){
       $('#formWriteDown').empty()
 
