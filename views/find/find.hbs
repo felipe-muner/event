@@ -4,18 +4,27 @@
   {{/each}}
 {{/section}}
 
+{{#section 'head'}}
+  <style media="screen">
+  .select2-container .select2-search,
+    .select2-container .select2-search__field {
+        width: 100% !important;
+    }
+  </style>
+{{/section}}
+
 <div class="panel panel-primary">
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-2">
-        Search Event <span style="margin-left:10px;" class="label label-warning">Filter</span>
+        Search Event <span style="margin-left:10px;" class="label label-warning" onclick="showModalFind();">Filter</span>
       </div>
     </div>
   </div>
   <div class="panel-body">
     <div class="row">
       <div class="col-sm-12">
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped" id="tableSearchEvent">
           <thead>
             <tr>
               <th>Event Number</th>
@@ -50,8 +59,78 @@
   </div>
 </div>
 
+<div id="modalFind" class="modal fade" role="dialog">
+  <div class="modal-dialog" style="width:40%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Choose your filter</h4>
+      </div>
+      <form action="/find/searchFiltered" method="post" id="formFind">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-3">
+              <input type="number" name="EventCode" value="" placeholder=" Event Code" class="form-control" step="1">
+            </div>
+            <div class="col-sm-9">
+              <label class="checkbox-inline">
+                <input type="radio" name="Type" value="I" style="margin-right:5px;">Internal
+              </label>
+              <label class="checkbox-inline">
+                <input type="radio" name="Type" value="E" style="margin-right:5px;">External
+              </label>
+              <label class="checkbox-inline">
+                <input type="radio" name="Type" value="I, E" style="margin-right:5px;" checked>Both
+              </label>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12">
+              <input type="text" name="EventName" value="" class="form-control" placeholder=" Event Name">
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12">
+              <select id="ResponsibleOrCreator" name="ResponsibleOrCreator" style="width:100%;" multiple>
+                <option>Select the Creator or Responsible</option>
+                {{#each allActiveUser}}
+                  <option value="{{matricula}}">{{pad matricula 4 0}} - {{toTitleCase nomeusuario}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" name="" value="Search">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 {{#section 'script'}}
   <script type="text/javascript">
+
+    function showModalFind(){
+      $('#modalFind').modal()
+    }
+
+    $('#formFind').submit(function(e){
+      e.preventDefault();
+
+      $.ajax({
+        url: '/find/searchFiltered',
+        type: 'POST',
+        data: $('#formFind').serialize(),
+        dataType:'json',
+        success: function(data) {
+          console.log(data)
+          alert(data)
+        }
+      })
+    })
+
+
     function moreInformationEvent(ecode){
        let form = document.createElement("form")
        form.method = "POST"
@@ -62,10 +141,15 @@
        campo1.value= ecode
 
        form.appendChild(campo1)
-
        document.body.appendChild(form)
 
        form.submit()
     }
+
+    $(document).ready(function(e){
+      $("#ResponsibleOrCreator").select2({
+        placeholder: "Select the Creator or Responsible"
+      })
+    })
   </script>
 {{/section}}
