@@ -339,7 +339,7 @@
           $('#externalEvents tbody').empty()
 
           var dataTableBody = data.reduce(function(acc,ele){
-            let newLine = '<tr>'
+            let newLine = '<tr data-event-code="'+ele.EventCode+'">'
                             +'<td class="text-center">'+ ele.EventCode +'</td>'
                             +'<td>'+ ele.CreatedByName +'</td>'
                             +'<td>'+ ele.ResponsibleByName +'</td>'
@@ -348,6 +348,7 @@
                             +'<td>'+ ele.title +'</td>'
                             +'<td>'+ ele.DepartureFrom +'</td>'
                             +'<td>'+ ele.StatusName +'</td>'
+                            +'<td><i onclick="loadMoreInfoExternal(this);" class="fa fa-search-plus" aria-hidden="true"></i></td>'
                          +'</tr>'
             acc = acc + newLine
             return acc
@@ -554,6 +555,22 @@
     })
     console.log(arrayGuest);
     return arrayGuest
+  }
+
+  function loadMoreInfoExternal(el){
+     let form = document.createElement("form")
+     form.method = "POST"
+     form.action = "/find/search-event-by-code"
+
+     var campo1 = document.createElement("input")
+     campo1.name= 'EventCode'
+     campo1.value= $(el).closest('tr').data('event-code')
+
+     form.appendChild(campo1)
+
+     document.body.appendChild(form)
+
+     form.submit()
   }
 
 </script>
