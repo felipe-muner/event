@@ -61,20 +61,24 @@ function Find(){
                   'e.DepartureFrom, '+
                   'e.AmountPerson, '+
                   'e.TransportWaitAvenue, '+
-                  'e.MeansOfTransport, '+
                   'e.LocationEvent, '+
                   'e.LeavingFromEvent, '+
                   'e.AdditionalInformation, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
-                  'u1.nomeusuario AS CreatedByName '+
+                  'u1.nomeusuario AS CreatedByName, '+
+                  'EventTransport.TypeVehicleEnglish, '+
+                  'EventTransport.TypeVehiclePort, '+
+                  'EventTransport.AmountSeat '+
                 'FROM '+
                   'Event AS e '+
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
+                  'Left Join EventTransport ON e.MeansOfTransport = EventTransport.EventTransportID '+
                 'WHERE '+
-                  'e.EventCode = ?', [req.body.EventCode],function(err, result) {
+                  'e.EventCode = ?', [parseInt(req.body.EventCode)],function(err, result) {
         con.release();
+        console.log('queryyyy');
         console.log(this.sql);
         if(err){
           res.render('error', { error: err } );

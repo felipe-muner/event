@@ -53,7 +53,7 @@
                 <td class="text-center">{{end}}</td>
                 <td>{{title}}</td>
                 <td style="text-align:center;">
-                  <i class="fa fa-search-plus" aria-hidden="true"></i>
+                  <i class="fa fa-search-plus" aria-hidden="true" onclick="loadMoreInfoApprove(this);" ></i>
                 </td>
                 <td style="text-align:center;">
                   <input class="checkboxToApprove" type="checkbox" name="toApprove" value="{{EventCode}}">
@@ -72,6 +72,23 @@
 {{#section 'script'}}
 
   <script type="text/javascript">
+
+  function loadMoreInfoApprove(el){
+     let form = document.createElement("form")
+     form.method = "POST"
+     form.action = "/find/search-event-by-code"
+
+     var campo1 = document.createElement("input")
+     campo1.name= 'EventCode'
+     campo1.value= $(el).closest('tr').data('event-code')
+
+     form.appendChild(campo1)
+
+     document.body.appendChild(form)
+
+     form.submit()
+  }
+
   function toggleCheckBox(source) {
     checkboxes = document.getElementsByName('toApprove');
     for(checkbox in checkboxes)
