@@ -74,13 +74,13 @@
             </div>
             <div class="col-sm-9">
               <label class="checkbox-inline">
-                <input type="radio" name="Type" value="I" style="margin-right:5px;">Internal
+                <input type="radio" name="Type" value="'I'" style="margin-right:5px;">Internal
               </label>
               <label class="checkbox-inline">
-                <input type="radio" name="Type" value="E" style="margin-right:5px;">External
+                <input type="radio" name="Type" value="'E'" style="margin-right:5px;">External
               </label>
               <label class="checkbox-inline">
-                <input type="radio" name="Type" value="I, E" style="margin-right:5px;" checked>Both
+                <input type="radio" name="Type" value="'I', 'E'" style="margin-right:5px;" checked>Both
               </label>
             </div>
           </div>
@@ -97,6 +97,22 @@
                   <option value="{{matricula}}">{{pad matricula 4 0}} - {{toTitleCase nomeusuario}}</option>
                 {{/each}}
               </select>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="StatusName" value="1" style="margin-right:5px;" checked>Waiting For Approval
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="StatusName" value="2" style="margin-right:5px;" checked>Approved
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="StatusName" value="3" style="margin-right:5px;" checked>Finalized
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="StatusName" value="4" style="margin-right:5px;" checked>Canceled
+              </label>
             </div>
           </div>
         </div>

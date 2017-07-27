@@ -2,20 +2,40 @@ const conn = require(process.env.PWD + '/conn');
 const fs = require('fs')
 
 function Find(){
+  this.testaFunc = function(){
+    console.log('testaFunc')
+  }
   this.makeFind = function(req, res, next){
     conn.acquire(function(err,con){
 
-      let whereEventCode = 'e.EventCode = '+ req.body.EventCode +' '
-      // let whereCreatedBy = 'e.CreateBy IN(?)'
-      // let whereResponsibleBy = 'e.ResponsibleByEvent IN(?)'
-      let whereEventName = 'e.Name like \'%' + req.body.EventName + '%\''
-      let whereType = 'e.Type IN(?) '
+      console.log(req.body)
 
-      let whereClause = whereEventCode
-            //  + ' OR ' + whereCreatedBy
-            //  + ' OR ' + whereResponsibleBy
-             + ' AND ' + whereEventName
-             + ' AND ' + whereType
+      let whereEventCode = ('' !== req.body.EventCode) ? 'e.EventCode = '+ req.body.EventCode +' ' : ''
+      // console.log(whereEventCode)
+      let whereType = 'e.Type IN ('+ req.body.Type +')'
+      // console.log(whereType)
+      let whereEventName = ('' !== req.body.EventName) ? 'e.Name LIKE \'%'+ req.body.EventName + '%\'' : ''
+      // console.log(whereEventName)
+      let whereOwner = (!!req.body.ResponsibleOrCreator) ? '(e.CreateBy IN('+ req.body.ResponsibleOrCreator +') OR e.ResponsibleByEvent IN('+ req.body.ResponsibleOrCreator+'))' : ''
+      // console.log(whereOwner)
+
+      let whereStatusName = (!!req.body.StatusName) ? 'e.EventStatus_ID IN('+ req.body.StatusName +')' : ''
+      console.log(req.body.StatusName)
+      console.log(whereStatusName)
+      console.log('____________________')
+      console.log('____________________')
+
+      let whereClause = 'WHERE '
+      if('' !== whereEventCode){
+        whereClause = whereClause += whereEventCode
+      }else{
+        whereClause = whereClause += whereType + ' '
+        if(whereEventName !== '') whereClause = whereClause += ' AND ' + whereEventName + ' '
+        if(whereOwner !== '') whereClause = whereClause += ' AND ' + whereOwner + ' '
+        if(whereStatusName !== '') whereClause = whereClause += ' AND ' + whereStatusName + ' '
+      }
+
+      whereClause = (whereClause === 'WHERE ') ? '' : whereClause
 
       let query = 'SELECT '+
                   'e.EventCode, '+
@@ -34,10 +54,8 @@ function Find(){
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
-                'WHERE '+
                   whereClause +
-                'ORDER BY EventID ASC '+
-                'LIMIT 100'
+                'ORDER BY EventID ASC'
 
       con.query(query, function(err, result) {
         con.release();

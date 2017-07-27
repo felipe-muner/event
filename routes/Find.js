@@ -56,8 +56,7 @@ router.get('/', find.getLastHundred, u.allActive, function(req, res, next) {
     EventFound: req.findEventByCode
   })
 }).post('/searchFiltered', find.makeFind, function(req, res, next) {
-  console.log('entreiii')
-  console.log(req.body);
+  // console.log(req.body)
   req.makeFind.map(e => {
     e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
@@ -66,7 +65,7 @@ router.get('/', find.getLastHundred, u.allActive, function(req, res, next) {
     e.end = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
   })
-  console.log(req.makeFind);
+  // console.log(req.makeFind);
   res.json(req.makeFind)
 })
 

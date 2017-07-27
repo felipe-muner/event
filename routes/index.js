@@ -97,7 +97,7 @@ router.post('/login', function(req, res, next) {
               })
             })
             conn.acquire(function(err,con){
-              con.query('select f.Name, f.Action, f.Icon from Functionality f inner join ProfileFunctionality pf on pf.Functionality_ID = f.FunctionalityID where pf.Profile_ID = ?', [result[0].id_perfil_sistema], function(err, functionality) {
+              con.query('select f.Name, f.Action, f.Icon from Functionality f inner join ProfileFunctionality pf on pf.Functionality_ID = f.FunctionalityID where pf.Profile_ID = ? ORDER BY f.Priority', [result[0].id_perfil_sistema], function(err, functionality) {
                 console.log('query profile: ' + this.sql);
                 con.release();
                 //console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
