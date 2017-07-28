@@ -49,14 +49,13 @@ router.get('/', find.getLastHundred, u.allActive, function(req, res, next) {
     e.NameGuest = Util.toTitleCase(e.NameGuest)
   })
 
-  console.log(req.findEventByCode)
-
   res.render(req.findEventByCode.typeTemplate, {
     sess: req.session,
     EventFound: req.findEventByCode
   })
 }).post('/searchFiltered', find.makeFind, function(req, res, next) {
   // console.log(req.body)
+
   req.makeFind.map(e => {
     e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)

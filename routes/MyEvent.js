@@ -24,15 +24,13 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
     e.title = Util.toTitleCase(e.title)
     e.btnCancel = (1 === e.EventStatus_ID || 2 === e.EventStatus_ID) ? true : false
   })
-
   res.render('my-event/my-event',{
     allMyEvent: req.allMyEvent,
-    sess: req.session
+    sess: req.session,
+    flashMsg
   })
 }).post('/cancel-event', myevent.cancelEvent, function(req, res, next) {
-  // let flashMsg = req.session.flashMsg
-  // if(flashMsg) delete req.session.flashMsg
-  console.log(req.body);
+  req.session.flashMsg = req.body.EventCode
   res.redirect('/my-event')
 })
 

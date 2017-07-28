@@ -4,6 +4,15 @@
   {{/each}}
 {{/section}}
 
+{{#if flashMsg}}
+  <div class="row">
+    <div class="alert alert-info">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+      <strong>Canceled! </strong> {{flashMsg}}
+    </div>
+  </div>
+{{/if}}
+
 <div class="panel panel-primary">
   <div class="panel-heading">
     <div class="row">
@@ -108,7 +117,6 @@
   }
 
   function cancelEvent(EventCode, ReasonCanceled){
-    debugger
 
     let form = document.createElement("form")
     form.method = "POST"
