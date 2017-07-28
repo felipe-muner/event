@@ -119,6 +119,10 @@ function InternalEvent(){
                   'e.Npupil, '+
                   'e.Nstaff, '+
                   'e.Nvisitor, '+
+                  'e.Budget_ID, '+
+                  'orcamento.setor, '+
+                  'orcamento.grupo, '+
+                  'orcamento.conta, '+
                   'e.AdditionalInformation, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
                   'u1.nomeusuario AS CreatedByName '+
@@ -127,6 +131,7 @@ function InternalEvent(){
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
+                  'left Join orcamento ON e.Budget_ID = orcamento.id '+
                 'WHERE '+
                   'e.EventCode = ?', [req.body.EventCode || req.query.EventCode],function(err, result) {
         con.release();
