@@ -29,11 +29,11 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
     allMyEvent: req.allMyEvent,
     sess: req.session
   })
-}).post('/cancel-event', myevent.getMyEvent, function(req, res, next) {
+}).post('/cancel-event', myevent.cancelEvent, function(req, res, next) {
   // let flashMsg = req.session.flashMsg
   // if(flashMsg) delete req.session.flashMsg
   console.log(req.body);
-  res.redirect('/find')
+  res.redirect('/my-event')
 })
 
 module.exports = router;
