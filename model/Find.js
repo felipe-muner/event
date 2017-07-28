@@ -144,7 +144,8 @@ function Find(){
                 'WHERE '+
                   'e.EventCode = ?', [parseInt(req.body.EventCode)],function(err, result) {
         con.release();
-        console.log('queryyyy');
+        console.log('_________');
+        console.log(req.body);
         console.log(this.sql);
         if(err){
           res.render('error', { error: err } );
