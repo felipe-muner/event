@@ -24,12 +24,12 @@ function MyEvent(){
                 'WHERE '+
                   'e.CreateBy = ? OR e.ResponsibleByEvent = ?', [req.session.matricula, req.session.matricula], function(err, result) {
         con.release();
-        console.log(this.sql);
+        // console.log(this.sql);
         if(err){
           console.log(err);
           res.render('error', { error: err } );
         }else{
-          console.log(result)
+          // console.log(result)
           req.allMyEvent = result
           next()
         }
