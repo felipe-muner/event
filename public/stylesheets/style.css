@@ -63,3 +63,9 @@ table.table th{
 .removePadding{
   padding: 4px;
 }
+
+.panel-primary > .panel-heading {
+    color: #fff;
+    background-color: #2A3F54;
+    border-color: #2A3F54;
+}
