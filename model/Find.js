@@ -134,13 +134,17 @@ function Find(){
                   'u1.nomeusuario AS CreatedByName, '+
                   'EventTransport.TypeVehicleEnglish, '+
                   'EventTransport.TypeVehiclePort, '+
-                  'EventTransport.AmountSeat '+
+                  'EventTransport.AmountSeat, '+
+                  'orcamento.setor,'+
+                  'orcamento.conta, '+
+                  'orcamento.grupo '+
                 'FROM '+
                   'Event AS e '+
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
                   'Left Join EventTransport ON e.MeansOfTransport = EventTransport.EventTransportID '+
+                  'Left Join orcamento ON e.Budget_ID = orcamento.id '+
                 'WHERE '+
                   'e.EventCode = ?', [parseInt(req.body.EventCode)],function(err, result) {
         con.release();

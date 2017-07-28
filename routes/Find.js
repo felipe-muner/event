@@ -27,7 +27,7 @@ router.get('/', find.getLastHundred, u.allActive, function(req, res, next) {
     allActiveUser:req.allActiveUser,
     lastHundredOccurrence: req.lastHundredOccurrence
   })
-}).post('/search-event-by-code', find.getLastHundred, find.searchEventByCode, find.getTemplateType, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+}).post('/search-event-by-code', find.searchEventByCode, find.getTemplateType, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
 
   req.findEventByCode.Type === 'I' ? req.findEventByCode.Type = 'Internal' : req.findEventByCode.Type = 'External'
   req.findEventByCode.ResponsibleByName = Util.toTitleCase(req.findEventByCode.ResponsibleByName)
