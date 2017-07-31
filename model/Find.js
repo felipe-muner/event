@@ -124,6 +124,8 @@ function Find(){
                   'e.Npupil, '+
                   'e.Nstaff, '+
                   'e.Nvisitor, '+
+                  'e.Departament_ID, '+
+                  'e.Budget_ID, '+
                   'e.DepartureFrom, '+
                   'e.AmountPerson, '+
                   'e.TransportWaitAvenue, '+
@@ -157,6 +159,66 @@ function Find(){
           // console.log(result);
           // console.log('fields from event');
           req.findEventByCode = result[0]
+          next()
+        }
+      });
+    });
+  }
+
+  this.myEvents = function(req, res, next){
+    conn.acquire(function(err,con){
+      // console.log(req.body);
+      con.query('SELECT '+
+                  'e.EventID, '+
+                  'e.Type, '+
+                  'e.EventCode, '+
+                  'e.CreateBy, '+
+                  'e.ResponsibleByEvent, '+
+                  'e.Name AS title, '+
+                  'e.StartEvent AS start, '+
+                  'e.EndEvent AS end, '+
+                  'es.StatusName, '+
+                  'e.NeedComputer, '+
+                  'e.NeedDataShow, '+
+                  'e.VideoFrom, '+
+                  'e.VideoTo, '+
+                  'e.Nparent, '+
+                  'e.Npupil, '+
+                  'e.Nstaff, '+
+                  'e.Nvisitor, '+
+                  'e.DepartureFrom, '+
+                  'e.AmountPerson, '+
+                  'e.TransportWaitAvenue, '+
+                  'e.LocationEvent, '+
+                  'e.LeavingFromEvent, '+
+                  'e.AdditionalInformation, '+
+                  'u2.nomeusuario AS ResponsibleByName, '+
+                  'u1.nomeusuario AS CreatedByName, '+
+                  'EventTransport.TypeVehicleEnglish, '+
+                  'EventTransport.TypeVehiclePort, '+
+                  'EventTransport.AmountSeat, '+
+                  'orcamento.setor,'+
+                  'orcamento.conta, '+
+                  'orcamento.grupo '+
+                'FROM '+
+                  'Event AS e '+
+                  'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
+                  'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
+                  'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
+                  'Left Join EventTransport ON e.MeansOfTransport = EventTransport.EventTransportID '+
+                  'Left Join orcamento ON e.Budget_ID = orcamento.id '+
+                'WHERE '+
+                  'e.CreateBy = ? OR e.ResponsibleByEvent = ?', [parseInt(req.session.matricula),parseInt(req.session.matricula)],function(err, result) {
+        con.release();
+        console.log('_________');
+        // console.log(req.body);
+        // console.log(this.sql);
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          // console.log(result);
+          // console.log('fields from event');
+          req.myEvents = result
           next()
         }
       });

@@ -137,6 +137,7 @@ function MenuItem(){
   this.productOfEvent = function(req, res, next){
     conn.acquire(function(err,con){
       con.query('SELECT '+
+                  'EventItem.EventProduct_ID, '+
                   'EventItem.Price, '+
                   'EventItem.Amount, '+
                   'EventItem.Amount * EventItem.Price as TotalProd, '+

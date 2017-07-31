@@ -53,6 +53,29 @@ router.get('/', find.getLastHundred, u.allActive, function(req, res, next) {
     sess: req.session,
     EventFound: req.findEventByCode
   })
+}).post('/fillout-form', find.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+
+  req.findEventByCode.Type === 'I' ? req.findEventByCode.Type = 'Internal' : req.findEventByCode.Type = 'External'
+  req.findEventByCode.ResponsibleByName = Util.toTitleCase(req.findEventByCode.ResponsibleByName)
+  req.findEventByCode.CreatedByName = Util.toTitleCase(req.findEventByCode.CreatedByName)
+  req.findEventByCode.title = Util.toTitleCase(req.findEventByCode.title)
+  req.findEventByCode.LocationEvent = Util.toTitleCase(req.findEventByCode.LocationEvent)
+
+  req.findEventByCode.start = moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm')
+  req.findEventByCode.end = moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm')
+  req.findEventByCode.LeavingFromEvent = moment(req.findEventByCode.LeavingFromEvent).format('DD/MM/YYYY HH:mm')
+
+  req.findEventByCode.TotalFinalProd = req.findEventByCode.products.reduce((acc,ele)=> acc + (ele.Amount * ele.Price * 1.14),0)
+  req.findEventByCode.TotalFinalProd = req.findEventByCode.TotalFinalProd.toFixed(2)
+
+  req.findEventByCode.products.map((e) => e.TotalProd = (e.TotalProd * 1.14).toFixed(2))
+
+  req.findEventByCode.guests.map(e => {
+    e.Type = Util.toTitleCase(e.Type)
+    e.NameGuest = Util.toTitleCase(e.NameGuest)
+  })
+
+  res.json({EventFound: req.findEventByCode})
 }).post('/searchFiltered', find.makeFind, function(req, res, next) {
   // console.log(req.body)
 

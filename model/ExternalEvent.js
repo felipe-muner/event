@@ -131,7 +131,8 @@ function ExternalEvent(){
       Nvisitor: parseInt(req.body.qtdVisitorNewEvent) || null,
       Budget_ID: parseInt(req.body.id_budget) || null,
       CreateBy: req.session.matricula,
-      ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || null,
+      ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || parseInt(req.session.matricula),
+      Departament_ID:req.body.iddepartamento,
       LocationEvent: req.body.locationEvent,
       LeavingFromEvent: req.body.LeavingFromEvent
     }

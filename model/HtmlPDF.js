@@ -67,6 +67,8 @@ function HtmlPDF(){
             }
 
             //guest
+            console.log(req.findEventByCode.guests)
+            console.log('________________________')
             let guests = req.findEventByCode.guests.reduce(function(acc,ele){
               acc.tabelaGuest = acc.tabelaGuest + '<tr style="line-height: 15px;">'+
                                                   '<td style="border:1px solid black;">'+ ele.Type +' </td>'+
@@ -75,7 +77,7 @@ function HtmlPDF(){
               return acc
             },{tabelaGuest:''})
 
-            if(req.findEventByCode.products.length > 0){
+            if(req.findEventByCode.guests.length > 0){
               $('#bodyGuests').html(guests.tabelaGuest)
             }else{
               $('#bodyGuests').html('<tr style="line-height: 15px;text-align:center;"><td colspan="4">Don\'t have guests</td></tr>')

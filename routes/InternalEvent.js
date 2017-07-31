@@ -7,6 +7,7 @@ const mailSender = require(process.env.PWD + '/util/MailSender')
 const ie = require(process.env.PWD + '/model/InternalEvent')
 const mi = require(process.env.PWD + '/model/MenuItem')
 const d = require(process.env.PWD + '/model/Departament')
+const f = require(process.env.PWD + '/model/Find')
 const g = require(process.env.PWD + '/model/Guest')
 const u = require(process.env.PWD + '/model/User')
 const HtmlPDF = require(process.env.PWD + '/model/HtmlPDF')
@@ -16,23 +17,33 @@ const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
-router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allActive, function(req, res, next) {
-  // console.log(req.allDepartament);
-  // console.log(req.allActiveUser);
-  console.log('felipe entrei ------');
+router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allActive, f.myEvents, function(req, res, next) {
+  // console.log(req.allDepartament)
+  // console.log(req.allActiveUser)
+  // console.log(req.myEvents)
+  console.log('felipe entrei ------')
+
+  req.myEvents.map((e)=>{
+    e.title = Util.toTitleCase(e.title)
+    e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
+    e.CreatedByName = Util.toTitleCase(e.CreatedByName)
+    return e
+  })
+
   res.render('internal-event/internal-event',{
     sess:req.session,
     getAllSiteBuildingRoom: req.getAllSiteBuildingRoom,
     allProductActive: req.allProductActive,
     allDepartament:req.allDepartament,
-    allActiveUser:req.allActiveUser
+    allActiveUser:req.allActiveUser,
+    myEvents:req.myEvents
   })
 }).post('/search-events', ie.searchEventTwoDate, function(req, res, next) {
   //console.log(req.allEvents);
   res.json(req.allEvents)
 }).post('/create-event',ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, function(req, res, next) {
   //console.log(req.resultCreated);
-  res.json(req.body)
+  res.json(req.nextEventCode)
 }).post('/find-event-by-code',ie.searchEventByCode, ie.getTemplateMoreInfo, g.guestOfEvent, mi.productOfEvent, function(req,res,next){
   req.findEventByCode.start = moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm')
   req.findEventByCode.end = moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm')
