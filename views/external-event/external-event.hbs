@@ -364,7 +364,7 @@
           // debugger
           $('#StartEvent').val(data.EventFound.start.replace(' ','T'))
           $('#EndEvent').val(data.EventFound.end.replace(' ','T'))
-          $('#LeavingFromEvent').val(data.EventFound.LeavingFromEvent.replace(' ','T'))
+          if(data.EventFound.LeavingFromEvent) $('#LeavingFromEvent').val(data.EventFound.LeavingFromEvent.replace(' ','T'))
           $('#nameNewEvent').val(data.EventFound.title)
           $('#responsibleNewEvent').val(data.EventFound.ResponsibleByEvent).trigger('change')
           $('#iddepartamento').val(data.EventFound.Departament_ID).trigger('change')
@@ -473,8 +473,8 @@
   }
 
   function initializeDatesSearch(){
-    $('#firstDayFind').val(moment().subtract(60, 'days').format('YYYY-MM-DD'))
-    $('#lastDayFind').val(moment().add(60, 'days').format('YYYY-MM-DD'))
+    $('#firstDayFind').val(moment().startOf('year').format('YYYY-MM-DD'))
+    $('#lastDayFind').val(moment().endOf('year').format('YYYY-MM-DD'))
   }
 
   function showModalNewEventExternal(){
@@ -515,7 +515,8 @@
         $('#submitFormNewEvent').prop("disabled",false);
         $('#submitFormNewEvent').prop("value",'Create');
         searchEvents()
-        swal("Saved successfully", "", "success")
+        debugger
+        swal("Saved successfully", data, "success")
       }
     })
   });

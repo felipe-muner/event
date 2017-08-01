@@ -40,7 +40,7 @@ router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, f
 
   res.json(req.allEvents)
 }).post('/create-event',ee.getLastEvent, ee.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, function(req, res, next) {
-  res.json(req.body)
+  res.json(req.nextEventCode)
 })
 
 module.exports = router;
