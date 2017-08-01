@@ -141,20 +141,22 @@
         dataType:'json',
         success: function(data) {
           $('#tableSearchEvent tbody').empty()
-
-          // <tr data-event-code="{{EventCode}}">
-          //   <td class="text-center">{{EventCode}}</td>
-          //   <td>{{Type}}</td>
-          //   <td>{{CreatedByName}}</td>
-          //   <td>{{ResponsibleByName}}</td>
-          //   <td class="text-center">{{start}}</td>
-          //   <td class="text-center">{{end}}</td>
-          //   <td>{{title}}</td>
-          //   <td style="text-align:center;">
-          //     <i class="fa fa-search-plus" aria-hidden="true" onclick="moreInformationEvent({{EventCode}});"></i>
-          //   </td>
-          // </tr>
-
+          debugger
+          for (var i = 0; i < data.length; i++) {
+            let newLine = '<tr data-event-code="'+data[i].EventCode+'">'+
+                            '<td class="text-center">'+data[i].EventCode+'</td>'+
+                            '<td>'+data[i].Type+'</td>'+
+                            '<td>'+data[i].CreatedByName+'</td>'+
+                            '<td>'+data[i].ResponsibleByName+'</td>'+
+                            '<td class="text-center">'+data[i].start+'</td>'+
+                            '<td class="text-center">'+data[i].end+'</td>'+
+                            '<td>'+data[i].title+'</td>'+
+                            '<td style="text-align:center;">'+
+                              '<i class="fa fa-search-plus" aria-hidden="true" onclick="moreInformationEvent('+data[i].EventCode+');"></i>'+
+                            '</td>'+
+                          '</tr>'
+            $('#tableSearchEvent tbody').append(newLine)
+          }
         }
       })
     })
