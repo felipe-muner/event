@@ -75,8 +75,19 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h5 class="modal-title">New External Event</h5>
+        <div class="row">
+          <div class="col-sm-6">
+            <h5 class="modal-title">New External Event</h5>
+          </div>
+          <div class="col-sm-6">
+            <select class="form-control" name="" id="selectReuseEvent" style="width:100%;">
+              <option value="">Reuse Info Event:</option>
+              {{#each myEvents}}
+                <option value="{{EventCode}}">{{EventCode}} - {{title}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
       </div>
       <form id="formNewEvent" action="index.html" method="post">
         <div class="modal-body">
@@ -181,7 +192,7 @@
                 <div class="panel panel-primary">
                   <div class="panel-heading">Additional Information</div>
                   <div class="panel-body">
-                    <textarea name="additionalInformation" style="height:111px;" rows="4" class="form-control btn-block"></textarea>
+                    <textarea name="additionalInformation" id="additionalInformation" style="height:111px;" rows="4" class="form-control btn-block"></textarea>
                   </div>
                 </div>
               </div>
@@ -314,6 +325,7 @@
 
   $(document).ready(function(e){
     $("#responsibleNewEvent").select2()
+    $("#selectReuseEvent").select2()
     $("#iddepartamento").select2()
     $("#listProduct").select2({
       placeholder: "SELECT THE PRODUCTS",
@@ -323,6 +335,106 @@
 
     initializeDatesSearch();
     searchEvents()
+  })
+
+  $("#selectReuseEvent").on("change", function (e) {
+    let EventCode = $("#selectReuseEvent").val()
+    if('' === EventCode){
+      document.getElementById('formNewEvent').reset()
+      $('#responsibleNewEvent').val('').trigger('change')
+      $('#iddepartamento').val('').trigger('change')
+      $('#additionalInformation').text('')
+      $('.lineName').empty()
+      $('#sumparent').text(0)
+      $('#sumpupil').text(0)
+      $('#sumstaff').text(0)
+      $('#sumvisitor').text(0)
+      $('#tableItemEvent tbody').empty()
+    }else{
+      let dataSend = {EventCode}
+
+      $.ajax({
+        url: '/find/fillout-form',
+        type: 'POST',
+        data: dataSend,
+        dataType:'json',
+        success: function(data) {
+          document.getElementById('formNewEvent').reset()
+          console.log(data);
+          // debugger
+          $('#StartEvent').val(data.EventFound.start.replace(' ','T'))
+          $('#EndEvent').val(data.EventFound.end.replace(' ','T'))
+          $('#LeavingFromEvent').val(data.EventFound.LeavingFromEvent.replace(' ','T'))
+          $('#nameNewEvent').val(data.EventFound.title)
+          $('#responsibleNewEvent').val(data.EventFound.ResponsibleByEvent).trigger('change')
+          $('#iddepartamento').val(data.EventFound.Departament_ID).trigger('change')
+
+          $('#locationEvent').val(data.EventFound.LocationEvent)
+          $('#departureFrom').val(data.EventFound.DepartureFrom)
+          $('#meansOfTransport').val(data.EventFound.MeansOfTransport)
+          $('#qtdPerson').val(data.EventFound.AmountPerson)
+          $('input[name="transportWaitVenue"][value='+ data.EventFound.TransportWaitAvenue +']').prop("checked", true)
+
+          $('#id_budget').val(data.EventFound.Budget_ID).trigger('change')
+
+          $('#additionalInformation').text(data.EventFound.AdditionalInformation)
+
+          $('#qtdParentNewEvent').val(data.EventFound.Nparent)
+          $('#qtdPupilNewEvent').val(data.EventFound.Npupil)
+          $('#qtdStaffNewEvent').val(data.EventFound.Nstaff)
+          $('#qtdVisitorNewEvent').val(data.EventFound.Nvisitor)
+
+          let sum = 0
+          $('.nParticipant').each(function(){
+            if('' !== $(this).val()) sum += parseInt($(this).val())
+          })
+          $('#qtdTotalParticipant').val('Total: ' + sum)
+
+          $('.lineName').empty()
+          $('#sumparent').text(0)
+          $('#sumpupil').text(0)
+          $('#sumstaff').text(0)
+          $('#sumvisitor').text(0)
+          data.EventFound.guests.map(function(e){
+            $('.lineName[data-group-name="'+ e.Type.toLowerCase() +'"]').append(
+              '<div class="lineGuest new'+e.Type.toLowerCase()+'" data-group-name="'+ e.Type.toLowerCase() +'" data-yourname="'+ e.NameGuest +'">'
+                +'<div class="col-sm-10" style="white-space:nowrap;padding-left:0px;padding-right:0px;" data-toggle="tooltip" title="'+ e.NameGuest +'">'
+                  + e.NameGuest
+                +'</div>'
+                +'<div class="col-sm-2">'
+                  +'<i onclick="removeName(this,`'+ e.Type.toLowerCase() +'`)" class="fa fa-times" aria-hidden="true"></i>'
+                +'</div>'
+              +'</div>'
+            )
+          })
+          $('#sumparent').text($('.newparent').size())
+          $('#sumpupil').text($('.newpupil').size())
+          $('#sumstaff').text($('.newstaff').size())
+          $('#sumvisitor').text($('.newvisitor').size())
+
+          $('#tableItemEvent tbody').empty()
+          let sumProd = 0
+          data.EventFound.products.map(function(e){
+            sumProd += e.Price * e.Amount
+            $('#tableItemEvent tbody').append(
+              '<tr data-product-id="'+ e.EventProduct_ID +'" data-price-prod="'+ e.Price +'" data-qtd="'+ e.Amount +'">'
+                +'<td class="text-center"><i onclick="removeItemEvent(this)" class="fa fa-times" aria-hidden="true"></i></td>'
+                +'<td>'+ e.ProductNameEnglish + '/' + e.ProductNamePort + '  |  ' + e.UnitInEnglish + '/' + e.UnitInPort +'</td>'
+                +'<td class="text-right">'
+                  +'<input onkeyup="updateValueAmont(this);" type="number" min="1" value="'+ e.Amount +'"'
+                +'</td>'
+                +'<td class="text-right totalProduct">'+ (e.Price * e.Amount).toFixed(2) +'</td>'
+              +'</tr>'
+            )
+          })
+          $('#tableItemEvent tbody').append(
+            '<tr class="lineTotalGeral">'
+              +'<td class="text-right" colspan="4">'+ sumProd.toFixed(2).replace('.',',') +'</td>'
+            +'</tr>'
+          )
+        }
+      })
+    }
   })
 
   function searchEvents(){
@@ -355,10 +467,6 @@
           }, '')
 
           $('#externalEvents tbody').append(dataTableBody)
-          // for (var i = 0; i < data.length; i++) {
-          //   let newLine = '<tr><td></td></tr>'
-          //   $('#externalEvents tbody').append(newLine)
-          // }
 
         }
     })

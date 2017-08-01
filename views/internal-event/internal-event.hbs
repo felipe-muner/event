@@ -340,9 +340,9 @@
           $('#additionalInformation').text(data.EventFound.AdditionalInformation)
 
           $('#qtdParentNewEvent').val(data.EventFound.Nparent)
-          $('#qtdPupilNewEvent').val(data.EventFound.Nparent)
-          $('#qtdStaffNewEvent').val(data.EventFound.Nparent)
-          $('#qtdVisitorNewEvent').val(data.EventFound.Nparent)
+          $('#qtdPupilNewEvent').val(data.EventFound.Npupil)
+          $('#qtdStaffNewEvent').val(data.EventFound.Nstaff)
+          $('#qtdVisitorNewEvent').val(data.EventFound.Nvisitor)
 
           let sum = 0
           $('.nParticipant').each(function(){

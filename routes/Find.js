@@ -61,10 +61,6 @@ router.get('/', find.getLastHundred, u.allActive, function(req, res, next) {
   req.findEventByCode.title = Util.toTitleCase(req.findEventByCode.title)
   req.findEventByCode.LocationEvent = Util.toTitleCase(req.findEventByCode.LocationEvent)
 
-  req.findEventByCode.start = moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm')
-  req.findEventByCode.end = moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm')
-  req.findEventByCode.LeavingFromEvent = moment(req.findEventByCode.LeavingFromEvent).format('DD/MM/YYYY HH:mm')
-
   req.findEventByCode.TotalFinalProd = req.findEventByCode.products.reduce((acc,ele)=> acc + (ele.Amount * ele.Price * 1.14),0)
   req.findEventByCode.TotalFinalProd = req.findEventByCode.TotalFinalProd.toFixed(2)
 

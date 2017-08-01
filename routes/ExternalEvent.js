@@ -5,6 +5,7 @@ const Util = require(process.env.PWD + '/util/Util')
 const mailSender = require(process.env.PWD + '/util/MailSender')
 const mi = require(process.env.PWD + '/model/MenuItem')
 const d = require(process.env.PWD + '/model/Departament')
+const f = require(process.env.PWD + '/model/Find')
 const ee = require(process.env.PWD + '/model/ExternalEvent')
 const ie = require(process.env.PWD + '/model/InternalEvent')
 const t = require(process.env.PWD + '/model/Transport')
@@ -16,14 +17,17 @@ const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
-router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, function(req, res, next) {
+router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, function(req, res, next) {
   console.log('entrei evento routa externo');
+  console.log(req.myEvents)
+  console.log('_________LOG');
   res.render('external-event/external-event',{
     sess:req.session,
     allProductActive: req.allProductActive,
     allDepartament:req.allDepartament,
     meansOfTransport:req.allMeansOfTransport,
-    allActiveUser:req.allActiveUser
+    allActiveUser:req.allActiveUser,
+    myEvents:req.myEvents
   })
 }).post('/search-events', ee.searchEventTwoDate, function(req, res, next) {
   console.log(req.allEvents);

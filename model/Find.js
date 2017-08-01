@@ -128,6 +128,7 @@ function Find(){
                   'e.Budget_ID, '+
                   'e.DepartureFrom, '+
                   'e.AmountPerson, '+
+                  'e.MeansOfTransport, '+
                   'e.TransportWaitAvenue, '+
                   'e.LocationEvent, '+
                   'e.LeavingFromEvent, '+
@@ -210,13 +211,13 @@ function Find(){
                 'WHERE '+
                   'e.CreateBy = ? OR e.ResponsibleByEvent = ?', [parseInt(req.session.matricula),parseInt(req.session.matricula)],function(err, result) {
         con.release();
-        console.log('_________');
+        console.log('_________PARAAA');
         // console.log(req.body);
         // console.log(this.sql);
         if(err){
           res.render('error', { error: err } );
         }else{
-          // console.log(result);
+          console.log(result)
           // console.log('fields from event');
           req.myEvents = result
           next()
