@@ -304,7 +304,12 @@
       document.getElementById('formNewEvent').reset()
       $('#responsibleNewEvent').val('').trigger('change')
       $('#iddepartamento').val('').trigger('change')
+      $('#additionalInformation').text('')
       $('.lineName').empty()
+      $('#sumparent').text(0)
+      $('#sumpupil').text(0)
+      $('#sumstaff').text(0)
+      $('#sumvisitor').text(0)
       $('#tableItemEvent tbody').empty()
     }else{
       let dataSend = {EventCode}
