@@ -209,7 +209,8 @@ function Find(){
                   'Left Join EventTransport ON e.MeansOfTransport = EventTransport.EventTransportID '+
                   'Left Join orcamento ON e.Budget_ID = orcamento.id '+
                 'WHERE '+
-                  'e.CreateBy = ? OR e.ResponsibleByEvent = ?', [parseInt(req.session.matricula),parseInt(req.session.matricula)],function(err, result) {
+                  'e.CreateBy = ? OR e.ResponsibleByEvent = ? '+
+                  'ORDER BY e.EventCode DESC LIMIT 100', [parseInt(req.session.matricula),parseInt(req.session.matricula)],function(err, result) {
         con.release();
         console.log('_________PARAAA');
         // console.log(req.body);
