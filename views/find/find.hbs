@@ -141,7 +141,6 @@
         dataType:'json',
         success: function(data) {
           $('#tableSearchEvent tbody').empty()
-          debugger
           for (var i = 0; i < data.length; i++) {
             let newLine = '<tr data-event-code="'+data[i].EventCode+'">'+
                             '<td class="text-center">'+data[i].EventCode+'</td>'+
@@ -157,6 +156,7 @@
                           '</tr>'
             $('#tableSearchEvent tbody').append(newLine)
           }
+          $('#modalFind').modal('hide')
         }
       })
     })

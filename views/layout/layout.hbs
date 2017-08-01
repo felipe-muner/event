@@ -15,6 +15,7 @@
     <link href="/vendor/sweetalert/sweetalert2.css" rel="stylesheet">
     <link href="/vendor/build/css/custom.css" rel="stylesheet">
     <link href="/stylesheets/style.css" rel="stylesheet">
+    <link href="/stylesheets/timer.css" rel="stylesheet">
     {{{_sections.head}}}
   </head>
 
@@ -140,6 +141,12 @@
       </div>
     </div>
 
+    <div id="relogio" style="display:none;">
+      <div style="color: #a0cadb;position:fixed;top: 40%;left: 45%;" class="la-timer la-3x">
+          <div></div>
+      </div>
+    </div>
+
     <script src="/vendor/jquery/dist/jquery.min.js"></script>
     <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/vendor/select2/dist/js/select2.js"></script>
@@ -150,6 +157,25 @@
     <script src="/vendor/jsPDF-master/dist/jspdf.min.js"></script>
     <script src="/vendor/build/js/custom.js"></script>
     <script src="/javascripts/muner.js"></script>
+
+    <script type="text/javascript">
+
+      $('a').click(function(){
+        $('#relogio').addClass('in modal-backdrop');
+        $('#relogio').css('display','block');
+      });
+
+      $( document ).ajaxStart(function() {
+          $('#relogio').addClass('in modal-backdrop');
+          $('#relogio').css('display','block');
+          // alert('indo')
+      })
+      $(document).ajaxComplete(function() {
+          $('#relogio').removeClass('in modal-backdrop');
+          $('#relogio').css('display','none');
+          // alert('voltei')
+      });
+    </script>
 
     {{{_sections.script}}}
 
