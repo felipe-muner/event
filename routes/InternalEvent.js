@@ -10,6 +10,7 @@ const d = require(process.env.PWD + '/model/Departament')
 const f = require(process.env.PWD + '/model/Find')
 const g = require(process.env.PWD + '/model/Guest')
 const u = require(process.env.PWD + '/model/User')
+const m = require(process.env.PWD + '/model/MailSender')
 const HtmlPDF = require(process.env.PWD + '/model/HtmlPDF')
 const fs = require('fs');
 const moment = require('moment');
@@ -41,8 +42,12 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
 }).post('/search-events', ie.searchEventTwoDate, function(req, res, next) {
   //console.log(req.allEvents);
   res.json(req.allEvents)
-}).post('/create-event',ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, function(req, res, next) {
-  //console.log(req.resultCreated);
+}).post('/create-event',ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+  console.log('_______________')
+  console.log(req.findEventByCode)
+  console.log('_______________')
+  
+  m.testeMuner(req.findEventByCode)
   res.json(req.nextEventCode)
 }).post('/find-event-by-code',ie.searchEventByCode, ie.getTemplateMoreInfo, g.guestOfEvent, mi.productOfEvent, function(req,res,next){
   req.findEventByCode.start = moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm')

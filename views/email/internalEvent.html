@@ -1,0 +1,143 @@
+<style media="screen">
+  div{
+    width: 100%;
+  }
+  table, th, td {
+   border: 1px solid black;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  .olar{
+    font-size:50px;
+  }
+  .titleTable{
+    text-align: center;
+    background-color: #2A3F54;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .titleTable td{
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .titleField{
+    background-color: #bbb;
+    padding-left: 3px;
+    font-weight: bold;
+  }
+
+  .contentField{
+    padding-left: 3px;
+  }
+</style>
+
+<div>
+  <table>
+    <tr class="titleTable">
+      <td colspan="2">
+        Main Information
+      </td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Event Code</td>
+      <td style="width:80%;" class="contentField" id="EventCode"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Event Name</td>
+      <td style="width:80%;" class="contentField" id="EventName"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Status</td>
+      <td style="width:80%;" class="contentField" id="StatusName"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Created by</td>
+      <td style="width:80%;" class="contentField" id="CreatedBy"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Responsible By</td>
+      <td style="width:80%;" class="contentField" id="ResponsibleBy"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Start</td>
+      <td style="width:80%;" class="contentField" id="StartEvent"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">End</td>
+      <td style="width:80%;" class="contentField" id="EndEvent"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Departament</td>
+      <td style="width:80%;" class="contentField" id="Departament"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Budget</td>
+      <td style="width:80%;" class="contentField" id="Budget"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Nº Parent</td>
+      <td style="width:80%;" class="contentField" id="Nparent"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Nº Pupil</td>
+      <td style="width:80%;" class="contentField" id="Npupil"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Nº Staff</td>
+      <td style="width:80%;" class="contentField" id="Nstaff"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Nº Visitor</td>
+      <td style="width:80%;" class="contentField" id="Nvisitor"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Need Computer</td>
+      <td style="width:80%;" class="contentField" id="NeedComputer"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Need DataShow</td>
+      <td style="width:80%;" class="contentField" id="NeedDataShow"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Video Conference</td>
+      <td style="width:80%;" class="contentField" id="VideoConference"></td>
+    </tr>
+  </table>
+
+  <table style="margin-top:10px;" id="tableProducts">
+    <tr class="titleTable">
+      <td colspan="4">
+        Products
+      </td>
+    </tr>
+    <tr class="titleTable" style="font-size:13px;">
+      <td>
+        Name
+      </td>
+      <td>
+        Amount
+      </td>
+      <td>
+        Price
+      </td>
+      <td>
+        Total
+      </td>
+    </tr>
+  </table>
+
+  <table style="margin-top:10px;" id="tableGuests">
+    <tr class="titleTable">
+      <td colspan="2">
+        Guests
+      </td>
+    </tr>
+    <tr class="titleTable">
+      <td>Type</td>
+      <td>Name</td>
+    </tr>
+  </table>
+</div>

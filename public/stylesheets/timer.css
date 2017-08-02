@@ -207,4 +207,22 @@
     }
 }
 
+.loadingscreen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2040;
+  background-color: #000;
+}
+.loadingscreen.fade {
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+.loadingscreen.in {
+  filter: alpha(opacity=50);
+  opacity: .5;
+}
+
 /* Fim Timer - Muner */

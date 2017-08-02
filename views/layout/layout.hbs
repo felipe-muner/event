@@ -66,12 +66,12 @@
           <div class="nav_menu">
             <nav>
               <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                <a class="no-loading" id="menu_toggle"><i class="fa fa-bars"></i></a>
               </div>
 
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
-                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  <a href="javascript:;" class="user-profile dropdown-toggle no-loading" data-toggle="dropdown" aria-expanded="false">
                     {{toTitleCase sess.nomeusuario}}
                     <span class=" fa fa-angle-down"></span>
                   </a>
@@ -89,7 +89,7 @@
                 </li>
 
                 <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                  <a href="javascript:;" class="dropdown-toggle info-number no-loading" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-envelope-o"></i>
                     <span class="badge bg-green">6</span>
                   </a>
@@ -160,21 +160,21 @@
 
     <script type="text/javascript">
 
-      $('a').click(function(){
-        $('#relogio').addClass('in modal-backdrop');
+      $('a:not(.no-loading)').click(function(){
+        $('#relogio').addClass('in loadingscreen');
         $('#relogio').css('display','block');
-      });
+      })
 
       $( document ).ajaxStart(function() {
-          $('#relogio').addClass('in modal-backdrop');
+          $('#relogio').addClass('in loadingscreen');
           $('#relogio').css('display','block');
           // alert('indo')
       })
       $(document).ajaxComplete(function() {
-          $('#relogio').removeClass('in modal-backdrop');
+          $('#relogio').removeClass('in loadingscreen');
           $('#relogio').css('display','none');
           // alert('voltei')
-      });
+      })
     </script>
 
     {{{_sections.script}}}

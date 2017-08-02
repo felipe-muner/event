@@ -149,7 +149,7 @@ function Find(){
                   'Left Join EventTransport ON e.MeansOfTransport = EventTransport.EventTransportID '+
                   'Left Join orcamento ON e.Budget_ID = orcamento.id '+
                 'WHERE '+
-                  'e.EventCode = ?', [parseInt(req.body.EventCode)],function(err, result) {
+                  'e.EventCode = ?', [parseInt(req.body.EventCode) || parseInt(req.nextEventCode)],function(err, result) {
         con.release();
         console.log('_________');
         console.log(req.body);

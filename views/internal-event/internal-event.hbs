@@ -464,9 +464,7 @@
       sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
     });
     $('.lineTotalGeral').find('td').text(sum.toFixed(2))
-
   }
-
 
   function addNameListEvent(novo){
     if ('' === document.getElementById(novo).value) return;
@@ -521,7 +519,9 @@
   $(document).ready(function() {
     $("#roomID").select2()
     $("#responsibleNewEvent").select2()
-    $("#selectReuseEvent").select2()
+    $("#selectReuseEvent").select2().on("select2:selecting", function(e) {
+       setTimeout(function() { $('#nameNewEvent').focus() }, 50)
+    })
     $("#iddepartamento").select2()
     $("#listProduct").select2({
       placeholder: "SELECT THE PRODUCTS"
@@ -679,7 +679,7 @@
     $('#dateNewEvent').val(moment(date).format('YYYY-MM-DD'))
     $('#roomIDNewEvent').val($("#roomID").val())
     $('#modalNewEvent').modal('show')
-    populateToTest()
+    // populateToTest()
   }
 
   $('#modalNewEvent').on('shown.bs.modal', function () {
@@ -695,7 +695,7 @@
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault()
     checkEndAfterStart()
-    checkNewTimeDay()
+    // checkNewTimeDay()
     passou()
 
     let data = $('#formNewEvent').serializeArray()
