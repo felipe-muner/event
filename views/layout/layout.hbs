@@ -36,7 +36,9 @@
               <div class="menu_section">
                 <h3>Event Booking</h3>
                 <ul class="nav side-menu">
-                  {{{_sections.functionality}}}
+                  {{#each sess.functionalityProfile}}
+                    <li><a href="{{Action}}"><i class="fa {{Icon}}"></i> {{Name}} </a></li>
+                  {{/each}}
                 </ul>
               </div>
             </div>
