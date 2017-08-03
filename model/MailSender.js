@@ -84,7 +84,7 @@ function MailSender(){
     next()
   }
 
-  this.testeMuner = function(eventFinded){
+  this.internalEvent = function(eventFinded){
     fs.readFile(process.env.PWD + '/views/email/internalEvent.html', {encoding: 'utf-8'}, function (err, html) {
       if (err) {
         throw err;
@@ -94,10 +94,10 @@ function MailSender(){
             const $ = cheerio.load(processedSource)
             // let qs = '?m=' + matricula + '&p=' + newPassword + '&recoveremail=true'
             $('#EventCode').text(eventFinded.EventCode)
-            $('#EventName').text(eventFinded.title)
+            $('#EventName').text(Util.toTitleCase(eventFinded.title))
             $('#StatusName').text(eventFinded.StatusName)
-            $('#CreatedBy').text(eventFinded.CreatedByName)
-            $('#ResponsibleBy').text(eventFinded.ResponsibleByName)
+            $('#CreatedBy').text(Util.toTitleCase(eventFinded.CreatedByName))
+            $('#ResponsibleBy').text(Util.toTitleCase(eventFinded.ResponsibleByName))
             $('#StartEvent').text(moment(eventFinded.start).format('DD/MM/YYYY HH:mm'))
             $('#EndEvent').text(moment(eventFinded.end).format('DD/MM/YYYY HH:mm'))
             $('#Departament').text(eventFinded.Departament_ID)
@@ -113,42 +113,38 @@ function MailSender(){
             if(eventFinded.products.length === 0){
               $('#tableProducts').append('<tr><td style="text-align:center;" colspan="2">Don\'t have products.</td></tr>')
             }else{
-               eventFinded.products.map(function(e){
+              let totalProduct = 0
+              eventFinded.products.map(function(e){
+                totalProduct += (e.Amount * e.Price * 1.14)
                 $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
-                                            '<td class="olar">'+ e.ProductNameEnglish + '/' + e.ProductNamePort + ' - ' + e.UnitInEnglish + '/' + e.UnitInPort +'</td>'+
-                                            '<td style="text-align:right;">'+ e.Amount +'</td>'+
-                                            '<td style="text-align:right;">'+ e.Price +'</td>'+
-                                            '<td style="text-align:right;">'+ (e.Amount * e.Price * 1.14).toFixed(2) +'</td>'+
+                                            '<td style="border:1px solid black;padding-left:3px;">'+ e.ProductNameEnglish + '/' + e.ProductNamePort + ' - ' + e.UnitInEnglish + '/' + e.UnitInPort +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Amount +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Price +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ (e.Amount * e.Price * 1.14).toFixed(2) +'</td>'+
+                                          '</tr>')
+              })
+              $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
+                                          '<td colspan="4" style="border:1px solid black;text-align:right;">'+ totalProduct.toFixed(2) +'</td>'+
+                                        '</tr>')
+            }
+
+            if(eventFinded.guests.length === 0){
+              $('#tableGuests').append('<tr><td style="text-align:center;" colspan="2">Don\'t have guests.</td></tr>')
+            }else{
+              eventFinded.guests.map(function(e){
+                $('#tableGuests').append('<tr style="border-bottom:1px solid black;">'+
+                                            '<td style="width:20%;border:1px solid black;padding-left:3px;">'+ Util.toTitleCase(e.Type) +'</td>'+
+                                            '<td style="border:1px solid black;padding-left:3px;">'+ Util.toTitleCase(e.NameGuest)   +'</td>'+
                                           '</tr>')
               })
             }
 
-            // if(eventFinded.guests.length === 0){
-            //   $('#tableGuests').append('<tr><td style="text-align:center;" colspan="2">Don\'t have guests.</td></tr>')
-            // }else{
-              // let guests = req.findEventByCode.guests.reduce(function(acc,ele){
-              //   acc.tabelaGuest = acc.tabelaGuest + '<tr style="line-height: 15px;">'+
-              //                                       '<td style="border:1px solid black;">'+ ele.Type +' </td>'+
-              //                                       '<td style="border:1px solid black;">'+ ele.NameGuest +'</td>'+
-              //                                     '</tr>'
-              //   return acc
-              // },{tabelaGuest:''})
-              //
-              // if(req.findEventByCode.guests.length > 0){
-              //   $('#bodyGuests').html(guests.tabelaGuest)
-              // }else{
-              //   $('#bodyGuests').html('<tr style="line-height: 15px;text-align:center;"><td colspan="4">Don\'t have guests</td></tr>')
-              // }
-            //   $('#tableGuests').append('<tr><td colspan="2">tem guest</td></tr>')
-            // }
-
-            console.log(eventFinded)
-            console.log('vou mandar emailll !');
-
+            // console.log(eventFinded)
+            // console.log('vou mandar emailll !');
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"British School - Event System" <noreply@britishschool.g12.br>'
-            mailOptions.to = 'fmuner@britishschool.g12.br'
+            mailOptions.to = 'fmuner@britishschool.g12.br, bdiniz@britishschool.g12.br'
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Recover Password'
             mailOptions.html = $('body').html()
@@ -170,7 +166,7 @@ function MailSender(){
     mailOptions.to = 'fmuner@britishschool.g12.br'
     mailOptions.subject = 'felipe muner teste'
     mailOptions.text = 'Recover Password'
-    mailOptions.html = '<b>create event</b>'
+    mailOptions.html = '<b>erro event</b>'
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {

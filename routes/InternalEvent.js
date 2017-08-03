@@ -46,8 +46,8 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
   console.log('_______________')
   console.log(req.findEventByCode)
   console.log('_______________')
-  
-  m.testeMuner(req.findEventByCode)
+
+  m.internalEvent(req.findEventByCode)
   res.json(req.nextEventCode)
 }).post('/find-event-by-code',ie.searchEventByCode, ie.getTemplateMoreInfo, g.guestOfEvent, mi.productOfEvent, function(req,res,next){
   req.findEventByCode.start = moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm')
