@@ -39,7 +39,7 @@ function MyEvent(){
 
   this.cancelEvent = function(req, res, next){
     conn.acquire(function(err,con){
-      con.query('UPDATE Event SET EventStatus_ID=4, ReasonCanceled=?, CanceledByMatricula_ID=? WHERE EventCode = ?', [req.body.ReasonCanceled, req.session.matricula, req.body.EventCode], function(err, result) {
+      con.query('UPDATE Event SET EventStatus_ID=4, ReasonCanceled=?, CanceledByMatricula_ID=?, CanceledAt = NOW() WHERE EventCode = ?', [req.body.ReasonCanceled, req.session.matricula, req.body.EventCode], function(err, result) {
         con.release();
         // console.log(this.sql);
         if(err){

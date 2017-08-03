@@ -16,24 +16,8 @@ let transporter = nodemailer.createTransport({
 })
 
 function MailSender(){
-  this.createEvent = function(req, res, next){
-    let mailOptions = {};
-    mailOptions.from = '"British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
-    mailOptions.to = 'fmuner@britishschool.g12.br'
-    mailOptions.subject = 'felipe muner teste'
-    mailOptions.text = 'Recover Password'
-    mailOptions.html = '<b>create event</b>'
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-          return console.log(error);
-      }
-      console.log('Message %s sent: %s', info.messageId, info.response);
-    })
-    next()
-  }
-
-  this.finishEvent = function(req, res, next){
+  this.finishEvent = function(eventFinded){
     let mailOptions = {};
     mailOptions.from = '"British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
     mailOptions.to = 'fmuner@britishschool.g12.br'
@@ -50,7 +34,7 @@ function MailSender(){
     next()
   }
 
-  this.approveEvent = function(req, res, next){
+  this.approveEvent = function(eventFinded){
     let mailOptions = {};
     mailOptions.from = '"British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
     mailOptions.to = 'fmuner@britishschool.g12.br'
@@ -67,21 +51,8 @@ function MailSender(){
     next()
   }
 
-  this.cancelEvent = function(req, res, next){
-    let mailOptions = {};
-    mailOptions.from = '"British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
-    mailOptions.to = 'fmuner@britishschool.g12.br'
-    mailOptions.subject = 'felipe muner teste'
-    mailOptions.text = 'Recover Password'
-    mailOptions.html = '<b>cancel event</b>'
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-          return console.log(error);
-      }
-      console.log('Message %s sent: %s', info.messageId, info.response);
-    })
-    next()
+  this.cancelEvent = function(eventFinded){
+    (eventFinded === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
   }
 
   this.internalEvent = function(eventFinded){

@@ -6,6 +6,9 @@ const mailSender = require(process.env.PWD + '/util/MailSender')
 const fe = require(process.env.PWD + '/model/FinishEvent')
 const myevent = require(process.env.PWD + '/model/MyEvent')
 const m = require(process.env.PWD + '/model/MailSender')
+const f = require(process.env.PWD + '/model/Find')
+const g = require(process.env.PWD + '/model/Guest')
+const mi = require(process.env.PWD + '/model/MenuItem')
 const fs = require('fs');
 const moment = require('moment');
 const md5 = require('md5');
@@ -30,7 +33,8 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
     sess: req.session,
     flashMsg
   })
-}).post('/cancel-event', myevent.cancelEvent, m.cancelEvent, function(req, res, next) {
+}).post('/cancel-event', myevent.cancelEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+  m.cancelEvent(req.findEventByCode)
   req.session.flashMsg = req.body.EventCode
   res.redirect('/my-event')
 })
