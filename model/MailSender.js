@@ -100,18 +100,26 @@ function MailSender(){
             $('#ResponsibleBy').text(Util.toTitleCase(eventFinded.ResponsibleByName))
             $('#StartEvent').text(moment(eventFinded.start).format('DD/MM/YYYY HH:mm'))
             $('#EndEvent').text(moment(eventFinded.end).format('DD/MM/YYYY HH:mm'))
-            $('#Departament').text(eventFinded.Departament_ID)
-            $('#Budget').text(eventFinded.setor + ' ' + eventFinded.grupo + ' ' + eventFinded.conta)
-            $('#Nparent').text(eventFinded.Nparent)
-            $('#Npupil').text(eventFinded.Npupil)
-            $('#Nstaff').text(eventFinded.Nstaff)
-            $('#Nvisitor').text(eventFinded.Nvisitor)
-            $('#NeedComputer').text(eventFinded.NeedComputer)
-            $('#NeedDataShow').text(eventFinded.NeedDataShow)
-            $('#VideoConference').text(eventFinded.VideoFrom + ' to: ' + eventFinded.VideoTo)
+            $('#Departament').text(eventFinded.Departament_ID || 'Not Reported')
+            if(eventFinded.conta){
+              $('#Budget').text(eventFinded.setor + ' ' + eventFinded.grupo + ' ' + eventFinded.conta)
+            }else{
+              $('#Budget').text('Not Reported')
+            }
+            $('#Nparent').text(eventFinded.Nparent || 'Not Reported')
+            $('#Npupil').text(eventFinded.Npupil || 'Not Reported')
+            $('#Nstaff').text(eventFinded.Nstaff || 'Not Reported')
+            $('#Nvisitor').text(eventFinded.Nvisitor || 'Not Reported')
+            $('#NeedComputer').text(eventFinded.NeedComputer || 'Not Reported')
+            $('#NeedDataShow').text(eventFinded.NeedDataShow || 'Not Reported')
+            if(eventFinded.VideoFrom){
+              $('#VideoConference').text(eventFinded.VideoFrom + ' to ' + eventFinded.VideoTo)
+            }else{
+              $('#VideoConference').text('Not Reported')
+            }
 
             if(eventFinded.products.length === 0){
-              $('#tableProducts').append('<tr><td style="text-align:center;" colspan="2">Don\'t have products.</td></tr>')
+              $('#tableProducts').append('<tr><td style="text-align:center;" colspan="4">Don\'t have products.</td></tr>')
             }else{
               let totalProduct = 0
               eventFinded.products.map(function(e){
@@ -140,7 +148,97 @@ function MailSender(){
             }
 
             // console.log(eventFinded)
-            // console.log('vou mandar emailll !');
+            console.log('vou mandar emailll !');
+            let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
+            let mailOptions = {}
+            mailOptions.from = '"British School - Event System" <noreply@britishschool.g12.br>'
+            mailOptions.to = 'fmuner@britishschool.g12.br, bdiniz@britishschool.g12.br'
+            mailOptions.subject = subjectConcat
+            mailOptions.text = 'Recover Password'
+            mailOptions.html = $('body').html()
+
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                  return console.log(error);
+              }
+              console.log('Message %s sent: %s', info.messageId, info.response);
+            })
+          })
+      }
+    })
+  }
+
+  this.externalEvent = function(eventFinded){
+    console.log(eventFinded)
+    console.log('__________________EVENTO Enviar email external')
+    fs.readFile(process.env.PWD + '/views/email/externalEvent.html', {encoding: 'utf-8'}, function (err, html) {
+      if (err) {
+        throw err;
+      }else{
+        styliner.processHTML(html)
+          .then(function(processedSource) {
+            const $ = cheerio.load(processedSource)
+            // let qs = '?m=' + matricula + '&p=' + newPassword + '&recoveremail=true'
+            $('#EventCode').text(eventFinded.EventCode)
+            $('#EventName').text(Util.toTitleCase(eventFinded.title))
+            $('#StatusName').text(eventFinded.StatusName)
+            $('#CreatedBy').text(Util.toTitleCase(eventFinded.CreatedByName))
+            $('#ResponsibleBy').text(Util.toTitleCase(eventFinded.ResponsibleByName))
+            $('#StartEvent').text(moment(eventFinded.start).format('DD/MM/YYYY HH:mm'))
+            $('#LeavingFromEvent').text(moment(eventFinded.LeavingFromEvent).format('DD/MM/YYYY HH:mm'))
+            $('#EndEvent').text(moment(eventFinded.end).format('DD/MM/YYYY HH:mm'))
+            $('#Departament').text(eventFinded.Departament_ID || 'Not Reported')
+            if(eventFinded.conta){
+              $('#Budget').text(eventFinded.setor + ' ' + eventFinded.grupo + ' ' + eventFinded.conta)
+            }else{
+              $('#Budget').text('Not Reported')
+            }
+            $('#Nparent').text(eventFinded.Nparent || 'Not Reported')
+            $('#Npupil').text(eventFinded.Npupil || 'Not Reported')
+            $('#Nstaff').text(eventFinded.Nstaff || 'Not Reported')
+            $('#Nvisitor').text(eventFinded.Nvisitor || 'Not Reported')
+            $('#LocationName').text(eventFinded.LocationEvent || 'Not Reported')
+            $('#DepartureLocation').text(eventFinded.DepartureFrom || 'Not Reported')
+            $('#NPassenger').text(eventFinded.AmountPerson || 'Not Reported')
+            if(eventFinded.MeansOfTransport){
+              $('#MeansOfTransport').text(eventFinded.TypeVehicleEnglish + '/' + eventFinded.TypeVehiclePort + ' (' + eventFinded.AmountSeat + ' Seats)')
+            }else{
+              $('#MeansOfTransport').text('Not Reported')
+            }
+            $('#WaitAvenue').text(eventFinded.TransportWaitAvenue || 'Not Reported')
+            $('#AdditionalInformation').text(eventFinded.AdditionalInformation || 'Not Reported')
+
+            if(eventFinded.products.length === 0){
+              $('#tableProducts').append('<tr><td style="text-align:center;" colspan="4">Don\'t have products.</td></tr>')
+            }else{
+              let totalProduct = 0
+              eventFinded.products.map(function(e){
+                totalProduct += (e.Amount * e.Price * 1.14)
+                $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
+                                            '<td style="border:1px solid black;padding-left:3px;">'+ e.ProductNameEnglish + '/' + e.ProductNamePort + ' - ' + e.UnitInEnglish + '/' + e.UnitInPort +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Amount +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Price +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ (e.Amount * e.Price * 1.14).toFixed(2) +'</td>'+
+                                          '</tr>')
+              })
+              $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
+                                          '<td colspan="4" style="border:1px solid black;text-align:right;">'+ totalProduct.toFixed(2) +'</td>'+
+                                        '</tr>')
+            }
+
+            if(eventFinded.guests.length === 0){
+              $('#tableGuests').append('<tr><td style="text-align:center;" colspan="2">Don\'t have guests.</td></tr>')
+            }else{
+              eventFinded.guests.map(function(e){
+                $('#tableGuests').append('<tr style="border-bottom:1px solid black;">'+
+                                            '<td style="width:20%;border:1px solid black;padding-left:3px;">'+ Util.toTitleCase(e.Type) +'</td>'+
+                                            '<td style="border:1px solid black;padding-left:3px;">'+ Util.toTitleCase(e.NameGuest)   +'</td>'+
+                                          '</tr>')
+              })
+            }
+
+            // console.log(eventFinded)
+            console.log('vou mandar emailll !');
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"British School - Event System" <noreply@britishschool.g12.br>'
