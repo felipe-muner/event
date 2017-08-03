@@ -100,7 +100,7 @@ function MailSender(){
             $('#ResponsibleBy').text(Util.toTitleCase(eventFinded.ResponsibleByName))
             $('#StartEvent').text(moment(eventFinded.start).format('DD/MM/YYYY HH:mm'))
             $('#EndEvent').text(moment(eventFinded.end).format('DD/MM/YYYY HH:mm'))
-            $('#Departament').text(eventFinded.Departament_ID || 'Not Reported')
+            $('#Departament').text(Util.toTitleCase(eventFinded.nomedepartamento) || 'Not Reported')
             if(eventFinded.conta){
               $('#Budget').text(eventFinded.setor + ' ' + eventFinded.grupo + ' ' + eventFinded.conta)
             }else{
@@ -188,7 +188,7 @@ function MailSender(){
             $('#StartEvent').text(moment(eventFinded.start).format('DD/MM/YYYY HH:mm'))
             $('#LeavingFromEvent').text(moment(eventFinded.LeavingFromEvent).format('DD/MM/YYYY HH:mm'))
             $('#EndEvent').text(moment(eventFinded.end).format('DD/MM/YYYY HH:mm'))
-            $('#Departament').text(eventFinded.Departament_ID || 'Not Reported')
+            $('#Departament').text(Util.toTitleCase(eventFinded.nomedepartamento) || 'Not Reported')
             if(eventFinded.conta){
               $('#Budget').text(eventFinded.setor + ' ' + eventFinded.grupo + ' ' + eventFinded.conta)
             }else{

@@ -125,6 +125,7 @@ function Find(){
                   'e.Nstaff, '+
                   'e.Nvisitor, '+
                   'e.Departament_ID, '+
+                  'departamentos.nomedepartamento, '+
                   'e.Budget_ID, '+
                   'e.DepartureFrom, '+
                   'e.AmountPerson, '+
@@ -148,13 +149,17 @@ function Find(){
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
                   'Left Join EventTransport ON e.MeansOfTransport = EventTransport.EventTransportID '+
                   'Left Join orcamento ON e.Budget_ID = orcamento.id '+
+                  'Left Join departamentos ON e.Departament_ID = departamentos.iddepartamento '+
                 'WHERE '+
                   'e.EventCode = ?', [parseInt(req.body.EventCode) || parseInt(req.nextEventCode)],function(err, result) {
         con.release();
         console.log('_________');
+        console.log('_________');
+        console.log('_________');
         console.log(req.body);
         console.log(this.sql);
         if(err){
+          console.log(err);
           res.render('error', { error: err } );
         }else{
           // console.log(result);
