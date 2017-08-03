@@ -117,6 +117,7 @@ function MailSender(){
             }else{
               $('#VideoConference').text('Not Reported')
             }
+            $('#AdditionalInformation').text(eventFinded.AdditionalInformation || 'Not Reported')
 
             if(eventFinded.products.length === 0){
               $('#tableProducts').append('<tr><td style="text-align:center;" colspan="4">Don\'t have products.</td></tr>')
