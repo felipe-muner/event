@@ -37,8 +37,8 @@ function Guest(){
           // console.log(req.findEventByCode.guests);
           next()
         }
-      });
-    });
+      })
+    })
   }
 }
 

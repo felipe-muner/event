@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const conn = require(process.env.PWD + '/conn');
 const Util = require(process.env.PWD + '/util/Util')
-const mailSender = require(process.env.PWD + '/util/MailSender')
 const approve = require(process.env.PWD + '/model/Approve')
+const m = require(process.env.PWD + '/model/MailSender')
 const fs = require('fs');
 const moment = require('moment');
 const md5 = require('md5');
@@ -21,16 +21,19 @@ router.get('/', approve.getEventToApprove ,function(req, res, next) {
     e.end = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
   })
-
   res.render('approve/approve', {
     sess:req.session,
     allEventToApprove:req.allEventToApprove,
     flashMsg
   })
-}).post('/approve-event', approve.evaluateEvents, function(req, res, next) {
+}).post('/approve-event', approve.evaluateEvents, approve.prepareEmailMain, approve.prepareEmailProducts, approve.prepareEmailGuests, function(req, res, next) {
   let statusName = (parseInt(req.body.statusToUpdate) === 2) ? 'Approved: ' : 'Cancelled: '
   let events = (Object.prototype.toString.call( req.body.selectedEvent ) === '[object Array]') ? req.body.selectedEvent.join(', ') : req.body.selectedEvent
   req.session.flashMsg = {statusName, events, type: 'alert-info'}
+
+  req.jsonAprove.map(function(e){
+    m.approveEvent(e)
+  })
   res.redirect('/approve')
 })
 
