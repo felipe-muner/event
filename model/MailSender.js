@@ -18,24 +18,70 @@ let transporter = nodemailer.createTransport({
 function MailSender(){
 
   this.finishEvent = function(eventFinded){
-    let mailOptions = {};
-    mailOptions.from = '"British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
-    mailOptions.to = 'fmuner@britishschool.g12.br'
-    mailOptions.subject = 'felipe muner teste'
-    mailOptions.text = 'Recover Password'
-    mailOptions.html = '<b>finish event</b>'
+    fs.readFile(process.env.PWD + '/views/email/finishEvent.html', {encoding: 'utf-8'}, function (err, html) {
+      if (err) {
+        throw err;
+      }else{
+        styliner.processHTML(html)
+          .then(function(processedSource) {
+            const $ = cheerio.load(processedSource)
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-          return console.log(error);
+            $('#EventCode').text(eventFinded.EventCode)
+            $('#EventName').text(Util.toTitleCase(eventFinded.title))
+            $('#StatusName').text(eventFinded.StatusName)
+            if (eventFinded.Type === 'I') {
+              $('#TypeEvent').text('Internal')
+            }else {
+              $('#TypeEvent').text('External')
+            }
+            $('#CreatedBy').text(Util.toTitleCase(eventFinded.CreatedByName))
+            $('#ResponsibleBy').text(Util.toTitleCase(eventFinded.ResponsibleByName))
+            $('#StartEvent').text(moment(eventFinded.start).format('DD/MM/YYYY HH:mm'))
+            $('#EndEvent').text(moment(eventFinded.end).format('DD/MM/YYYY HH:mm'))
+            $('#Departament').text(Util.toTitleCase(eventFinded.nomedepartamento) || 'Not Reported')
+            if(eventFinded.conta){
+              $('#Budget').text(eventFinded.setor + ' ' + eventFinded.grupo + ' ' + eventFinded.conta)
+            }else{
+              $('#Budget').text('Not Reported')
+            }
+            $('#AdditionalInformation').text(eventFinded.AdditionalInformation || 'Not Reported')
+
+            if(eventFinded.products.length === 0){
+              $('#tableProducts').append('<tr><td style="text-align:center;" colspan="4">Don\'t have products.</td></tr>')
+            }else{
+              eventFinded.products.map(function(e){
+                $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
+                                            '<td style="border:1px solid black;padding-left:3px;">'+ e.ProductNameEnglish + '/' + e.ProductNamePort + ' - ' + e.UnitInEnglish + '/' + e.UnitInPort +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.UsedAmount +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Amount +'</td>'+
+                                          '</tr>')
+              })
+            }
+
+
+            let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName
+
+            let mailOptions = {};
+            mailOptions.from = '"British School - Event System - Finish Event" <noreply@britishschool.g12.br>'
+            mailOptions.to = 'fmuner@britishschool.g12.br;bdiniz@britishschool.g12.br;'
+            mailOptions.subject = subjectConcat
+            mailOptions.text = 'Finish Event'
+            mailOptions.html = $('body').html()
+
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                return console.log(error);
+              }
+              console.log('Message %s sent: %s', info.messageId, info.response);
+            })
+
+          })
       }
-      console.log('Message %s sent: %s', info.messageId, info.response);
     })
-    next()
   }
 
   this.approveEvent = function(eventFinded){
-    let mailOptions = {};
+    let mailOptions = {}
     mailOptions.from = '"British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
     mailOptions.to = 'fmuner@britishschool.g12.br'
     mailOptions.subject = 'felipe muner teste'
@@ -48,7 +94,6 @@ function MailSender(){
       }
       console.log('Message %s sent: %s', info.messageId, info.response);
     })
-    next()
   }
 
   this.cancelEvent = function(eventFinded){
@@ -119,7 +164,6 @@ function MailSender(){
               })
             }
 
-            // console.log(eventFinded)
             console.log('vou mandar emailll !');
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}

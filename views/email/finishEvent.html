@@ -1,0 +1,107 @@
+<style media="screen">
+  div{
+    width: 100%;
+  }
+  table, th, td {
+   border: 1px solid black;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  .titleTable{
+    text-align: center;
+    background-color: #2A3F54;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .titleTable td{
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .titleField{
+    background-color: #bbb;
+    padding-left: 3px;
+    font-weight: bold;
+  }
+
+  .contentField{
+    padding-left: 3px;
+  }
+</style>
+
+<div>
+  <table>
+    <tr class="titleTable">
+      <td colspan="2">
+        Main Information
+      </td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Event Code</td>
+      <td style="width:80%;" class="contentField" id="EventCode"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Event Name</td>
+      <td style="width:80%;" class="contentField" id="EventName"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Status</td>
+      <td style="width:80%;" class="contentField" id="StatusName"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Type</td>
+      <td style="width:80%;" class="contentField" id="TypeEvent"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Created by</td>
+      <td style="width:80%;" class="contentField" id="CreatedBy"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Responsible By</td>
+      <td style="width:80%;" class="contentField" id="ResponsibleBy"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Start</td>
+      <td style="width:80%;" class="contentField" id="StartEvent"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">End</td>
+      <td style="width:80%;" class="contentField" id="EndEvent"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Departament</td>
+      <td style="width:80%;" class="contentField" id="Departament"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Budget</td>
+      <td style="width:80%;" class="contentField" id="Budget"></td>
+    </tr>
+    <tr>
+      <td style="width:20%;" class="titleField">Additional Information</td>
+      <td style="width:80%;" class="contentField" id="AdditionalInformation"></td>
+    </tr>
+  </table>
+
+  <br />
+
+  <table id="tableProducts">
+    <tr class="titleTable">
+      <td colspan="4">
+        Products
+      </td>
+    </tr>
+    <tr class="titleTable" style="font-size:13px;">
+      <td style="width:70%;">
+        Name
+      </td>
+      <td>
+        Amount Used
+      </td>
+      <td>
+        Amount Requested
+      </td>
+    </tr>
+  </table>
+</div>

@@ -5,6 +5,8 @@ const Util = require(process.env.PWD + '/util/Util')
 const mailSender = require(process.env.PWD + '/util/MailSender')
 const fe = require(process.env.PWD + '/model/FinishEvent')
 const mi = require(process.env.PWD + '/model/MenuItem')
+const m = require(process.env.PWD + '/model/MailSender')
+const f = require(process.env.PWD + '/model/Find')
 const fs = require('fs');
 const moment = require('moment');
 const md5 = require('md5');
@@ -24,7 +26,8 @@ router.get('/', fe.getAllFinishEvent, function(req, res, next) {
   })
   res.render('finish-event/finish-event',{
     sess:req.session,
-    allEventToFinish:req.allEventToFinish
+    allEventToFinish:req.allEventToFinish,
+    flashMsg
   })
 }).post('/write-down-page', fe.productOfEvent, function(req,res,next){
   res.render('finish-event/write-down-page',{
@@ -32,7 +35,13 @@ router.get('/', fe.getAllFinishEvent, function(req, res, next) {
     camposAproveitados:req.body,
     products: req.products
   })
-}).post('/close-event', fe.updateItemsFinishEvent, fe.updateStatusEvent, function(req,res,next){
+}).post('/close-event', fe.updateItemsFinishEvent, fe.updateStatusEvent, f.searchEventByCode, mi.productOfEvent, function(req,res,next){
+  req.session.flashMsg = {
+    type: 'alert-success',
+    statusName: 'Finalized',
+    text: req.body.EventCode
+  }
+  m.finishEvent(req.findEventByCode)
   console.log(req.body);
   res.redirect('/finish-event')
 })

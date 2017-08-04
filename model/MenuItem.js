@@ -140,6 +140,7 @@ function MenuItem(){
                   'EventItem.EventProduct_ID, '+
                   'EventItem.Price, '+
                   'EventItem.Amount, '+
+                  'EventItem.UsedAmount, '+
                   'EventItem.Amount * EventItem.Price as TotalProd, '+
                   'EventProduct.NameEnglish as ProductNameEnglish,  '+
                   'EventProduct.NamePort as ProductNamePort, '+
@@ -156,7 +157,7 @@ function MenuItem(){
           res.render('error', { error: err } );
         }else{
           // console.log('fields from products');
-          // console.log(result);
+          console.log(result)
           req.findEventByCode.products = result
           next()
         }
