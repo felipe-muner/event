@@ -132,10 +132,13 @@ function ExternalEvent(){
       Budget_ID: parseInt(req.body.id_budget) || null,
       CreateBy: req.session.matricula,
       ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || parseInt(req.session.matricula),
-      Departament_ID:req.body.iddepartamento,
+      Departament_ID: req.body.iddepartamento || null,
       LocationEvent: req.body.locationEvent,
       LeavingFromEvent: req.body.LeavingFromEvent
+
     }
+    let approvedDirectly = req.directApproved.some((e) => e.Matricula_ID === req.session.matricula)
+    if (approvedDirectly) event.EventStatus_ID = 2
     // for(var propName in EndEvent) console.log(propName + ' ------- Valor:' +  EndEvent[propName])
     // moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
     conn.acquire(function(err,con){

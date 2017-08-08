@@ -89,6 +89,7 @@ function MailSender(){
   }
 
   this.internalEvent = function(eventFinded){
+    
     fs.readFile(process.env.PWD + '/views/email/internalEvent.html', {encoding: 'utf-8'}, function (err, html) {
       if (err) {
         throw err;

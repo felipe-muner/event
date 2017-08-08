@@ -3,8 +3,23 @@ const async = require('async')
 
 function Approve(){
 
+  this.getDirectApproval = function(req,res,next){
+    conn.acquire(function(err,con){
+      con.query('SELECT Matricula_ID FROM EventDirectApproval', function(err, result) {
+        con.release();
+        if(err){
+          console.log(this.sql)
+          res.render('error', { error: err } );
+        }else{
+          req.directApproved = result
+          next()
+        }
+      })
+    })
+  }
+
   this.getEventToApprove = function(req, res, next){
-    
+
     let whereClausure = ''
     if (15 === parseInt(req.session.profile)) {
       whereClausure = 'WHERE e.EventStatus_ID=1'

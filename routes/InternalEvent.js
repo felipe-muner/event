@@ -7,6 +7,7 @@ const mailSender = require(process.env.PWD + '/util/MailSender')
 const ie = require(process.env.PWD + '/model/InternalEvent')
 const mi = require(process.env.PWD + '/model/MenuItem')
 const d = require(process.env.PWD + '/model/Departament')
+const a = require(process.env.PWD + '/model/Approve')
 const f = require(process.env.PWD + '/model/Find')
 const g = require(process.env.PWD + '/model/Guest')
 const u = require(process.env.PWD + '/model/User')
@@ -42,11 +43,10 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
 }).post('/search-events', ie.searchEventTwoDate, function(req, res, next) {
   //console.log(req.allEvents);
   res.json(req.allEvents)
-}).post('/create-event',ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+}).post('/create-event', a.getDirectApproval,ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
   console.log('_______________')
   console.log(req.findEventByCode)
   console.log('_______________')
-
   m.internalEvent(req.findEventByCode)
   res.json(req.nextEventCode)
 }).post('/find-event-by-code',ie.searchEventByCode, ie.getTemplateMoreInfo, g.guestOfEvent, mi.productOfEvent, function(req,res,next){

@@ -7,6 +7,7 @@ const mi = require(process.env.PWD + '/model/MenuItem')
 const d = require(process.env.PWD + '/model/Departament')
 const f = require(process.env.PWD + '/model/Find')
 const ee = require(process.env.PWD + '/model/ExternalEvent')
+const a = require(process.env.PWD + '/model/Approve')
 const ie = require(process.env.PWD + '/model/InternalEvent')
 const t = require(process.env.PWD + '/model/Transport')
 const m = require(process.env.PWD + '/model/MailSender')
@@ -40,7 +41,7 @@ router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, f
   req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
 
   res.json(req.allEvents)
-}).post('/create-event',ee.getLastEvent, ee.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+}).post('/create-event', a.getDirectApproval,ee.getLastEvent, ee.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
   m.externalEvent(req.findEventByCode)
   res.json(req.nextEventCode)
 })

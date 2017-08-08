@@ -201,7 +201,6 @@ function InternalEvent(){
 
   this.createEvent = function(req, res, next){
     console.log('vou criar');
-    console.log(req.session);
 
     let StartEvent = moment(req.body.dateNewEvent + 'T' + req.body.startTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
     let EndEvent = moment(req.body.dateNewEvent + 'T' + req.body.endTimeNewEvent).format('YYYY-MM-DD HH:mm:ss')
@@ -227,6 +226,9 @@ function InternalEvent(){
       ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || parseInt(req.session.matricula),
       Departament_ID: req.body.iddepartamento || null
     }
+    let approvedDirectly = req.directApproved.some((e) => e.Matricula_ID === req.session.matricula)
+    if (approvedDirectly) event.EventStatus_ID = 2
+
     // for(var propName in EndEvent) console.log(propName + ' ------- Valor:' +  EndEvent[propName])
     // moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
     conn.acquire(function(err,con){
