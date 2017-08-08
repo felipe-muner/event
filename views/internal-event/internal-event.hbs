@@ -531,7 +531,7 @@
       if('' !== idRoom) searchEvents()
     })
 
-    setTimeout(function () { $('#roomID').val('551').trigger('change') }, 100);
+    // setTimeout(function () { $('#roomID').val('551').trigger('change') }, 100);
 
     $('#calendar').fullCalendar({
       header: {
@@ -544,7 +544,20 @@
       displayEventEnd: true,
       allDaySlot:false,
       dayClick: function(date, jsEvent, view) {
-        ( '' !== $("#roomID").val() ) ? showModalNewEvent(date) : swal("Select the room!", "First, select the room!", "info")
+        if( '' !== $("#roomID").val() ){
+          showModalNewEvent(date)
+        }else {
+          swal({
+            title:"Select the room!",
+            text:"First, select the room!",
+            type:"info"
+          }).then(
+            function () {
+              $('#roomID').select2('open')
+              // setTimeout(function() { $('#roomID').select2('open') }, 50)
+            }
+          )
+        }
       },
       eventClick: function(calEvent, jsEvent, view) {
         findEventByCode(calEvent.EventCode)
@@ -689,14 +702,14 @@
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault()
     checkEndAfterStart()
-    // checkNewTimeDay()
+    checkEventPast()
+    checkNewTimeDay()
     passou()
 
     let data = $('#formNewEvent').serializeArray()
-
     data.push({name: 'guests', value: JSON.stringify(serializeGuest())})
     data.push({name: 'products', value: JSON.stringify(serializeTableProduct())})
-    debugger
+
     $.ajax({
       url: '/internal-event/create-event',
       type: 'POST',
@@ -745,6 +758,13 @@
     })
   }
 
+  function checkEventPast(){
+    if(startEvent < todayDate){
+      swal("Incorrect Date", "You can\'t create event to previous days", "error")
+      throw new Error('Event can\'t be before today.')
+    }
+  }
+
   function checkEndAfterStart(){
     let startEvent = moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
     let endEvent = moment($('#dateNewEvent').val() + 'T' + $('#endTimeNewEvent').val())
@@ -757,7 +777,7 @@
   }
 
   function passou(){
-    $('#submitFormNewEvent').prop("disabled",true);
+    $('#submitFormNewEvent').prop("disabled", true);
     $('#submitFormNewEvent').prop("value",'...creating');
     // alert('passou')
   }
