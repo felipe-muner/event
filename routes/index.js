@@ -11,8 +11,19 @@ const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/testeJavaScriptTemplate', function(req, res, next) {
-  console.log('testeJavaScriptTemplate view');
-  res.render('testeJavaScriptTemplate',{layout:false})
+  conn.acquire(function(err,con){
+    con.query('SELECT * FROM usuarios WHERE ativo = 1 ORDER BY idusuario', function(err, result) {
+      con.release();
+      if(err){
+        res.render('error', { error: err } );
+      }else{
+        result.map(function(e){
+          console.log('INSERT INTO usuario_controle_acesso VALUES(null,'+e.idusuario+',7,20,1);')
+        })
+      }
+    });
+  });
+  res.send('ok')
 });
 
 // router.get('/*', function(req, res, next) {
@@ -97,7 +108,7 @@ router.post('/login', function(req, res, next) {
               })
             })
             conn.acquire(function(err,con){
-              con.query('select f.Name, f.Action, f.Icon from Functionality f inner join ProfileFunctionality pf on pf.Functionality_ID = f.FunctionalityID where pf.Profile_ID = ? ORDER BY f.Priority', [result[0].id_perfil_sistema], function(err, functionality) {
+              con.query('select f.Name, f.Action, f.Icon from Functionality f inner join ProfileFunctionality pf on pf.Functionality_ID = f.FunctionalityID where pf.Profile_ID = ? AND f.Active = 1 ORDER BY f.Priority', [result[0].id_perfil_sistema], function(err, functionality) {
                 console.log('query profile: ' + this.sql);
                 con.release();
                 //console.log('diferenca menor que dia limite --- ' + moment().diff(moment(result[0].date_last_change_pass),'days'));
@@ -229,9 +240,9 @@ router.post('/email-forget-password', function(req, res, next) {
   });
 });
 
-// router.get('*', function(req, res, next) {
-//   req.session.matricula ? next() : res.redirect('/');
-// });
+router.get('*', function(req, res, next) {
+  req.session.matricula ? next() : res.redirect('/');
+});
 
 router.get('/panel', function(req, res, next) {
   console.log('entrei panel');

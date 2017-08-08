@@ -4,6 +4,17 @@ const async = require('async')
 function Approve(){
 
   this.getEventToApprove = function(req, res, next){
+    
+    let whereClausure = ''
+    if (15 === parseInt(req.session.profile)) {
+      whereClausure = 'WHERE e.EventStatus_ID=1'
+    }else if (16 === parseInt(req.session.profile)){
+      whereClausure = 'WHERE e.EventStatus_ID=1 AND (u1.id_site = '+ req.session.idunidade +' OR u2.id_site = '+ req.session.idunidade +')'
+    }else {
+      let err = 'Error ao tentar utilizar aprovacao'
+      res.render('error', { error: err } );
+    }
+
     conn.acquire(function(err,con){
       con.query('SELECT '+
                   'e.EventCode, '+
@@ -16,18 +27,22 @@ function Approve(){
                   'es.StatusName, '+
                   'e.DepartureFrom, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
-                  'u1.nomeusuario AS CreatedByName '+
+                  'u1.nomeusuario AS CreatedByName, '+
+                  'u2.id_site AS SiteResponsible, '+
+                  'u1.id_site AS SiteCreator '+
                 'FROM '+
                   'Event AS e '+
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
-                'WHERE '+
-                  'e.EventStatus_ID = 1', [], function(err, result) {
+                whereClausure, function(err, result) {
         con.release();
         if(err){
+          console.log(this.sql)
           res.render('error', { error: err } );
         }else{
+          console.log(req.session)
+          console.log(this.sql)
           req.allEventToApprove = result
           next()
         }
