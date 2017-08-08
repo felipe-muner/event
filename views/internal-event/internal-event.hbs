@@ -295,16 +295,7 @@
   $("#selectReuseEvent").on("change", function (e) {
     let EventCode = $("#selectReuseEvent").val()
     if('' === EventCode){
-      document.getElementById('formNewEvent').reset()
-      $('#responsibleNewEvent').val('').trigger('change')
-      $('#iddepartamento').val('').trigger('change')
-      $('#additionalInformation').text('')
-      $('.lineName').empty()
-      $('#sumparent').text(0)
-      $('#sumpupil').text(0)
-      $('#sumstaff').text(0)
-      $('#sumvisitor').text(0)
-      $('#tableItemEvent tbody').empty()
+      resetForm()
     }else{
       let dataSend = {EventCode}
 
@@ -544,6 +535,7 @@
       displayEventEnd: true,
       allDaySlot:false,
       dayClick: function(date, jsEvent, view) {
+        checkEventPast(date)
         if( '' !== $("#roomID").val() ){
           showModalNewEvent(date)
         }else {
@@ -554,7 +546,6 @@
           }).then(
             function () {
               $('#roomID').select2('open')
-              // setTimeout(function() { $('#roomID').select2('open') }, 50)
             }
           )
         }
@@ -702,8 +693,8 @@
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault()
     checkEndAfterStart()
-    checkEventPast()
     checkNewTimeDay()
+    checkVideoConference()
     passou()
 
     let data = $('#formNewEvent').serializeArray()
@@ -720,7 +711,17 @@
         $('#submitFormNewEvent').prop("disabled",false);
         $('#submitFormNewEvent').prop("value",'Create');
         searchEvents()
-        swal("Saved successfully", data, "success")
+        resetForm()
+        swal({
+          title: "Saved successfully",
+          text: data,
+          type:"success"
+        }).then(
+          function () {
+            $('#modalNewEvent').modal('hide')
+          }
+        )
+
       }
     })
   });
@@ -745,6 +746,21 @@
     return arrayGuest
   }
 
+  function checkVideoConference(){
+    if (($('#videoFrom').val() !== '') && $('#videoTo').val() === '') {
+      swal({
+        title:"",
+        text:"Video Conference to can\'t be empty",
+        type: "info"
+      }).then(
+        function () {
+          $('#videoTo').css('border-color','red')
+        }
+      )
+      throw new Error('Please choose Video Conference to')
+    }
+  }
+
   function checkNewTimeDay(){
     let startEvent = moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
     let endEvent = moment($('#dateNewEvent').val() + 'T' + $('#endTimeNewEvent').val())
@@ -758,8 +774,8 @@
     })
   }
 
-  function checkEventPast(){
-    if(startEvent < todayDate){
+  function checkEventPast(dataDesejada){
+    if( dataDesejada.format('YYYY-MM-DD') < moment().format('YYYY-MM-DD') ){
       swal("Incorrect Date", "You can\'t create event to previous days", "error")
       throw new Error('Event can\'t be before today.')
     }
@@ -796,6 +812,19 @@
         console.log(eventData);
       }
     })
+  }
+
+  function resetForm(){
+    document.getElementById('formNewEvent').reset()
+    $('#responsibleNewEvent').val('').trigger('change')
+    $('#iddepartamento').val('').trigger('change')
+    $('#additionalInformation').text('')
+    $('.lineName').empty()
+    $('#sumparent').text(0)
+    $('#sumpupil').text(0)
+    $('#sumstaff').text(0)
+    $('#sumvisitor').text(0)
+    $('#tableItemEvent tbody').empty()
   }
 </script>
 {{/section}}
