@@ -18,8 +18,8 @@ router.get('/', find.getLastHundred, u.allActive, function(req, res, next) {
     e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
     e.CreatedByName = Util.toTitleCase(e.CreatedByName)
-    e.start = moment(e.start).format('DD/MM/YYYY HH:mm')
-    e.end = moment(e.end).format('DD/MM/YYYY HH:mm')
+    e.startFormated = moment(e.start).format('DD/MM/YYYY HH:mm')
+    e.endFormated = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
   })
   res.render('find/find', {
@@ -79,8 +79,8 @@ router.get('/', find.getLastHundred, u.allActive, function(req, res, next) {
     e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
     e.CreatedByName = Util.toTitleCase(e.CreatedByName)
-    e.start = moment(e.start).format('DD/MM/YYYY HH:mm')
-    e.end = moment(e.end).format('DD/MM/YYYY HH:mm')
+    e.startFormated = moment(e.start).format('DD/MM/YYYY HH:mm')
+    e.endFormated = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
   })
   // console.log(req.makeFind);

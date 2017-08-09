@@ -17,7 +17,7 @@
   </div>
   <div class="panel-body">
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-12" id="divTable">
         <table class="table table-hover table-striped" id="tableSearchEvent">
           <thead>
             <tr>
@@ -38,8 +38,8 @@
                 <td>{{Type}}</td>
                 <td>{{CreatedByName}}</td>
                 <td>{{ResponsibleByName}}</td>
-                <td class="text-center">{{start}}</td>
-                <td class="text-center">{{end}}</td>
+                <td class="text-center" data-order="{{start}}">{{startFormated}}</td>
+                <td class="text-center" data-order="{{end}}">{{endFormated}}</td>
                 <td>{{title}}</td>
                 <td style="text-align:center;">
                   <i class="fa fa-search-plus" aria-hidden="true" onclick="moreInformationEvent({{EventCode}});"></i>
@@ -142,22 +142,48 @@
         data: $('#formFind').serialize(),
         dataType:'json',
         success: function(data) {
-          $('#tableSearchEvent tbody').empty()
+
+          let tableTemplate = '<table class="table table-hover table-striped" id="tableSearchEvent">'+
+                                '<thead>'+
+                                  '<tr>'+
+                                    '<th>Event Number</th>'+
+                                    '<th>Type</th>'+
+                                    '<th>Creator</th>'+
+                                    '<th>Responsible</th>'+
+                                    '<th>Start</th>'+
+                                    '<th>End</th>'+
+                                    '<th>Event Name</th>'+
+                                    '<th>More Info</th>'+
+                                  '</tr>'+
+                                '</thead>'+
+                                '<tbody>'+
+                                '</tbody>'+
+                              '</table>'
+          $('#divTable').empty()
+          $('#divTable').append(tableTemplate)
           for (var i = 0; i < data.length; i++) {
+            debugger
             let newLine = '<tr data-event-code="'+data[i].EventCode+'">'+
                             '<td class="text-center">'+data[i].EventCode+'</td>'+
                             '<td>'+data[i].Type+'</td>'+
                             '<td>'+data[i].CreatedByName+'</td>'+
                             '<td>'+data[i].ResponsibleByName+'</td>'+
-                            '<td class="text-center">'+data[i].start+'</td>'+
-                            '<td class="text-center">'+data[i].end+'</td>'+
+                            '<td class="text-center" data-order="'+ data[i].start +'">'+data[i].startFormated+'</td>'+
+                            '<td class="text-center" data-order="'+ data[i].end +'">'+data[i].endFormated+'</td>'+
                             '<td>'+data[i].title+'</td>'+
                             '<td style="text-align:center;">'+
                               '<i class="fa fa-search-plus" aria-hidden="true" onclick="moreInformationEvent('+data[i].EventCode+');"></i>'+
                             '</td>'+
                           '</tr>'
-            $('#tableSearchEvent tbody').append(newLine)
+            $('#tableSearchEvent').append(newLine)
           }
+          $('#tableSearchEvent').DataTable({
+        		aLengthMenu: [
+    	        [25, 50, 100, 200, -1],
+    	        [25, 50, 100, 200, "Todos"]
+      	    ],
+      	    iDisplayLength: 25
+        	})
           $('#modalFind').modal('hide')
         }
       })
@@ -179,13 +205,22 @@
        form.submit()
     }
 
-    $(document).ready(function(e){
+
       $("#ResponsibleOrCreator").select2({
         placeholder: "Select the Creator or Responsible"
       })
       $('#StartTime').val(moment().startOf('year').format('YYYY-MM-DD'))
       $('#EndTime').val(moment().endOf('year').format('YYYY-MM-DD'))
       $('[data-toggle="tooltip"]').tooltip()
-    })
+
+      $('#tableSearchEvent').DataTable({
+    		aLengthMenu: [
+	        [25, 50, 100, 200, -1],
+	        [25, 50, 100, 200, "Todos"]
+  	    ],
+  	    iDisplayLength: 25
+    	})
+
+
   </script>
 {{/section}}

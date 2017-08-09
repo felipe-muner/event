@@ -88,8 +88,7 @@ function Find(){
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
-                'ORDER BY EventCode DESC '+
-                'LIMIT 100', function(err, result) {
+                'ORDER BY EventCode DESC', function(err, result) {
         con.release();
         if(err){
           res.render('error', { error: err } );
