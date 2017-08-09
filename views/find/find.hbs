@@ -79,6 +79,14 @@
             </div>
           </div>
           <div class="row" style="margin-top:10px;">
+            <div class="col-sm-6">
+              <input type="date" name="StartTime" id="StartTime" data-toggle="tooltip" title="Start Date">
+            </div>
+            <div class="col-sm-6">
+              <input type="date" name="EndTime" id="EndTime" data-toggle="tooltip" title="End Date">
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
             <div class="col-sm-12">
               <input type="text" name="EventName" value="" class="form-control" placeholder=" Event Name">
             </div>
@@ -175,6 +183,9 @@
       $("#ResponsibleOrCreator").select2({
         placeholder: "Select the Creator or Responsible"
       })
+      $('#StartTime').val(moment().startOf('year').format('YYYY-MM-DD'))
+      $('#EndTime').val(moment().endOf('year').format('YYYY-MM-DD'))
+      $('[data-toggle="tooltip"]').tooltip()
     })
   </script>
 {{/section}}

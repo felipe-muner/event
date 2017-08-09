@@ -18,12 +18,9 @@ function Find(){
       // console.log(whereEventName)
       let whereOwner = (!!req.body.ResponsibleOrCreator) ? '(e.CreateBy IN('+ req.body.ResponsibleOrCreator +') OR e.ResponsibleByEvent IN('+ req.body.ResponsibleOrCreator+'))' : ''
       // console.log(whereOwner)
-
       let whereStatusName = (!!req.body.StatusName) ? 'e.EventStatus_ID IN('+ req.body.StatusName +')' : ''
-      console.log(req.body.StatusName)
-      console.log(whereStatusName)
-      console.log('____________________')
-      console.log('____________________')
+
+      let whereRangeDate = (!!req.body.StartTime) ? 'CAST(StartEvent AS DATE) between \''+ req.body.StartTime +'\' and \''+ req.body.EndTime + '\'' : ''
 
       let whereClause = 'WHERE '
       if('' !== whereEventCode){
@@ -33,6 +30,7 @@ function Find(){
         if(whereEventName !== '') whereClause = whereClause += ' AND ' + whereEventName + ' '
         if(whereOwner !== '') whereClause = whereClause += ' AND ' + whereOwner + ' '
         if(whereStatusName !== '') whereClause = whereClause += ' AND ' + whereStatusName + ' '
+        if(whereRangeDate !== '') whereClause = whereClause += ' AND ' + whereRangeDate + ' '
       }
 
       whereClause = (whereClause === 'WHERE ') ? '' : whereClause
