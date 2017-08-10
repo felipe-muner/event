@@ -492,7 +492,7 @@
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault()
     checkEndAfterStart()
-    // passou()
+    passou()
 
     let data = $('#formNewEvent').serializeArray()
 
@@ -537,7 +537,9 @@
 
 
   function passou(){
-    alert('passo')
+    $('#submitFormNewEvent').prop("disabled", true);
+    $('#submitFormNewEvent').prop("value",'...creating');
+    // alert('passou')
   }
 
   function checkEndAfterStart(){
