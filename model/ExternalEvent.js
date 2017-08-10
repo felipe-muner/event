@@ -134,8 +134,7 @@ function ExternalEvent(){
       ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || parseInt(req.session.matricula),
       Departament_ID: req.body.iddepartamento || null,
       LocationEvent: req.body.locationEvent,
-      LeavingFromEvent: req.body.LeavingFromEvent
-
+      LeavingFromEvent: req.body.LeavingFromEvent || null
     }
     let approvedDirectly = req.directApproved.some((e) => e.Matricula_ID === req.session.matricula)
     if (approvedDirectly) event.EventStatus_ID = 2

@@ -98,7 +98,7 @@
                       </div>
                       <div class="col-sm-2">
                         <label for="LeavingFromEvent">Leaving the Event Site</label>
-                        <input type="datetime-local" name="LeavingFromEvent" id="LeavingFromEvent" class="form-control" required>
+                        <input type="datetime-local" name="LeavingFromEvent" id="LeavingFromEvent" class="form-control">
                       </div>
                       <div class="col-sm-2">
                         <label for="EndEvent">Arrival at School</label>
@@ -493,7 +493,7 @@
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault()
     checkEndAfterStart()
-    passou()
+    // passou()
 
     let data = $('#formNewEvent').serializeArray()
 
@@ -506,14 +506,35 @@
       data,
       dataType:'json',
       success: function(data) {
-        $('#submitFormNewEvent').prop("disabled",false);
-        $('#submitFormNewEvent').prop("value",'Create');
+        $('#submitFormNewEvent').prop("disabled",false)
+        $('#submitFormNewEvent').prop("value",'Create')
         searchEvents()
-        debugger
-        swal("Saved successfully", data, "success")
+        resetForm()
+        swal({
+          title: "Saved successfully",
+          text: data,
+          type:"success"
+        }).then(
+          function () {
+            $('#modalNewEventExternal').modal('hide')
+          }
+        )
       }
     })
-  });
+  })
+
+  function resetForm(){
+    document.getElementById('formNewEvent').reset()
+    $('#responsibleNewEvent').val('').trigger('change')
+    $('#iddepartamento').val('').trigger('change')
+    $('#additionalInformation').text('')
+    $('.lineName').empty()
+    $('#sumparent').text(0)
+    $('#sumpupil').text(0)
+    $('#sumstaff').text(0)
+    $('#sumvisitor').text(0)
+    $('#tableItemEvent tbody').empty()
+  }
 
 
   function passou(){
