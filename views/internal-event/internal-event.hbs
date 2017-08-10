@@ -240,7 +240,7 @@
                         <select id="id_budget" name="id_budget" style="width:100%;">
                           <option value="">SELECT THE BUDGET</option>
                           {{#each sess.budgets}}
-                            <option data-setor="{{setor}}" data-grupo="{{grupo}}" data-conta="{{conta}}" data-ncont="{{ncont}}" value="{{id_orca}}">{{pad setor 3 0}} {{pad grupo 3 0}} {{conta}} {{ncont}} - R${{addDecimalCases saldo}}</option>
+                            <option data-setor="{{setor}}" data-grupo="{{grupo}}" data-conta="{{conta}}" data-ncont="{{nomecont}}" value="{{id_orca}}">{{pad setor 3 0}} {{pad grupo 3 0}} {{conta}} {{ncont}} - R${{addDecimalCases saldo}}</option>
                           {{/each}}
                         </select>
                       </div>
