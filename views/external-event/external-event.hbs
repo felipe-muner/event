@@ -264,7 +264,7 @@
                         <select id="id_budget" name="id_budget" style="width:100%;">
                           <option value="">SELECT THE BUDGET</option>
                           {{#each sess.budgets}}
-                            <option data-setor="{{setor}}" data-grupo="{{grupo}}" data-conta="{{conta}}" data-ncont="{{nomecont}}" value="{{id_orca}}">{{pad setor 3 0}} {{pad grupo 3 0}} {{conta}} {{ncont}} - R${{addDecimalCases saldo}}</option>
+                            <option data-setor="{{setor}}" data-grupo="{{grupo}}" data-conta="{{conta}}" data-ncont="{{nomecont}}" data-saldo="{{saldo}}" value="{{id_orca}}">{{pad setor 3 0}} {{pad grupo 3 0}} {{conta}} {{ncont}} - R${{addDecimalCases saldo}}</option>
                           {{/each}}
                         </select>
                       </div>
@@ -272,7 +272,6 @@
                     <div class="row" style="margin-top:5px;">
                       <div class="col-sm-10">
                         <select id="listProduct" name="allProductActive" multiple style="width:100%;">
-                          <option></option>
                           {{#each allProductActive}}
                             <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} data-event-product-id="{{EventProductID}}" value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
                           {{/each}}
@@ -410,7 +409,7 @@
           data.EventFound.products.map(function(e){
             sumProd += e.Price * e.Amount
             $('#tableItemEvent tbody').append(
-              '<tr data-product-id="'+ e.EventProduct_ID +'" data-price-prod="'+ e.Price +'" data-qtd="'+ e.Amount +'">'
+              '<tr class="lineItemEvent" data-product-id="'+ e.EventProduct_ID +'" data-price-prod="'+ e.Price +'" data-qtd="'+ e.Amount +'">'
                 +'<td class="text-center"><i onclick="removeItemEvent(this)" class="fa fa-times" aria-hidden="true"></i></td>'
                 +'<td>'+ e.ProductNameEnglish + '/' + e.ProductNamePort + '  |  ' + e.UnitInEnglish + '/' + e.UnitInPort +'</td>'
                 +'<td class="text-right">'
@@ -492,6 +491,7 @@
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault()
     checkEndAfterStart()
+    checkBudgetBalance()
     passou()
 
     let data = $('#formNewEvent').serializeArray()
@@ -507,8 +507,8 @@
       success: function(data) {
         $('#submitFormNewEvent').prop("disabled",false)
         $('#submitFormNewEvent').prop("value",'Create')
-        searchEvents()
-        resetForm()
+        // searchEvents()
+        // resetForm()
         swal({
           title: "Saved successfully",
           text: data,
@@ -516,6 +516,7 @@
         }).then(
           function () {
             $('#modalNewEventExternal').modal('hide')
+            window.location.replace('/my-event')
           }
         )
       }
@@ -567,7 +568,7 @@
       let qtdProd = parseInt($('#qtdProduct').val())
 
       $('#tableItemEvent tbody').append(
-        '<tr data-product-id="'+eventProductID+'" data-price-prod="'+priceProd+'" data-qtd="'+qtdProd+'">'
+        '<tr class="lineItemEvent" data-product-id="'+eventProductID+'" data-price-prod="'+priceProd+'" data-qtd="'+qtdProd+'">'
           +'<td class="text-center"><i onclick="removeItemEvent(this)" class="fa fa-times" aria-hidden="true"></i></td>'
           +'<td>'+ nomeProdIngl + '/' + nomeProdPort + '  |  ' + unitIngl + '/' + unitPort +'</td>'
           +'<td class="text-right">'
@@ -576,7 +577,6 @@
           +'<td class="text-right totalProduct">'+ (priceProd * qtdProd).toFixed(2) +'</td>'
         +'</tr>'
       )
-      document.getElementById('qtdProduct').value = ''
     })
 
     let sum = 0;
@@ -589,6 +589,8 @@
         +'<td class="text-right" colspan="4">'+ sum.toFixed(2).replace('.',',') +'</td>'
       +'</tr>'
     )
+    document.getElementById('qtdProduct').value = ''
+    $('#listProduct').val('').trigger("change")
   }
 
   $('#qtdProduct').keypress(function(e){
@@ -682,6 +684,25 @@
     console.log(arrayGuest);
     return arrayGuest
   }
+  function checkBudgetBalance(){
+    if ($('.lineItemEvent').size() > 0 && '' === $('#id_budget').val()) {
+      $('#id_budget').css('border-color','red')
+      swal("No Budget Selected", "Please choose an budget", "error")
+      throw new Error('Please choose an budget')
+    }
+
+    let sum = 0
+    $('.totalProduct').each(function(){
+      sum += (parseFloat($(this).text()) * 1.14)
+    })
+
+    if ($('#id_budget').find(":selected").data('saldo') < sum) {
+      $('#id_budget').css('border-color','red')
+      swal("Budget doesn't have balance", "Choose another budget or remove itens", "error")
+      throw new Error('Please choose an budget')
+    }
+  }
+
 
   function loadMoreInfoExternal(el){
      let form = document.createElement("form")
