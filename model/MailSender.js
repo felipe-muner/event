@@ -81,11 +81,12 @@ function MailSender(){
   }
 
   this.approveEvent = function(eventFinded){
-    (eventFinded === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
+
+    (eventFinded.Type === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
   }
 
   this.cancelEvent = function(eventFinded){
-    (eventFinded === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
+    (eventFinded.Type === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
   }
 
   this.internalEvent = function(eventFinded){
