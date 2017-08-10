@@ -551,7 +551,7 @@
 
   function addItemEvent(){
     if ('' === document.getElementById('qtdProduct').value
-     || '' === $('#listProduct').find(":selected").val()) return;
+     || 0 === $("#listProduct").select2().find(":selected").size()) return;
 
     $('.lineTotalGeral').remove()
 
