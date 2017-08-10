@@ -22,7 +22,7 @@ function MyEvent(){
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
                 'WHERE '+
-                  'e.CreateBy = ? OR e.ResponsibleByEvent = ?', [req.session.matricula, req.session.matricula], function(err, result) {
+                  'e.CreateBy = ? OR e.ResponsibleByEvent = ? ORDER BY e.EventCode DESC', [req.session.matricula, req.session.matricula], function(err, result) {
         con.release();
         // console.log(this.sql);
         if(err){
