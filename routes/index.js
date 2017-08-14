@@ -3,31 +3,27 @@ const router = express.Router();
 const conn = require(process.env.PWD + '/conn');
 const connPurchasing = require(process.env.PWD + '/conn-purchasing');
 const Util = require(process.env.PWD + '/util/Util')
-const mailSender = require(process.env.PWD + '/util/MailSender')
+const mailSender = require(process.env.PWD + '/model/MailSender')
 const fs = require('fs');
 const moment = require('moment');
 const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
-router.get('/testeJavaScriptTemplate', function(req, res, next) {
-  conn.acquire(function(err,con){
-    con.query('SELECT * FROM usuarios WHERE ativo = 1 ORDER BY idusuario', function(err, result) {
-      con.release();
-      if(err){
-        res.render('error', { error: err } );
-      }else{
-        result.map(function(e){
-          console.log('INSERT INTO usuario_controle_acesso VALUES(null,'+e.idusuario+',7,20,1);')
-        })
-      }
-    });
-  });
-  res.send('ok')
-});
-
-// router.get('/*', function(req, res, next) {
-//   next()
+// router.get('/testeJavaScriptTemplate', function(req, res, next) {
+//   conn.acquire(function(err,con){
+//     con.query('SELECT * FROM usuarios WHERE ativo = 1 ORDER BY idusuario', function(err, result) {
+//       con.release();
+//       if(err){
+//         res.render('error', { error: err } );
+//       }else{
+//         result.map(function(e){
+//           console.log('INSERT INTO usuario_controle_acesso VALUES(null,'+e.idusuario+',7,20,1);')
+//         })
+//       }
+//     });
+//   });
+//   res.send('ok')
 // });
 
 router.get('/', function(req, res, next) {
@@ -220,7 +216,7 @@ router.post('/email-forget-password', function(req, res, next) {
   conn.acquire(function(err,con){
     let randomString = Util.randomAlphaNumeric(6)
     let matricula = parseInt(req.body.matriculaToReset)
-    let sql = 'UPDATE usuarios SET senha = md5(?), primeiroacesso=0 WHERE matricula = ?'
+    let sql = 'UPDATE usuarios SET senha = md5(?), AttemptLogin=0, primeiroacesso=0 WHERE matricula = ?'
     con.query(sql, [randomString, matricula], function(err, result) {
       con.release();
       if(err){
@@ -238,7 +234,32 @@ router.post('/email-forget-password', function(req, res, next) {
       }
     });
   });
-});
+})
+
+// router.post('/email-forget-password', function(req, res, next) {
+//   console.log('entrei aqui');
+//   conn.acquire(function(err,con){
+//     let randomString = Util.randomAlphaNumeric(6)
+//     let matricula = parseInt(req.body.matriculaToReset)
+//     let sql = 'UPDATE usuarios SET senha = md5(?), primeiroacesso=0 WHERE matricula = ?'
+//     con.query(sql, [randomString, matricula], function(err, result) {
+//       con.release();
+//       if(err){
+//         res.render('error', { error: err } );
+//       }else{
+//         if(!!result.affectedRows){
+//           sql = 'SELECT email FROM usuarios WHERE Matricula = ?'
+//           con.query(sql, [matricula], function(err, result) {
+//             mailSender.emailRecoverPassword(randomString, result[0].email, matricula)
+//             res.render('login',{layout:false, alertClass: 'alert-success', msg: 'Please, check your e-mail. New Password was sent.'});
+//           })
+//         }else{
+//           res.render('login',{layout:false, alertClass: 'alert-danger', msg: 'Incorrect Matrícula / E-mail.'});
+//         }
+//       }
+//     });
+//   });
+// })
 
 router.get('*', function(req, res, next) {
   req.session.matricula ? next() : res.redirect('/');
