@@ -10,7 +10,7 @@ function Find(){
 
       console.log('___listorom')
       let listRoom = []
-      if ('string' === typeof req.body.listRoom){
+      if ('string' === typeof req.body.listRoom && '' !== req.body.listRoom){
         listRoom.push(req.body.listRoom)
       }else{
         listRoom = req.body.listRoom

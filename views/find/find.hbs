@@ -81,7 +81,6 @@
           <div class="row" style="margin-top:10px;display:none;" id="divLineRoom">
             <div class="col-sm-12">
               <select class="" name="listRoom" id="listRoom" style="width:100%;" multiple>
-                <option value="">Select the room</option>
                 {{#each getAllSiteBuildingRoom}}
                   <option value="{{RoomID}}">{{unidade}} - {{NameBuilding}} - {{NameRoom}}</option>
                 {{/each}}
@@ -219,9 +218,7 @@
         placeholder: "Select the Creator or Responsible"
       })
 
-      $('#listRoom').select2({
-        placeholder: "Select the room"
-      })
+      $('#listRoom').select2()
 
       $('#StartTime').val(moment().startOf('year').format('YYYY-MM-DD'))
       $('#EndTime').val(moment().endOf('year').format('YYYY-MM-DD'))
@@ -236,7 +233,15 @@
     	})
 
       $('input[name=Type]').change(function(e){
-        ('\'I\'' === this.value) ? $('#divLineRoom').fadeIn() : $('#divLineRoom').fadeOut()
+        debugger
+        if('\'I\'' === this.value){
+          $('#listRoom').css('display','block')
+          $('#divLineRoom').fadeIn()
+        }else{
+          $('#listRoom').css('display','none')
+          $('#divLineRoom').fadeOut()
+          $('#listRoom').val('').trigger("change")
+        }
       })
 
 
