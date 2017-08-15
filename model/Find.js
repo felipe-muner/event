@@ -141,7 +141,9 @@ function Find(){
                   'orcamento.grupo, '+
                   'e.ReasonCanceled, '+
                   'e.CanceledByMatricula_ID, '+
-                  'u3.nomeusuario AS CanceledByName '+
+                  'u3.nomeusuario AS CanceledByName, '+
+                  'r.RoomID, '+
+                  'r.Name as RoomName '+
                 'FROM '+
                   'Event AS e '+
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
@@ -151,6 +153,7 @@ function Find(){
                   'Left Join EventTransport ON e.MeansOfTransport = EventTransport.EventTransportID '+
                   'Left Join orcamento ON e.Budget_ID = orcamento.id '+
                   'Left Join departamentos ON e.Departament_ID = departamentos.iddepartamento '+
+                  'Left Join Room as r ON e.Room_ID = r.RoomID '+
                 'WHERE '+
                   'e.EventCode = ?', [parseInt(req.body.EventCode) || parseInt(req.nextEventCode)],function(err, result) {
         con.release();
