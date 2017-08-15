@@ -79,6 +79,16 @@
             </div>
           </div>
           <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12">
+              <select class="" name="listRoom" id="listRoom" style="width:100%;" multiple>
+                <option value="">Select the room</option>
+                {{#each getAllSiteBuildingRoom}}
+                  <option value="{{RoomID}}">{{unidade}} - {{NameBuilding}} - {{NameRoom}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
             <div class="col-sm-6">
               <input type="date" name="StartTime" id="StartTime" data-toggle="tooltip" title="Start Date">
             </div>
@@ -209,6 +219,11 @@
       $("#ResponsibleOrCreator").select2({
         placeholder: "Select the Creator or Responsible"
       })
+
+      $('#listRoom').select2({
+        placeholder: "Select the room"
+      })
+
       $('#StartTime').val(moment().startOf('year').format('YYYY-MM-DD'))
       $('#EndTime').val(moment().endOf('year').format('YYYY-MM-DD'))
       $('[data-toggle="tooltip"]').tooltip()
