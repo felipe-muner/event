@@ -130,6 +130,7 @@ function MailSender(){
             // let qs = '?m=' + matricula + '&p=' + newPassword + '&recoveremail=true'
             $('#EventCode').text(eventFinded.EventCode)
             $('#EventName').text(Util.toTitleCase(eventFinded.title))
+            $('#RoomName').text(Util.toTitleCase(eventFinded.RoomName))            
             $('#StatusName').text(eventFinded.StatusName)
             $('#CreatedBy').text(Util.toTitleCase(eventFinded.CreatedByName))
             $('#ResponsibleBy').text(Util.toTitleCase(eventFinded.ResponsibleByName))
