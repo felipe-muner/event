@@ -8,7 +8,16 @@ function Find(){
   this.makeFind = function(req, res, next){
     conn.acquire(function(err,con){
 
+      console.log('___listorom')
+      let listRoom = []
+      if ('string' === typeof req.body.listRoom){
+        listRoom.push(req.body.listRoom)
+      }else{
+        listRoom = req.body.listRoom
+      }
       console.log(req.body)
+      console.log(listRoom)
+      console.log('___listorom')
 
       let whereEventCode = ('' !== req.body.EventCode) ? 'e.EventCode = '+ req.body.EventCode +' ' : ''
       // console.log(whereEventCode)
@@ -19,8 +28,11 @@ function Find(){
       let whereOwner = (!!req.body.ResponsibleOrCreator) ? '(e.CreateBy IN('+ req.body.ResponsibleOrCreator +') OR e.ResponsibleByEvent IN('+ req.body.ResponsibleOrCreator+'))' : ''
       // console.log(whereOwner)
       let whereStatusName = (!!req.body.StatusName) ? 'e.EventStatus_ID IN('+ req.body.StatusName +')' : ''
-
+      // console.log(whereStatusName)
       let whereRangeDate = (!!req.body.StartTime) ? 'CAST(StartEvent AS DATE) between \''+ req.body.StartTime +'\' and \''+ req.body.EndTime + '\'' : ''
+
+      let whereRoomSelect = (!!listRoom) ? 'e.Room_ID IN ('+ listRoom.join(', ') +')' : ''
+      console.log('___room selected' + whereRoomSelect)
 
       let whereClause = 'WHERE '
       if('' !== whereEventCode){
@@ -31,6 +43,7 @@ function Find(){
         if(whereOwner !== '') whereClause = whereClause += ' AND ' + whereOwner + ' '
         if(whereStatusName !== '') whereClause = whereClause += ' AND ' + whereStatusName + ' '
         if(whereRangeDate !== '') whereClause = whereClause += ' AND ' + whereRangeDate + ' '
+        if(whereRoomSelect !== '') whereClause = whereClause += ' AND ' + whereRoomSelect + ' '
       }
 
       whereClause = (whereClause === 'WHERE ') ? '' : whereClause
@@ -62,7 +75,7 @@ function Find(){
           console.log(err);
           res.render('error', { error: err } );
         }else{
-          console.log(this.sql);
+          console.log(this.sql)
           req.makeFind = result
           next()
         }

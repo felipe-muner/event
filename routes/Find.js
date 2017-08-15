@@ -23,10 +23,6 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
     e.endFormated = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
   })
-
-  console.log('___')
-  console.log(req.getAllSiteBuildingRoom)
-  console.log('___')
   res.render('find/find', {
     sess:req.session,
     allActiveUser:req.allActiveUser,

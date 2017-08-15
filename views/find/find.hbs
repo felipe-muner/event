@@ -78,7 +78,7 @@
               </label>
             </div>
           </div>
-          <div class="row" style="margin-top:10px;">
+          <div class="row" style="margin-top:10px;display:none;" id="divLineRoom">
             <div class="col-sm-12">
               <select class="" name="listRoom" id="listRoom" style="width:100%;" multiple>
                 <option value="">Select the room</option>
@@ -172,7 +172,6 @@
           $('#divTable').empty()
           $('#divTable').append(tableTemplate)
           for (var i = 0; i < data.length; i++) {
-            debugger
             let newLine = '<tr data-event-code="'+data[i].EventCode+'">'+
                             '<td class="text-center">'+data[i].EventCode+'</td>'+
                             '<td>'+data[i].Type+'</td>'+
@@ -235,6 +234,10 @@
   	    ],
   	    iDisplayLength: 25
     	})
+
+      $('input[name=Type]').change(function(e){
+        ('\'I\'' === this.value) ? $('#divLineRoom').fadeIn() : $('#divLineRoom').fadeOut()
+      })
 
 
   </script>
