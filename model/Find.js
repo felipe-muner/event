@@ -168,7 +168,7 @@ function Find(){
                   'Left Join departamentos ON e.Departament_ID = departamentos.iddepartamento '+
                   'Left Join Room as r ON e.Room_ID = r.RoomID '+
                 'WHERE '+
-                  'e.EventCode = ?', [parseInt(req.body.EventCode) || parseInt(req.nextEventCode)],function(err, result) {
+                  'e.EventCode = ?', [parseInt(req.body.EventCode) || parseInt(req.nextEventCode) || parseInt(req.query.EventCode)],function(err, result) {
         con.release();
         console.log('_________');
         console.log('_________');
@@ -190,7 +190,6 @@ function Find(){
 
   this.myEvents = function(req, res, next){
     conn.acquire(function(err,con){
-      // console.log(req.body);
       con.query('SELECT '+
                   'e.EventID, '+
                   'e.Type, '+

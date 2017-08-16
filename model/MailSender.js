@@ -92,7 +92,7 @@ function MailSender(){
 
             let mailOptions = {};
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Finish Event" <noreply@britishschool.g12.br>'
-            mailOptions.to = 'fmuner@britishschool.g12.br;bdiniz@britishschool.g12.br;'
+            mailOptions.to = 'felipe.muner@gmail.com'
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Finish Event'
             mailOptions.html = $('body').html()
@@ -130,7 +130,7 @@ function MailSender(){
             // let qs = '?m=' + matricula + '&p=' + newPassword + '&recoveremail=true'
             $('#EventCode').text(eventFinded.EventCode)
             $('#EventName').text(Util.toTitleCase(eventFinded.title))
-            $('#RoomName').text(Util.toTitleCase(eventFinded.RoomName))            
+            $('#RoomName').text(Util.toTitleCase(eventFinded.RoomName))
             $('#StatusName').text(eventFinded.StatusName)
             $('#CreatedBy').text(Util.toTitleCase(eventFinded.CreatedByName))
             $('#ResponsibleBy').text(Util.toTitleCase(eventFinded.ResponsibleByName))
@@ -188,7 +188,7 @@ function MailSender(){
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System" <noreply@britishschool.g12.br>'
-            mailOptions.to = 'fmuner@britishschool.g12.br, bdiniz@britishschool.g12.br'
+            mailOptions.to = 'felipe.muner@gmail.com'
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Recover Password'
             mailOptions.html = $('body').html()
@@ -278,7 +278,7 @@ function MailSender(){
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System" <noreply@britishschool.g12.br>'
-            mailOptions.to = 'fmuner@britishschool.g12.br, bdiniz@britishschool.g12.br'
+            mailOptions.to = 'felipe.muner@gmail.com'
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Recover Password'
             mailOptions.html = $('body').html()
@@ -297,7 +297,7 @@ function MailSender(){
   this.errorEvent = function(req, res, next){
     let mailOptions = {};
     mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
-    mailOptions.to = 'fmuner@britishschool.g12.br'
+    mailOptions.to = 'felipe.muner@gmail.com'
     mailOptions.subject = 'felipe muner teste'
     mailOptions.text = 'Recover Password'
     mailOptions.html = '<b>erro event</b>'

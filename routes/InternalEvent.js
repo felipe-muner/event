@@ -20,9 +20,7 @@ const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allActive, f.myEvents, function(req, res, next) {
-  // console.log(req.allDepartament)
-  // console.log(req.allActiveUser)
-  // console.log(req.myEvents)
+
   console.log('felipe entrei ------')
 
   req.myEvents.map((e)=>{
@@ -57,6 +55,6 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
   req.findEventByCode.TotalGeralProduct = req.findEventByCode.products.reduce((acc,ele) => acc + (ele.Price * ele.Amount),0)
   req.findEventByCode.TotalGeralProduct = (req.findEventByCode.TotalGeralProduct * 1.14).toFixed(2)
   res.json(req.findEventByCode)
-}).get('/downloadPDF', ie.searchEventByCode, g.guestOfEvent, mi.productOfEvent, HtmlPDF.genPDF)
+}).get('/downloadPDF', f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, HtmlPDF.genPDFInternal)
 
 module.exports = router;

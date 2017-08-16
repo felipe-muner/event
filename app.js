@@ -28,7 +28,7 @@ var find = require('./routes/Find');
 var myEvent = require('./routes/MyEvent');
 var user = require('./routes/user');
 
-var app = express();
+var app = express()
 
 app.use(helmet())
 

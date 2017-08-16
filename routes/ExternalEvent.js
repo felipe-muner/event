@@ -9,10 +9,12 @@ const f = require(process.env.PWD + '/model/Find')
 const ee = require(process.env.PWD + '/model/ExternalEvent')
 const a = require(process.env.PWD + '/model/Approve')
 const ie = require(process.env.PWD + '/model/InternalEvent')
+const find = require(process.env.PWD + '/model/Find')
 const t = require(process.env.PWD + '/model/Transport')
 const m = require(process.env.PWD + '/model/MailSender')
 const g = require(process.env.PWD + '/model/Guest')
 const u = require(process.env.PWD + '/model/User')
+const HtmlPDF = require(process.env.PWD + '/model/HtmlPDF')
 const fs = require('fs');
 const moment = require('moment');
 const md5 = require('md5');
@@ -44,6 +46,6 @@ router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, f
 }).post('/create-event', a.getDirectApproval,ee.getLastEvent, ee.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
   m.externalEvent(req.findEventByCode)
   res.json(req.nextEventCode)
-})
+}).get('/downloadPDF', f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, HtmlPDF.genPDFExternal)
 
 module.exports = router;
