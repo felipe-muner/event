@@ -28,6 +28,7 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
     e.end = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
     e.btnCancel = (1 === e.EventStatus_ID || 2 === e.EventStatus_ID) ? true : false
+    e.canEdit = (1 === e.EventStatus_ID) ? true : false
   })
 
   res.render('my-event/my-event',{

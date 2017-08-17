@@ -8,6 +8,7 @@ const g = require(process.env.PWD + '/model/Guest')
 const ie = require(process.env.PWD + '/model/InternalEvent')
 const mi = require(process.env.PWD + '/model/MenuItem')
 const u = require(process.env.PWD + '/model/User')
+const t = require(process.env.PWD + '/model/Transport')
 const fs = require('fs');
 const moment = require('moment');
 const md5 = require('md5');
@@ -87,6 +88,26 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   })
   // console.log(req.makeFind);
   res.json(req.makeFind)
+}).post('/edit', ie.getAllSiteBuildingRoom, u.allActive, t.all, find.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+
+  (req.findEventByCode.Type === 'I') ? req.findEventByCode.isInternal = true : req.findEventByCode.isExternal = true
+
+  req.findEventByCode.startFormated = req.findEventByCode.start.replace(' ', 'T')
+  req.findEventByCode.endFormated =req.findEventByCode.end.replace(' ', 'T')
+
+  req.findEventByCode.OptionsTransportWaitAvenue = [{"opt":"No"},{"opt":"Yes"}];
+  req.findEventByCode.OptionsDepartureFrom = [{"opt":"Botafogo"},{"opt":"Urca"},{"opt":"Barra"}];
+
+  req.findEventByCode.OptionsGuest = [{"opt":"parent"},{"opt":"pupil"},{"opt":"staff"},{"opt":"visitor"}];
+
+  res.render('find/edit', {
+    sess:req.session,
+    getAllSiteBuildingRoom: req.getAllSiteBuildingRoom,
+    allActiveUser:req.allActiveUser,
+    meansOfTransport:req.allMeansOfTransport,
+    Evento:req.findEventByCode
+  })
+
 })
 
 module.exports = router;

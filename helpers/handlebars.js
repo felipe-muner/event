@@ -19,6 +19,8 @@ function hbsHelpers(hbs) {
         return value + 1
       },
       setSelected: function(value, unitList) {
+        console.log(value + ' ' + unitList)
+        console.log('setSelected')
         return (value === unitList) ? 'selected' : ''
       },
       convBoolToHuman: function(value) {
@@ -35,7 +37,7 @@ function hbsHelpers(hbs) {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
       },
       addDecimalCases: function(num) {
-        return  num.toFixed(2)
+        return num.toFixed(2)
       }
     }
   });
