@@ -163,20 +163,22 @@
                         <input type="text" name="nameParticipant" id="nameParticipant" value="" class="form-control" placeholder="Choose the type, insert the name and press enter">
                       </div>
                   </div>
-                  {{#each Evento.guests}}
-                    <div class="row lineGuest" style="margin-top:5px;">
-                      <div class="col-sm-4">
-                        <select class="form-control">
-                          {{#each ../Evento.OptionsGuest}}
-                            <option {{setSelected ../Type opt}} value="{{opt}}">{{toTitleCase opt}}</option>
-                          {{/each}}
-                        </select>
+                  <div class="allGuests">
+                    {{#each Evento.guests}}
+                      <div class="row lineGuest" style="margin-top:5px;">
+                        <div class="col-sm-4">
+                          <select class="form-control">
+                            {{#each ../Evento.OptionsGuest}}
+                              <option {{setSelected ../Type opt}} value="{{opt}}">{{toTitleCase opt}}</option>
+                            {{/each}}
+                          </select>
+                        </div>
+                        <div class="col-sm-8">
+                          <input type="text" name="pupil" value="{{toTitleCase NameGuest}}" class="form-control">
+                        </div>
                       </div>
-                      <div class="col-sm-8">
-                        <input type="text" name="pupil" value="{{toTitleCase NameGuest}}" class="form-control">
-                      </div>
-                    </div>
-                  {{/each}}
+                    {{/each}}
+                  </div>
                 </div>
               </div>
             </div>
@@ -227,12 +229,31 @@
 
         let type = $('#listTypeGuest').val()
 
-        let select = document.createElement('select')
-        $(select).append('<option value="parent">Parent</option>')
-        $(select).append('<option value="pupil">Pupil</option>')
-        $(select).append('<option value="staff">Staff</option>')
-        $(select).append('<option value="visitor">Visitor</option>')
-        debugger
+        var array = ["Parent","Pupil","Staff","Visitor"];
+
+        let div = document.createElement("select");
+        let selectList = document.createElement("select");
+        selectList.className = 'form-control'
+        div.appendChild(selectList)
+        for (var i = 0; i < array.length; i++) {
+
+          var option = document.createElement("option");
+          option.value = array[i].toLowerCase()
+          option.text = array[i]
+          if (type === array[i].toLowerCase()) {
+            option.setAttribute('selected', true);
+          }
+          selectList.appendChild(option)
+        }
+
+        $('.allGuests').prepend('<div class="row lineGuest" style="margin-top:5px;">'+
+                                  '<div class="col-sm-4">'+
+                                  div.innerHTML +
+                                  '</div>'+
+                                  '<div class="col-sm-8">'+
+                                  'muner'+
+                                  '</div>'+
+                                '</div>')
       }
     })
   </script>
