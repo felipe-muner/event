@@ -47,6 +47,9 @@ function MailSender(){
   }
 
   this.finishEvent = function(eventFinded){
+
+    let listRecipientsEmail = this.generateListEmail(eventFinded)
+
     fs.readFile(process.env.PWD + '/views/email/finishEvent.html', {encoding: 'utf-8'}, function (err, html) {
       if (err) {
         throw err;
@@ -92,7 +95,7 @@ function MailSender(){
 
             let mailOptions = {};
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Finish Event" <noreply@britishschool.g12.br>'
-            mailOptions.to = 'adm_ict@britishschool.g12.br'
+            mailOptions.to = listRecipientsEmail
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Finish Event'
             mailOptions.html = $('body').html()

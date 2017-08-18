@@ -35,12 +35,13 @@ router.get('/', fe.getAllFinishEvent, function(req, res, next) {
     camposAproveitados:req.body,
     products: req.products
   })
-}).post('/close-event', fe.updateItemsFinishEvent, fe.updateStatusEvent, f.searchEventByCode, mi.productOfEvent, function(req,res,next){
+}).post('/close-event', fe.updateItemsFinishEvent, fe.updateStatusEvent, f.searchEventByCode, mi.productOfEvent, f.getRecipientsEmail, function(req,res,next){
   req.session.flashMsg = {
     type: 'alert-success',
     statusName: 'Finalized',
     text: req.body.EventCode
   }
+  
   m.finishEvent(req.findEventByCode)
   console.log(req.body);
   res.redirect('/finish-event')
