@@ -134,7 +134,16 @@ function MailSender(){
 
   this.internalEvent = function(eventFinded){
 
+    console.log('cancelando____');
+    console.log(eventFinded);
+    console.log('cancelando____213');
+
     let listRecipientsEmail = this.generateListEmail(eventFinded)
+
+    console.log(listRecipientsEmail);
+    console.log('cancelando____213');
+    console.log(eventFinded);
+    console.log('cancelando____');
 
     fs.readFile(process.env.PWD + '/views/email/internalEvent.html', {encoding: 'utf-8'}, function (err, html) {
       if (err) {
@@ -302,7 +311,7 @@ function MailSender(){
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System" <noreply@britishschool.g12.br>'
-            mailOptions.to = 'adm_ict@britishschool.g12.br'
+            mailOptions.to = listRecipientsEmail
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Recover Password'
             mailOptions.html = $('body').html()

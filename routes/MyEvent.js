@@ -36,7 +36,7 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
     sess: req.session,
     flashMsg
   })
-}).post('/cancel-event', myevent.cancelEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+}).post('/cancel-event', myevent.cancelEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, f.getRecipientsEmail, function(req, res, next) {
   m.cancelEvent(req.findEventByCode)
   req.session.flashMsg = req.body.EventCode
   res.redirect('/my-event')
