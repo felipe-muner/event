@@ -173,8 +173,11 @@
                             {{/each}}
                           </select>
                         </div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-7">
                           <input type="text" name="pupil" value="{{toTitleCase NameGuest}}" class="form-control">
+                        </div>
+                        <div class="col-sm-1">
+                          <i onclick="removeGuest(this);" class="fa fa-times" aria-hidden="true"></i>
                         </div>
                       </div>
                     {{/each}}
@@ -248,13 +251,24 @@
 
         $('.allGuests').prepend('<div class="row lineGuest" style="margin-top:5px;">'+
                                   '<div class="col-sm-4">'+
-                                  div.innerHTML +
+                                    div.innerHTML +
                                   '</div>'+
-                                  '<div class="col-sm-8">'+
-                                  'muner'+
+                                  '<div class="col-sm-7">'+
+                                     '<input class="form-control" type="text" value="'+ document.getElementById('nameParticipant').value+'" />'+
+                                  '</div>'+
+                                  '<div class="col-sm-1">'+
+                                    '<i onclick="removeGuest(this);" class="fa fa-times" aria-hidden="true" data-container="body" title="Remove" data-toggle="tooltip"></i>'+
                                   '</div>'+
                                 '</div>')
+        $('[data-toggle="tooltip"]').tooltip()
+        document.getElementById('nameParticipant').value = ''
       }
     })
+
+
+    function removeGuest(el){
+      $(el).closest('.lineGuest').remove()
+    }
+
   </script>
 {{/section}}
