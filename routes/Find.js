@@ -88,7 +88,7 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   })
   // console.log(req.makeFind);
   res.json(req.makeFind)
-}).post('/edit', ie.getAllSiteBuildingRoom, u.allActive, t.all, find.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+}).post('/edit', ie.getAllSiteBuildingRoom, mi.getAllProductActive, u.allActive, t.all, find.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
 
   (req.findEventByCode.Type === 'I') ? req.findEventByCode.isInternal = true : req.findEventByCode.isExternal = true
 
@@ -100,9 +100,14 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
 
   req.findEventByCode.OptionsGuest = [{"opt":"parent"},{"opt":"pupil"},{"opt":"staff"},{"opt":"visitor"}];
 
+  req.findEventByCode.totProd = req.findEventByCode.products.reduce(function(acc, el){
+    return acc + el.TotalProd
+  },0)
+
   res.render('find/edit', {
     sess:req.session,
     getAllSiteBuildingRoom: req.getAllSiteBuildingRoom,
+    allProductActive: req.allProductActive,
     allActiveUser:req.allActiveUser,
     meansOfTransport:req.allMeansOfTransport,
     Evento:req.findEventByCode

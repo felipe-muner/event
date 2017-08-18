@@ -187,17 +187,63 @@
             </div>
             <div class="col-sm-6">
               <div class="panel panel-primary">
-                <div class="panel-heading">
+                <div class="panel-heading">Menu</div>
+                <div class="panel-body">
                   <div class="row">
-                    <div class="col-sm-2">
-                      Products
+                    <div class="col-sm-12">
+                      <select id="id_budget" name="id_budget" style="width:100%;">
+                        <option value="">SELECT THE BUDGET</option>
+                        {{#each sess.budgets}}
+                          <option {{setSelectedCompareSession ../Evento.Budget_ID id_orca}} data-setor="{{setor}}" data-grupo="{{grupo}}" data-conta="{{conta}}" data-ncont="{{nomecont}}" data-saldo="{{saldo}}" value="{{id_orca}}">{{pad setor 3 0}} {{pad grupo 3 0}} {{conta}} {{ncont}} - R${{addDecimalCases saldo}}</option>
+                        {{/each}}
+                      </select>
                     </div>
                   </div>
-                </div>
-                <div class="panel-body">
-                  {{#each Evento.products}}
-                  {{this}}
-                  {{/each}}
+                  <div class="row" style="margin-top:5px;">
+                    <div class="col-sm-10">
+                      <select id="listProduct" name="allProductActive" multiple style="width:100%;">
+                        {{#each allProductActive}}
+                          <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} data-event-product-id="{{EventProductID}}" value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
+                        {{/each}}
+                      </select>
+                    </div>
+                    <div class="col-sm-2">
+                      <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control" style="height:33px;" title="Insert amount and press enter" data-toggle="tooltip">
+                    </div>
+                  </div>
+                  <div class="row" style="margin-top:10px;">
+                    <div class="col-sm-12">
+                      <div class="table-responsive">
+                        <table class="table" id="tableItemEvent" style="margin-bottom: 0px;">
+                          <thead>
+                            <th style="width:5%;border-right: 1px solid white;">Remove</th>
+                            <th style="width:65%;border-right: 1px solid white;">Product</th>
+                            <th style="width:10%;border-right: 1px solid white;">Amount</th>
+                            <th style="width:20%;">Total (R$)</th>
+                          </thead>
+                          <tbody>
+                            {{#each Evento.products}}
+                              <tr class="lineItemEvent" data-product-id="{{EventProduct_ID}}" data-price-prod="{{Price}}" data-qtd="{{Amount}}">
+                                <td class="text-center"><i onclick="removeProduct(this);" class="fa fa-times" aria-hidden="true" data-container="body" title="Remove" data-toggle="tooltip"></i></td>
+                                <td>
+                                  {{ProductNameEnglish}}/{{ProductNamePort}} | {{UnitInEnglish}}/{{UnitInPort}}
+                                </td>
+                                <td>
+                                  <input type="number" name="" value="{{Amount}}">
+                                </td>
+                                <td class="text-right">
+                                  {{addDecimalCases TotalProd}}
+                                </td>
+                              </tr>
+                            {{/each}}
+                            <tr>
+                              <td colspan="4" class="text-right lineTotalGeral">{{Evento.totProd}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -214,6 +260,9 @@
 
     $('#roomID').select2()
     $('#responsibleNewEvent').select2()
+    $("#listProduct").select2({
+      placeholder: "SELECT THE PRODUCTS"
+    })
     $('[data-toggle="tooltip"]').tooltip()
 
     $(".select2-container").tooltip({
@@ -265,9 +314,52 @@
       }
     })
 
-
     function removeGuest(el){
       $(el).closest('.lineGuest').remove()
+    }
+    function removeProduct(el){
+      $(el).closest('tr').remove()
+    }
+
+    function addItemEvent(){
+      if ('' === document.getElementById('qtdProduct').value
+       || 0 === $("#listProduct").select2().find(":selected").size()) return;
+
+      $('.lineTotalGeral').remove()
+
+      $("#listProduct").select2().find(":selected").each(function(){
+        let eventProductID = $(this).data('event-product-id')
+        let nomeProdIngl = $(this).data('name-english')
+        let nomeProdPort = $(this).data('name-port')
+        let unitIngl = $(this).data('name-unit-engl')
+        let unitPort = $(this).data('name-unit-port')
+        let priceProd = parseFloat($(this).data('price'))
+        let qtdProd = parseInt($('#qtdProduct').val())
+
+        $('#tableItemEvent tbody').append(
+          '<tr class="lineItemEvent" data-product-id="'+eventProductID+'" data-price-prod="'+priceProd+'" data-qtd="'+qtdProd+'">'
+            +'<td class="text-center"><i onclick="removeItemEvent(this)" class="fa fa-times" aria-hidden="true"></i></td>'
+            +'<td>'+ nomeProdIngl + '/' + nomeProdPort + '  |  ' + unitIngl + '/' + unitPort +'</td>'
+            +'<td class="text-right">'
+              +'<input onkeyup="updateValueAmont(this);" type="number" min="1" value="'+ qtdProd +'"'
+            +'</td>'
+            +'<td class="text-right totalProduct">'+ (priceProd * qtdProd).toFixed(2) +'</td>'
+          +'</tr>'
+        )
+      })
+
+      let sum = 0;
+      $('.totalProduct').each(function(){
+        sum += parseFloat($(this).text());  // Or this.innerHTML, this.innerText
+      });
+
+      $('#tableItemEvent tbody').append(
+        '<tr class="lineTotalGeral">'
+          +'<td class="text-right" colspan="4">'+ sum.toFixed(2).replace('.',',') +'</td>'
+        +'</tr>'
+      )
+      document.getElementById('qtdProduct').value = ''
+      $('#listProduct').val('').trigger("change")
     }
 
   </script>

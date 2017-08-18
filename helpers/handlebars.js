@@ -19,9 +19,14 @@ function hbsHelpers(hbs) {
         return value + 1
       },
       setSelected: function(value, unitList) {
-        console.log(value + ' ' + unitList)
+        console.log('setSelected')
+        console.log(typeof value + '-' + typeof unitList)
+        console.log(value === unitList)
         console.log('setSelected')
         return (value === unitList) ? 'selected' : ''
+      },
+      setSelectedCompareSession: function(value, unitList) {
+        return (parseInt(value) === parseInt(unitList)) ? 'selected' : ''
       },
       convBoolToHuman: function(value) {
         //console.log('convBoolToHuman' + value);
