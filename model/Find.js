@@ -121,7 +121,11 @@ function Find(){
                   'e.Type, '+
                   'e.EventCode, '+
                   'e.CreateBy, '+
+                  'u1.email as EmailCreateBy, '+
+                  'u1.id_site as UnitCreateBy, '+
                   'e.ResponsibleByEvent, '+
+                  'u2.email as EmailResponsibleBy, '+
+                  'u2.id_site as UnitResponsibleBy, '+
                   'e.Name AS title, '+
                   'e.StartEvent AS start, '+
                   'e.EndEvent AS end, '+
@@ -170,17 +174,18 @@ function Find(){
                 'WHERE '+
                   'e.EventCode = ?', [parseInt(req.body.EventCode) || parseInt(req.nextEventCode) || parseInt(req.query.EventCode)],function(err, result) {
         con.release();
-        console.log('_________');
-        console.log('_________');
-        console.log('_________');
-        console.log(req.body);
-        console.log(this.sql);
         if(err){
           console.log(err);
           res.render('error', { error: err } );
         }else{
-          // console.log(result);
-          // console.log('fields from event');
+          // console.log('_________');
+          // console.log('_________');
+          // console.log('_________');
+          // console.log(this.sql)
+          // console.log(result[0])
+          // console.log('_________');
+          // console.log('_________');
+          // console.log('_________');
           req.findEventByCode = result[0]
           next()
         }
@@ -264,6 +269,36 @@ function Find(){
       req.findEventByCode.template = data
       next()
     });
+  }
+
+  this.getRecipientsEmail = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('SELECT '+
+                  'u.email, '+
+                  'u.matricula, '+
+                  'u.id_site, '+
+                  'uca.id_perfil_sistema, '+
+                  'u.idusuario '+
+                  'FROM '+
+                  'usuarios AS u '+
+                  'Inner Join usuario_controle_acesso AS uca ON u.idusuario = uca.id_usuario '+
+                  'WHERE '+
+                  'u.ativo =  1 AND '+
+                  'uca.id_sistema = 7 AND '+
+                  'uca.id_perfil_sistema <> 20 AND '+
+                  '(u.id_site = ? OR u.id_site = ?)', [req.findEventByCode.UnitCreateBy , req.findEventByCode.UnitResponsibleBy], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          console.log('___qUERY EMAIL')
+          console.log(this.sql)
+          console.log('___qUERY EMAIL')
+          req.findEventByCode.RecipientsEmail = result
+          next()
+        }
+      })
+    })
   }
 
 }

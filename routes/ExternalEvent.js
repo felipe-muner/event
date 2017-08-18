@@ -43,7 +43,7 @@ router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, f
   req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
 
   res.json(req.allEvents)
-}).post('/create-event', a.getDirectApproval,ee.getLastEvent, ee.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+}).post('/create-event', a.getDirectApproval,ee.getLastEvent, ee.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, f.getRecipientsEmail, function(req, res, next) {
   m.externalEvent(req.findEventByCode)
   res.json(req.nextEventCode)
 }).get('/downloadPDF', f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, HtmlPDF.genPDFExternal)

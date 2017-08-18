@@ -118,7 +118,20 @@ function MailSender(){
     (eventFinded.Type === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
   }
 
+  this.generateListEmail = function(eventFinded){
+    let filteredList = []
+    filteredList.push(eventFinded.EmailCreateBy)
+    filteredList.push(eventFinded.EmailResponsibleBy)
+    filteredList.push('adm_ict@britishschool.g12.br')
+    eventFinded.RecipientsEmail.map(function(e){
+      filteredList.push(e.email)
+    })
+    return filteredList
+  }
+
   this.internalEvent = function(eventFinded){
+
+    let listRecipientsEmail = this.generateListEmail(eventFinded)
 
     fs.readFile(process.env.PWD + '/views/email/internalEvent.html', {encoding: 'utf-8'}, function (err, html) {
       if (err) {
@@ -188,7 +201,7 @@ function MailSender(){
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System" <noreply@britishschool.g12.br>'
-            mailOptions.to = 'adm_ict@britishschool.g12.br'
+            mailOptions.to = listRecipientsEmail
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Recover Password'
             mailOptions.html = $('body').html()
@@ -205,8 +218,16 @@ function MailSender(){
   }
 
   this.externalEvent = function(eventFinded){
-    console.log(eventFinded)
-    console.log('__________________EVENTO Enviar email external')
+
+    let listRecipientsEmail = this.generateListEmail(eventFinded)
+
+    console.log('_________PARAAA EMAIL EXTERNO')
+    console.log(listRecipientsEmail)
+    console.log('_________PARAAA EMAIL EXTERNO')
+    console.log(eventFinded.RecipientsEmail)
+    console.log('_________PARAAA EMAIL EXTERNO')
+
+
     fs.readFile(process.env.PWD + '/views/email/externalEvent.html', {encoding: 'utf-8'}, function (err, html) {
       if (err) {
         throw err;
@@ -294,10 +315,12 @@ function MailSender(){
     })
   }
 
+
+
   this.errorEvent = function(req, res, next){
     let mailOptions = {};
     mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
-    mailOptions.to = 'adm_ict@britishschool.g12.br'
+    mailOptions.to = listRecipientsEmail
     mailOptions.subject = 'felipe muner teste'
     mailOptions.text = 'Recover Password'
     mailOptions.html = '<b>erro event</b>'
