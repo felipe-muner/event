@@ -29,10 +29,10 @@
               <th>End</th>
               <th>Event Name</th>
               <th>Status</th>
-              <th>Edit</th>
-              <th>PDF</th>
-              <th>More Info</th>
-              <th>Cancel ?</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -48,16 +48,16 @@
                 <td>{{StatusName}}</td>
                 <td class="text-center">
                   {{#if canEdit}}
-                  <i onclick="editEvent(this);" data-container="body" title="Edit Event" data-toggle="tooltip" class="fa fa-edit" aria-hidden="true"></i>
+                  <i onclick="editEvent(this);" data-container="body" title="Edit" data-toggle="tooltip" class="fa fa-edit" aria-hidden="true"></i>
                   {{/if}}
                 </td>
                 <td class="text-center">{{{pdf}}}</td>
                 <td style="text-align:center;">
-                  <i class="fa fa-search-plus" aria-hidden="true" onclick="loadMoreInfoMy(this);"></i>
+                  <i class="fa fa-search-plus" aria-hidden="true" onclick="loadMoreInfoMy(this);" data-container="body" title="Info" data-toggle="tooltip"></i>
                 </td>
                 <td class="text-center">
                   {{#if btnCancel}}
-                    <i onclick="cancelEventModal(this);" data-container="body" title="Cancel Event" data-toggle="tooltip" class="fa fa-window-close" aria-hidden="true"></i>
+                    <i onclick="cancelEventModal(this);" data-container="body" title="Cancel" data-toggle="tooltip" class="fa fa-window-close" aria-hidden="true"></i>
                   {{/if}}
                 </td>
               </tr>
