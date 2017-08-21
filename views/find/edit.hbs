@@ -412,6 +412,20 @@
       checkVideoConference()
       checkBudgetBalance()
       passou()
+
+      let data = $('#formEditEvent').serializeArray()
+      data.push({name: 'guests', value: JSON.stringify(serializeGuest())})
+      data.push({name: 'products', value: JSON.stringify(serializeTableProduct())})
+
+      $.ajax({
+        url: '/find/update',
+        type: 'POST',
+        data,
+        dataType:'json',
+        success: function(data) {
+          alert(data)
+        }
+      })
     })
 
     function passou(){

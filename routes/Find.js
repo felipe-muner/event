@@ -94,7 +94,7 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
 
   req.findEventByCode.startFormated = req.findEventByCode.start.replace(' ', 'T')
   req.findEventByCode.endFormated =req.findEventByCode.end.replace(' ', 'T')
-  if(req.findEventByCode.LeavingFromEvent) req.findEventByCode.LeavingFromEventFormated = req.findEventByCode.LeavingFromEvent.replace(' ', 'T')  
+  if(req.findEventByCode.LeavingFromEvent) req.findEventByCode.LeavingFromEventFormated = req.findEventByCode.LeavingFromEvent.replace(' ', 'T')
 
   req.findEventByCode.OptionsTransportWaitAvenue = [{"opt":""},{"opt":"No"},{"opt":"Yes"}];
   req.findEventByCode.OptionsNeedComputer = [{"opt":""},{"opt":"No"},{"opt":"Yes"}];
@@ -122,6 +122,9 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
     Evento:req.findEventByCode
   })
 
+}).post('/update', function(req, res, next) {
+  console.log(req.body)
+  res.json(req.body)
 })
 
 module.exports = router;
