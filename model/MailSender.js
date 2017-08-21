@@ -113,23 +113,11 @@ function MailSender(){
   }
 
   this.approveEvent = function(eventFinded){
-
     (eventFinded.Type === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
   }
 
   this.cancelEvent = function(eventFinded){
     (eventFinded.Type === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
-  }
-
-  this.generateListEmail = function(eventFinded){
-    let filteredList = []
-    filteredList.push(eventFinded.EmailCreateBy)
-    filteredList.push(eventFinded.EmailResponsibleBy)
-    filteredList.push('adm_ict@britishschool.g12.br')
-    eventFinded.RecipientsEmail.map(function(e){
-      filteredList.push(e.email)
-    })
-    return filteredList
   }
 
   this.internalEvent = function(eventFinded){
@@ -327,8 +315,6 @@ function MailSender(){
     })
   }
 
-
-
   this.errorEvent = function(req, res, next){
     let mailOptions = {};
     mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
@@ -343,6 +329,18 @@ function MailSender(){
       }
       console.log('Message %s sent: %s', info.messageId, info.response);
     })
+  }
+
+  this.generateListEmail = function(eventFinded){
+    let filteredList = []
+    // filteredList.push(eventFinded.EmailCreateBy)
+    // filteredList.push(eventFinded.EmailResponsibleBy)
+    filteredList.push('adm_ict@britishschool.g12.br')
+    // eventFinded.RecipientsEmail.map(function(e){
+    //   filteredList.push(e.email)
+    // })
+    console.log(filteredList.join('\n'))
+    return filteredList
   }
 }
 

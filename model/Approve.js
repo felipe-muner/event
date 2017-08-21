@@ -151,7 +151,11 @@ function Approve(){
                       'e.Type, '+
                       'e.EventCode, '+
                       'e.CreateBy, '+
+                      'u1.nomeusuario AS CreatedByName, '+
+                      'u1.email AS EmailCreateBy, '+
                       'e.ResponsibleByEvent, '+
+                      'u2.nomeusuario AS ResponsibleByName, '+
+                      'u2.email AS EmailResponsibleBy, '+
                       'e.Name AS title, '+
                       'e.StartEvent AS start, '+
                       'e.EndEvent AS end, '+
@@ -174,8 +178,6 @@ function Approve(){
                       'e.LocationEvent, '+
                       'e.LeavingFromEvent, '+
                       'e.AdditionalInformation, '+
-                      'u2.nomeusuario AS ResponsibleByName, '+
-                      'u1.nomeusuario AS CreatedByName, '+
                       'EventTransport.TypeVehicleEnglish, '+
                       'EventTransport.TypeVehiclePort, '+
                       'EventTransport.AmountSeat, '+
@@ -221,7 +223,11 @@ function Approve(){
                     'e.Type, '+
                     'e.EventCode, '+
                     'e.CreateBy, '+
+                    'u1.nomeusuario AS CreatedByName, '+
+                    'u1.email AS EmailCreateBy, '+
                     'e.ResponsibleByEvent, '+
+                    'u2.nomeusuario AS ResponsibleByName, '+
+                    'u2.email AS EmailResponsibleBy, '+
                     'e.Name AS title, '+
                     'e.StartEvent AS start, '+
                     'e.EndEvent AS end, '+
@@ -244,8 +250,6 @@ function Approve(){
                     'e.LocationEvent, '+
                     'e.LeavingFromEvent, '+
                     'e.AdditionalInformation, '+
-                    'u2.nomeusuario AS ResponsibleByName, '+
-                    'u1.nomeusuario AS CreatedByName, '+
                     'EventTransport.TypeVehicleEnglish, '+
                     'EventTransport.TypeVehiclePort, '+
                     'EventTransport.AmountSeat, '+
