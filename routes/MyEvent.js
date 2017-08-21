@@ -20,7 +20,7 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
   if(flashMsg) delete req.session.flashMsg
 
   req.allMyEvent.map(e => {
-    e.pdf = ('I' === e.Type) ? '<a class="no-loading" href="/internal-event/downloadPDF?EventCode='+ e.EventCode +'" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>' : '<a class="no-loading" href="/external-event/downloadPDF?EventCode='+ e.EventCode +'" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>'
+    e.pdf = ('I' === e.Type) ? '<a class="no-loading" href="/internal-event/downloadPDF?EventCode='+ e.EventCode +'" target="_blank"><i class="fa fa-file-pdf-o" data-container="body" title="PDF" data-toggle="tooltip" aria-hidden="true"></i></a>' : '<a class="no-loading" href="/external-event/downloadPDF?EventCode='+ e.EventCode +'" target="_blank"><i class="fa fa-file-pdf-o" data-container="body" title="PDF" data-toggle="tooltip" aria-hidden="true"></i></a>'
     e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
     e.CreatedByName = Util.toTitleCase(e.CreatedByName)
