@@ -94,9 +94,15 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
 
   req.findEventByCode.startFormated = req.findEventByCode.start.replace(' ', 'T')
   req.findEventByCode.endFormated =req.findEventByCode.end.replace(' ', 'T')
+  if(req.findEventByCode.LeavingFromEvent) req.findEventByCode.LeavingFromEventFormated = req.findEventByCode.LeavingFromEvent.replace(' ', 'T')  
 
-  req.findEventByCode.OptionsTransportWaitAvenue = [{"opt":"No"},{"opt":"Yes"}];
+  req.findEventByCode.OptionsTransportWaitAvenue = [{"opt":""},{"opt":"No"},{"opt":"Yes"}];
+  req.findEventByCode.OptionsNeedComputer = [{"opt":""},{"opt":"No"},{"opt":"Yes"}];
+  req.findEventByCode.OptionsNeedDataShow = [{"opt":""},{"opt":"No"},{"opt":"Yes"}];
+
   req.findEventByCode.OptionsDepartureFrom = [{"opt":"Botafogo"},{"opt":"Urca"},{"opt":"Barra"}];
+
+  req.findEventByCode.OptionsVideoConference = [{"opt":""},{"opt":"ADM"},{"opt":"Botafogo"},{"opt":"Urca"},{"opt":"Barra"}];
 
   req.findEventByCode.OptionsGuest = [{"opt":"parent"},{"opt":"pupil"},{"opt":"staff"},{"opt":"visitor"}];
 
@@ -104,6 +110,9 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
     return acc + el.TotalProd
   },0)
 
+  console.log('aditional information')
+  console.log(req.findEventByCode)
+  console.log('aditional information')
   res.render('find/edit', {
     sess:req.session,
     getAllSiteBuildingRoom: req.getAllSiteBuildingRoom,

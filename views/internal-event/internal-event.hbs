@@ -729,8 +729,10 @@
   function serializeTableProduct(){
     let arrayProducts = []
     $('#tableItemEvent tbody tr').not(':last').each(function(e){
+      debugger
       arrayProducts.push($(this).data())
     })
+
     return arrayProducts
   }
 
@@ -739,7 +741,7 @@
     $('.lineGuest').each(function(e){
       arrayGuest.push({
         type: $(this).data('group-name'),
-        name:$(this).data('yourname')
+        name: $(this).data('yourname')
       })
     })
     console.log(arrayGuest);
