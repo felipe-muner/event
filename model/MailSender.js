@@ -95,7 +95,7 @@ function MailSender(){
 
             let mailOptions = {};
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Finish Event" <noreply@britishschool.g12.br>'
-            mailOptions.to = listRecipientsEmail
+            mailOptions.to = 'adm_ict@britishschool.g12.br'
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Finish Event'
             mailOptions.html = $('body').html()
@@ -122,16 +122,11 @@ function MailSender(){
 
   this.internalEvent = function(eventFinded){
 
-    console.log('cancelando____');
-    console.log(eventFinded);
-    console.log('cancelando____213');
 
     let listRecipientsEmail = this.generateListEmail(eventFinded)
-
-    console.log(listRecipientsEmail);
-    console.log('cancelando____213');
-    console.log(eventFinded);
-    console.log('cancelando____');
+    console.log('___emails')
+    console.log(listRecipientsEmail.join('\n'))
+    console.log('___emails')
 
     fs.readFile(process.env.PWD + '/views/email/internalEvent.html', {encoding: 'utf-8'}, function (err, html) {
       if (err) {
@@ -201,7 +196,7 @@ function MailSender(){
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System" <noreply@britishschool.g12.br>'
-            mailOptions.to = listRecipientsEmail
+            mailOptions.to = 'adm_ict@britishschool.g12.br'
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Recover Password'
             mailOptions.html = $('body').html()
@@ -221,13 +216,11 @@ function MailSender(){
 
     let listRecipientsEmail = this.generateListEmail(eventFinded)
 
-    console.log('_________PARAAA EMAIL EXTERNO')
-    console.log(listRecipientsEmail)
-    console.log('_________PARAAA EMAIL EXTERNO')
-    console.log(eventFinded.RecipientsEmail)
-    console.log('_________PARAAA EMAIL EXTERNO')
+    console.log('___emails')
+    console.log(listRecipientsEmail.join('\n'))
+    console.log('___emails')
 
-
+    
     fs.readFile(process.env.PWD + '/views/email/externalEvent.html', {encoding: 'utf-8'}, function (err, html) {
       if (err) {
         throw err;
@@ -299,7 +292,7 @@ function MailSender(){
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System" <noreply@britishschool.g12.br>'
-            mailOptions.to = listRecipientsEmail
+            mailOptions.to = 'adm_ict@britishschool.g12.br'
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Recover Password'
             mailOptions.html = $('body').html()
@@ -333,12 +326,12 @@ function MailSender(){
 
   this.generateListEmail = function(eventFinded){
     let filteredList = []
-    // filteredList.push(eventFinded.EmailCreateBy)
-    // filteredList.push(eventFinded.EmailResponsibleBy)
+    filteredList.push(eventFinded.EmailCreateBy)
+    filteredList.push(eventFinded.EmailResponsibleBy)
     filteredList.push('adm_ict@britishschool.g12.br')
-    // eventFinded.RecipientsEmail.map(function(e){
-    //   filteredList.push(e.email)
-    // })
+    eventFinded.RecipientsEmail.map(function(e){
+      filteredList.push(e.email)
+    })
     console.log(filteredList.join('\n'))
     return filteredList
   }

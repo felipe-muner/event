@@ -153,9 +153,11 @@ function Approve(){
                       'e.CreateBy, '+
                       'u1.nomeusuario AS CreatedByName, '+
                       'u1.email AS EmailCreateBy, '+
+                      'u1.id_site as UnitCreateBy, '+
                       'e.ResponsibleByEvent, '+
                       'u2.nomeusuario AS ResponsibleByName, '+
                       'u2.email AS EmailResponsibleBy, '+
+                      'u2.id_site as UnitResponsibleBy, '+
                       'e.Name AS title, '+
                       'e.StartEvent AS start, '+
                       'e.EndEvent AS end, '+
@@ -186,7 +188,9 @@ function Approve(){
                       'orcamento.grupo, '+
                       'e.ReasonCanceled, '+
                       'e.CanceledByMatricula_ID, '+
-                      'u3.nomeusuario AS CanceledByName '+
+                      'u3.nomeusuario AS CanceledByName, '+
+                      'r.RoomID, '+
+                      'r.Name as RoomName '+
                     'FROM '+
                       'Event AS e '+
                       'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
@@ -196,14 +200,18 @@ function Approve(){
                       'Left Join EventTransport ON e.MeansOfTransport = EventTransport.EventTransportID '+
                       'Left Join orcamento ON e.Budget_ID = orcamento.id '+
                       'Left Join departamentos ON e.Departament_ID = departamentos.iddepartamento '+
+                      'Left Join Room as r ON e.Room_ID = r.RoomID '+
                     'WHERE '+
                       'e.EventCode = ?', [item],function(err, result) {
             con.release();
-            console.log('_________');
-            console.log('_________');
-            console.log('_________');
-            console.log(req.body);
-            console.log(this.sql);
+            // console.log('_________');
+            // console.log('_________');
+            // console.log('_________');
+            // console.log(req.body);
+            // console.log(this.sql);
+            // console.log('_________');
+            // console.log('_________');
+            // console.log('_________');
             if(err){
               console.log(err);
               res.render('error', { error: err } );
@@ -214,6 +222,9 @@ function Approve(){
           })
         })
       }, function(err) {
+        // console.log('____veremail do criador e responsavel')
+        // console.log(req.jsonAprove)
+        // console.log('____veremail do criador e responsavel')
         next()
       })
     }else{
@@ -225,9 +236,11 @@ function Approve(){
                     'e.CreateBy, '+
                     'u1.nomeusuario AS CreatedByName, '+
                     'u1.email AS EmailCreateBy, '+
+                    'u1.id_site as UnitCreateBy, '+
                     'e.ResponsibleByEvent, '+
                     'u2.nomeusuario AS ResponsibleByName, '+
                     'u2.email AS EmailResponsibleBy, '+
+                    'u2.id_site as UnitResponsibleBy, '+
                     'e.Name AS title, '+
                     'e.StartEvent AS start, '+
                     'e.EndEvent AS end, '+
@@ -258,7 +271,9 @@ function Approve(){
                     'orcamento.grupo, '+
                     'e.ReasonCanceled, '+
                     'e.CanceledByMatricula_ID, '+
-                    'u3.nomeusuario AS CanceledByName '+
+                    'u3.nomeusuario AS CanceledByName, '+
+                    'r.RoomID, '+
+                    'r.Name as RoomName '+
                   'FROM '+
                     'Event AS e '+
                     'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
@@ -268,6 +283,7 @@ function Approve(){
                     'Left Join EventTransport ON e.MeansOfTransport = EventTransport.EventTransportID '+
                     'Left Join orcamento ON e.Budget_ID = orcamento.id '+
                     'Left Join departamentos ON e.Departament_ID = departamentos.iddepartamento '+
+                    'Left Join Room as r ON e.Room_ID = r.RoomID '+
                   'WHERE '+
                     'e.EventCode = ?', [req.body.selectedEvent],function(err, result) {
           con.release();
@@ -275,6 +291,9 @@ function Approve(){
             console.log(err);
             res.render('error', { error: err } );
           }else{
+            // console.log('____veremail do criador e responsavel')
+            // console.log(result[0])
+            // console.log('____veremail do criador e responsavel')
             req.jsonAprove.push(result[0])
             next()
           }
@@ -282,6 +301,42 @@ function Approve(){
       })
     }
   }
+
+  this.getListRecipients = function(req, res, next){
+    async.forEach((req.jsonAprove), function (item, callback){
+      conn.acquire(function(err,con){
+        con.query('SELECT '+
+                    'u.email, '+
+                    'u.matricula, '+
+                    'u.id_site, '+
+                    'uca.id_perfil_sistema, '+
+                    'u.idusuario '+
+                    'FROM '+
+                    'usuarios AS u '+
+                    'Inner Join usuario_controle_acesso AS uca ON u.idusuario = uca.id_usuario '+
+                    'WHERE '+
+                    'u.ativo =  1 AND '+
+                    'uca.id_sistema = 7 AND '+
+                    'uca.id_perfil_sistema <> 20 AND '+
+                    '(u.id_site = ? OR u.id_site = ?)', [item.UnitCreateBy , item.UnitResponsibleBy],function(err, result) {
+          con.release();
+          if(err){
+            console.log(err);
+            res.render('error', { error: err } );
+          }else{
+            console.log('____query sql lista email')
+            console.log(this.sql)
+            console.log('____query sql lista email')
+            item.RecipientsEmail = result
+            callback()
+          }
+        })
+      })
+    }, function(err) {
+      next()
+    })
+  }
+
 }
 
 module.exports = new Approve()

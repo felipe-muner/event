@@ -26,12 +26,15 @@ router.get('/', approve.getEventToApprove ,function(req, res, next) {
     allEventToApprove:req.allEventToApprove,
     flashMsg
   })
-}).post('/approve-event', approve.evaluateEvents, approve.prepareEmailMain, approve.prepareEmailProducts, approve.prepareEmailGuests, function(req, res, next) {
+}).post('/approve-event', approve.evaluateEvents, approve.prepareEmailMain, approve.getListRecipients, approve.prepareEmailProducts, approve.prepareEmailGuests, function(req, res, next) {
   let statusName = (parseInt(req.body.statusToUpdate) === 2) ? 'Approved: ' : 'Cancelled: '
   let events = (Object.prototype.toString.call( req.body.selectedEvent ) === '[object Array]') ? req.body.selectedEvent.join(', ') : req.body.selectedEvent
   req.session.flashMsg = {statusName, events, type: 'alert-info'}
 
   req.jsonAprove.map(function(e){
+    console.log('analisando ojb')
+    console.log(e)
+    console.log('analisando ojb')
     m.approveEvent(e)
   })
   res.redirect('/approve')
