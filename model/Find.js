@@ -368,7 +368,8 @@ function Find(){
               res.json({
                 "right":false,
                 "redirect":"/my-event",
-                "objeto":req.body
+                "objeto":req.body,
+                "events":result
               })
             }
           }
