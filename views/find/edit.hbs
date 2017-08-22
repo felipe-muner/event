@@ -151,14 +151,14 @@
               </div>
               <div class="col-sm-2">
                 <select name="VideoFrom" class="form-control" data-container="body" title="Video Conference From:" data-toggle="tooltip">
-                  {{#each Evento.OptionsVideoConference}}
+                  {{#each Evento.OptionsVideoConferenceFrom}}
                     <option {{setSelected ../Evento.VideoFrom opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
                 </select>
               </div>
               <div class="col-sm-2">
                 <select name="VideoTo" class="form-control" data-container="body" title="Video Conference To:" data-toggle="tooltip">
-                  {{#each Evento.OptionsVideoConference}}
+                  {{#each Evento.OptionsVideoConferenceTo}}
                     <option {{setSelected ../Evento.VideoTo opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
                 </select>
