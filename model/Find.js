@@ -354,14 +354,14 @@ function Find(){
   }
 
   this.updateEvent = function(req, res, next){
-
+    debugger
     let event = {
       EventCode: req.body.EventCode,
       Type: req.body.Type,
       EventStatus_ID: 1,
       StartEvent: req.body.StartTime,
       EndEvent: req.body.EndTime,
-      Room_ID: req.body.roomID || NULL,
+      Room_ID: req.body.roomID || null,
       Name: req.body.Name,
 
       NeedComputer: req.body.NeedComputer || null,
@@ -369,11 +369,12 @@ function Find(){
       VideoFrom: req.body.VideoFrom || null,
       VideoTo: req.body.VideoTo || null,
 
-      AmountPerson: req.body.AmountSeat || null,
+      AmountPerson: req.body.AmountPerson || null,
       DepartureFrom: req.body.DepartureFrom || null,
       LeavingFromEvent: req.body.LeavingFromEvent || null,
       LocationEvent: req.body.LocationEvent || null,
       TransportWaitAvenue: req.body.TransportWaitAvenue || null,
+      MeansOfTransport: req.body.meansOfTransport || null,      
 
       AdditionalInformation: req.body.AdditionalInformation || null,
       Nparent: parseInt(req.body.Nparent) || null,
@@ -384,8 +385,8 @@ function Find(){
       ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || parseInt(req.session.matricula)
     }
 
-    // console.log('to no update___')
-    // console.log(event);
+    console.log('to no update___')
+    console.log(event);
     // next()
 
     conn.acquire(function(err,con){
