@@ -344,13 +344,39 @@ function Find(){
     })
   }
 
-  this.checkEvent = function(req, res, next){
-    next()
-    // if (2 === 3) {
-    //   res.json({"redirect":"yes","objeto":req.body})
-    // }else{
-    //   next()
-    // }
+  this.checkEventAvailable = function(req, res, next){
+    if ('I' === req.body.Type) {
+      conn.acquire(function(err,con){
+        con.query('SELECT * FROM Event WHERE Room_ID = ? '+
+                  'AND (? BETWEEN StartEvent AND EndEvent ' +
+                    'OR ? BETWEEN StartEvent AND EndEvent ' +
+                    'OR StartEvent BETWEEN ? AND ? ' +
+                    'OR EndEvent BETWEEN ? AND ? )', [req.body.roomID, req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime], function(err, result) {
+          con.release();
+          console.log(this.sql);
+          if(err){
+            console.log(err);
+            res.render('error', { error: err } );
+          }else{
+            if(0 === result.length){
+              console.log('nenhum evento na sala, horario inicial e horario final')
+              next()
+            }else{
+              console.log('___sou evento interno')
+              console.log(result)
+              console.log('___sou evento interno')
+              res.json({
+                "right":false,
+                "redirect":"/my-event",
+                "objeto":req.body
+              })
+            }
+          }
+        })
+      })
+    }else{
+      next()
+    }
   }
 
   this.updateEvent = function(req, res, next){
@@ -374,7 +400,7 @@ function Find(){
       LeavingFromEvent: req.body.LeavingFromEvent || null,
       LocationEvent: req.body.LocationEvent || null,
       TransportWaitAvenue: req.body.TransportWaitAvenue || null,
-      MeansOfTransport: req.body.meansOfTransport || null,      
+      MeansOfTransport: req.body.meansOfTransport || null,
 
       AdditionalInformation: req.body.AdditionalInformation || null,
       Nparent: parseInt(req.body.Nparent) || null,
@@ -391,7 +417,6 @@ function Find(){
 
     conn.acquire(function(err,con){
       con.query('UPDATE Event SET ? WHERE EventCode = ?', [event, event.EventCode], function(err, result) {
-        // UPDATE User SET ? WHERE UserID = ?', [user,user.UserID]
         con.release();
         console.log(this.sql);
         if(err){
