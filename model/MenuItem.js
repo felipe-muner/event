@@ -134,6 +134,19 @@ function MenuItem(){
     }
   }
 
+  this.clearProduct = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('DELETE FROM EventItem WHERE Event_ID = ?', [req.nextEventCode], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          next()
+        }
+      })
+    })
+  }
+
   this.productOfEvent = function(req, res, next){
     conn.acquire(function(err,con){
       con.query('SELECT '+

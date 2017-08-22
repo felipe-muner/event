@@ -301,6 +301,114 @@ function Find(){
     })
   }
 
+  this.clearEvent = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('UPDATE Event set '+
+                  'EventStatus_ID = NULL,'+
+                  'Type = NULL,'+
+                  'Room_ID = NULL,'+
+                  'Name = NULL,'+
+                  'ResponsibleByEvent = NULL,'+
+                  'NeedComputer = NULL,'+
+                  'NeedDataShow = NULL,'+
+                  'VideoFrom = NULL,'+
+                  'VideoTo = NULL,'+
+                  'AdditionalInformation = NULL,'+
+                  'Nparent = NULL,'+
+                  'Npupil = NULL,'+
+                  'Nstaff = NULL,'+
+                  'Nvisitor = NULL,'+
+                  'Budget_ID = NULL,'+
+                  'ApprovedBy = NULL,'+
+                  'ApprovedAt = NULL,'+
+                  'DepartureFrom = NULL,'+
+                  'AmountPerson = NULL,'+
+                  'TransportWaitAvenue = NULL,'+
+                  'MeansOfTransport = NULL,'+
+                  'LocationEvent = NULL,'+
+                  'LeavingFromEvent = NULL,'+
+                  'Departament_ID = NULL'+
+                  ' WHERE EventCode = ?', [req.body.EventCode], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          console.log('___qUERY null')
+          console.log(this.sql)
+          console.log('___qUERY null')
+          console.log(result)
+          req.resultadoevento = result
+          next()
+        }
+      })
+    })
+  }
+
+  this.checkEvent = function(req, res, next){
+    next()
+    // if (2 === 3) {
+    //   res.json({"redirect":"yes","objeto":req.body})
+    // }else{
+    //   next()
+    // }
+  }
+
+  this.updateEvent = function(req, res, next){
+
+    let event = {
+      EventCode: req.body.EventCode,
+      Type: req.body.Type,
+      EventStatus_ID: 1,
+      StartEvent: req.body.StartTime,
+      EndEvent: req.body.EndTime,
+      Room_ID: req.body.roomID || NULL,
+      Name: req.body.Name,
+
+      NeedComputer: req.body.NeedComputer || null,
+      NeedDataShow: req.body.NeedDataShow || null,
+      VideoFrom: req.body.VideoFrom || null,
+      VideoTo: req.body.VideoTo || null,
+
+      AmountPerson: req.body.AmountSeat || null,
+      DepartureFrom: req.body.DepartureFrom || null,
+      LeavingFromEvent: req.body.LeavingFromEvent || null,
+      LocationEvent: req.body.LocationEvent || null,
+      TransportWaitAvenue: req.body.TransportWaitAvenue || null,
+
+      AdditionalInformation: req.body.AdditionalInformation || null,
+      Nparent: parseInt(req.body.Nparent) || null,
+      Npupil: parseInt(req.body.Npupil) || null,
+      Nstaff: parseInt(req.body.Nstaff) || null,
+      Nvisitor: parseInt(req.body.Nvisitor) || null,
+      Budget_ID: parseInt(req.body.id_budget) || null,
+      ResponsibleByEvent: parseInt(req.body.responsibleNewEvent) || parseInt(req.session.matricula)
+    }
+
+    // console.log('to no update___')
+    // console.log(event);
+    // next()
+
+    conn.acquire(function(err,con){
+      con.query('UPDATE Event SET ? WHERE EventCode = ?', [event, event.EventCode], function(err, result) {
+        // UPDATE User SET ? WHERE UserID = ?', [user,user.UserID]
+        con.release();
+        console.log(this.sql);
+        if(err){
+          console.log(err);
+          res.render('error', { error: err } );
+        }else{
+          console.log('___qUERY EMAIL')
+          console.log(this.sql)
+          console.log('___qUERY EMAIL')
+          console.log(result)
+          req.nextEventCode = req.body.EventCode
+          req.resultadofinal = result
+          next()
+        }
+      })
+    })
+  }
+
 }
 
 module.exports = new Find()

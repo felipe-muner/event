@@ -18,7 +18,7 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-sm-12">
-        <form action="/find/end" method="post" id="formEditEvent">
+        <form action="/find/updates" method="post" id="formEditEvent">
           <input type="hidden" name="EventCode" value="{{Evento.EventCode}}" id="EventCode">
           <input type="hidden" name="Type" value="{{Evento.Type}}" id="Type">
           <div class="row">
@@ -136,28 +136,28 @@
           {{#if Evento.isInternal}}
             <div class="row" style="margin-top:10px;">
               <div class="col-sm-2">
-                <select name="" class="form-control" data-container="body" title="Need computer/notebook?" data-toggle="tooltip">
+                <select name="NeedComputer" class="form-control" data-container="body" title="Need computer/notebook?" data-toggle="tooltip">
                   {{#each Evento.OptionsNeedComputer}}
                     <option {{setSelected ../Evento.NeedComputer opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
                 </select>
               </div>
               <div class="col-sm-2">
-                <select name="" class="form-control" data-container="body" title="Need DataShow?" data-toggle="tooltip">
+                <select name="NeedDataShow" class="form-control" data-container="body" title="Need DataShow?" data-toggle="tooltip">
                   {{#each Evento.OptionsNeedDataShow}}
                     <option {{setSelected ../Evento.NeedDataShow opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
                 </select>
               </div>
               <div class="col-sm-2">
-                <select name="" class="form-control" data-container="body" title="Video Conference From:" data-toggle="tooltip">
+                <select name="VideoFrom" class="form-control" data-container="body" title="Video Conference From:" data-toggle="tooltip">
                   {{#each Evento.OptionsVideoConference}}
                     <option {{setSelected ../Evento.VideoFrom opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
                 </select>
               </div>
               <div class="col-sm-2">
-                <select name="" class="form-control" data-container="body" title="Video Conference To:" data-toggle="tooltip">
+                <select name="VideoTo" class="form-control" data-container="body" title="Video Conference To:" data-toggle="tooltip">
                   {{#each Evento.OptionsVideoConference}}
                     <option {{setSelected ../Evento.VideoTo opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
@@ -423,13 +423,17 @@
         data,
         dataType:'json',
         success: function(data) {
-          alert(data)
+          $('#submitEdit').prop("disabled", false);
+          $('#submitEdit').prop("value",'Update');
+          if (data.right) {
+            window.location.replace(data.redirect)
+          }
+          console.log(data)
         }
       })
     })
 
     function passou(){
-      alert('validado')
       $('#submitEdit').prop("disabled", true);
       $('#submitEdit').prop("value",'...creating');
     }
@@ -481,7 +485,7 @@
     $('#qtdProduct').keypress(function(e){
       if ( e.which == 13 ){
         e.preventDefault()
-        addItemEvent();
+        addItemEvent()
       }
     })
 
@@ -492,8 +496,8 @@
     function updateValueAmont(el){
       let newValue = parseInt($(el).val()) * parseFloat($(el).closest('tr').data('price-prod'))
       if($(el).val() === '') newValue = 0
-      $(el).closest('tr').find('.totalProduct').text(newValue.toFixed(2))
-      $(el).closest('tr').data('qtd',parseInt($(el).val()))
+      $(el).closest('tr').find('.totalProduct').text((newValue * 1.14).toFixed(2))
+      $(el).closest('tr').data('qtd', parseInt($(el).val()))
 
       let sum = 0;
       $('.totalProduct').each(function(){

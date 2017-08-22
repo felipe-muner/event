@@ -40,6 +40,19 @@ function Guest(){
       })
     })
   }
+
+  this.clearGuest = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('DELETE FROM EventGuest WHERE Event_ID = ?', [req.nextEventCode], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          next()
+        }
+      })
+    })
+  }
 }
 
 module.exports = new Guest()

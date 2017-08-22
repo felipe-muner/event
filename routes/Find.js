@@ -122,9 +122,20 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
     Evento:req.findEventByCode
   })
 
-}).post('/update', function(req, res, next) {
+// }).post('/update', find.clearEvent, find.updateEvent, function(req, res, next) {
+}).post('/update', find.checkEvent, find.clearEvent, find.updateEvent, g.clearGuest, g.bulkGuestEvent, mi.clearProduct, mi.bulkItemEvent, function(req, res, next) {
+  console.log(req.resultadofinal)
   console.log(req.body)
-  res.json(req.body)
+  console.log('__+_+_+_+_req.nextEventCode')
+  console.log('__+_+_+_+_req.nextEventCode')
+
+  console.log('__+_+_+_+_req.nextEventCode')
+  console.log('__+_+_+_+_req.nextEventCode')
+  res.json({
+    "right":true,
+    "redirect":"/my-event",
+    "objeto":req.body
+  })
 })
 
 module.exports = router;
