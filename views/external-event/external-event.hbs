@@ -154,7 +154,7 @@
                     <div class="row">
                       <div class="col-sm-4">
                         <label for="qtdPerson">Nº of passengers</label>
-                        <input type="text" name="qtdPerson" id="qtdPerson" class="form-control" required>
+                        <input type="number" name="qtdPerson" id="qtdPerson" class="form-control" required>
                       </div>
                       <div class="col-sm-8">
                         <div class="">
@@ -490,6 +490,7 @@
 
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault()
+    checkEventPast($('#StartEvent').val())
     checkEndAfterStart()
     checkBudgetBalance()
     passou()
@@ -685,6 +686,14 @@
     console.log(arrayGuest);
     return arrayGuest
   }
+
+  function checkEventPast(dataDesejada){
+    if( moment(dataDesejada).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD') ){
+      swal("Incorrect Date", "You can\'t create event to previous days", "error")
+      throw new Error('Event can\'t be before today.')
+    }
+  }
+
   function checkBudgetBalance(){
     if ($('.lineItemEvent').size() > 0 && '' === $('#id_budget').val()) {
       $('#id_budget').css('border-color','red')
