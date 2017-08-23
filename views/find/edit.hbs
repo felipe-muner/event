@@ -441,7 +441,16 @@
                 showCloseButton: true
               })
             }else if('alreadyApproved' === data.reasonCode){
-
+              swal({
+                title: data.reasonText,
+                type: 'error',
+                html: data.content,
+                showCloseButton: true
+              }).then(
+                function () {
+                  document.location.replace('/my-event')
+                }
+              )
             }
           }
 

@@ -35,6 +35,7 @@ router.get('/', approve.getEventToApprove ,function(req, res, next) {
     console.log('analisando ojb')
     console.log(e)
     console.log('analisando ojb')
+    e.typeRoute = 'approved'
     m.approveEvent(e)
   })
   res.redirect('/approve')

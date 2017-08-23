@@ -396,6 +396,45 @@ function Find(){
     }
   }
 
+  this.checkAlreadyApproved = function(req, res, next){
+    if ('I' === req.body.Type) {
+      conn.acquire(function(err,con){
+        con.query('SELECT * FROM Event WHERE EventCode = ?', [req.body.EventCode], function(err, result) {
+          con.release();
+          if(err){
+            console.log(err);
+            res.render('error', { error: err } );
+          }else{
+            console.log('teste status')
+            console.log(this.sql)
+            console.log(result[0])
+            console.log('teste status')
+            debugger
+
+            if(1 !== result[0].EventStatus_ID){
+              console.log('ta aprovado')
+              let content = 'Already qualified event'
+              res.json({
+                "right": false,
+                "reasonText": 'Already qualified event',
+                "reasonCode": 'alreadyApproved',
+                "redirect": "/my-event",
+                "objeto": req.body,
+                "content": content
+              })
+            }else{
+              console.log('nao ta aprovado');
+              next()
+            }
+
+          }
+        })
+      })
+    }else{
+      next()
+    }
+  }
+
   this.updateEvent = function(req, res, next){
     debugger
     let event = {

@@ -47,7 +47,9 @@ function MailSender(){
   }
 
   this.finishEvent = function(eventFinded){
-
+    console.log('______typerota')
+    console.log(eventFinded.typeRoute)
+    console.log('______typerota')
     let listRecipientsEmail = this.generateListEmail(eventFinded)
 
     fs.readFile(process.env.PWD + '/views/email/finishEvent.html', {encoding: 'utf-8'}, function (err, html) {
@@ -121,8 +123,15 @@ function MailSender(){
     (eventFinded.Type === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
   }
 
+  this.editEvent = function(eventFinded){
+    (eventFinded.Type === 'I') ? this.internalEvent(eventFinded) : this.externalEvent(eventFinded)
+  }
+
   this.internalEvent = function(eventFinded){
 
+    console.log('______typerota')
+    console.log(eventFinded.typeRoute)
+    console.log('______typerota')
 
     let listRecipientsEmail = this.generateListEmail(eventFinded)
     console.log('___emails')
@@ -136,7 +145,15 @@ function MailSender(){
         styliner.processHTML(html)
           .then(function(processedSource) {
             const $ = cheerio.load(processedSource)
-            // let qs = '?m=' + matricula + '&p=' + newPassword + '&recoveremail=true'
+
+            if ('edit' === eventFinded.typeRoute) {
+              $('#infoDefault').text('This event was edited.')
+            }else if('approved' === eventFinded.typeRoute){
+              $('#infoDefault').text('Approved.')
+            }else if('cancel' === eventFinded.typeRoute){
+              $('#infoDefault').text('Cancel.')
+            }
+
             $('#EventCode').text(eventFinded.EventCode)
             $('#EventName').text(Util.toTitleCase(eventFinded.title))
             $('#RoomName').text(Util.toTitleCase(eventFinded.RoomName))
@@ -216,6 +233,10 @@ function MailSender(){
 
   this.externalEvent = function(eventFinded){
 
+    console.log('______typerota')
+    console.log(eventFinded.typeRoute)
+    console.log('______typerota')
+
     let listRecipientsEmail = this.generateListEmail(eventFinded)
 
     console.log('___emails')
@@ -230,7 +251,15 @@ function MailSender(){
         styliner.processHTML(html)
           .then(function(processedSource) {
             const $ = cheerio.load(processedSource)
-            // let qs = '?m=' + matricula + '&p=' + newPassword + '&recoveremail=true'
+
+            if ('edit' === eventFinded.typeRoute) {
+              $('#infoDefault').text('This event was edited.')
+            }else if('approved' === eventFinded.typeRoute){
+              $('#infoDefault').text('Approved.')
+            }else if('cancel' === eventFinded.typeRoute){
+              $('#infoDefault').text('Cancel.')
+            }
+
             $('#EventCode').text(eventFinded.EventCode)
             $('#EventName').text(Util.toTitleCase(eventFinded.title))
             $('#StatusName').text(eventFinded.StatusName)

@@ -7,6 +7,7 @@ const find = require(process.env.PWD + '/model/Find')
 const g = require(process.env.PWD + '/model/Guest')
 const ie = require(process.env.PWD + '/model/InternalEvent')
 const mi = require(process.env.PWD + '/model/MenuItem')
+const m = require(process.env.PWD + '/model/MailSender')
 const u = require(process.env.PWD + '/model/User')
 const t = require(process.env.PWD + '/model/Transport')
 const fs = require('fs');
@@ -124,14 +125,16 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   })
 
 // }).post('/update', find.clearEvent, find.updateEvent, function(req, res, next) {
-}).post('/update', find.checkEventAvailable, find.clearEvent, find.updateEvent, g.clearGuest, g.bulkGuestEvent, mi.clearProduct, mi.bulkItemEvent, function(req, res, next) {
+}).post('/update', find.checkAlreadyApproved, find.checkEventAvailable, find.clearEvent, find.updateEvent, g.clearGuest, g.bulkGuestEvent, mi.clearProduct, mi.bulkItemEvent, find.searchEventByCode, g.guestOfEvent, mi.productOfEvent, find.getRecipientsEmail, function(req, res, next) {
   console.log(req.resultadofinal)
   console.log(req.body)
   console.log('__+_+_+_+_req.nextEventCode')
   console.log('__+_+_+_+_req.nextEventCode')
-
+  console.log(req.findEventByCode)
   console.log('__+_+_+_+_req.nextEventCode')
   console.log('__+_+_+_+_req.nextEventCode')
+  req.findEventByCode.typeRoute = 'edit'
+  m.editEvent(req.findEventByCode)
   res.json({
     "right":true,
     "redirect":"/my-event",

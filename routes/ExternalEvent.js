@@ -44,6 +44,7 @@ router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, f
 
   res.json(req.allEvents)
 }).post('/create-event', a.getDirectApproval,ee.getLastEvent, ee.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, f.getRecipientsEmail, function(req, res, next) {
+  req.findEventByCode.typeRoute = 'external'
   m.externalEvent(req.findEventByCode)
   res.json(req.nextEventCode)
 }).get('/downloadPDF', f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, HtmlPDF.genPDFExternal)

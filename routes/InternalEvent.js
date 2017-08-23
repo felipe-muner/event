@@ -45,6 +45,7 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
   // console.log('_______________criei')
   // console.log(req.findEventByCode)
   // console.log('_______________criei')
+  req.findEventByCode.typeRoute = 'internal'
   m.internalEvent(req.findEventByCode)
   res.json(req.nextEventCode)
 }).post('/find-event-by-code',ie.searchEventByCode, ie.getTemplateMoreInfo, g.guestOfEvent, mi.productOfEvent, function(req,res,next){

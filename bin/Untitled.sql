@@ -1,2 +1,1 @@
-
-SELECT * FROM Event WHERE Room_ID = 556 AND ('2017-08-23 10:00:00' BETWEEN StartTime AND EndTime OR '2017-08-23 10:00:00' BETWEEN StartTime AND EndTime)
+select * from event
