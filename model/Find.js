@@ -347,11 +347,11 @@ function Find(){
   this.checkEventAvailable = function(req, res, next){
     if ('I' === req.body.Type) {
       conn.acquire(function(err,con){
-        con.query('SELECT * FROM Event WHERE Room_ID = ? '+
+        con.query('SELECT * FROM Event WHERE Room_ID = ? AND EventCode <> ? '+
                   'AND (? BETWEEN StartEvent AND EndEvent ' +
                     'OR ? BETWEEN StartEvent AND EndEvent ' +
                     'OR StartEvent BETWEEN ? AND ? ' +
-                    'OR EndEvent BETWEEN ? AND ? )', [req.body.roomID, req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime], function(err, result) {
+                    'OR EndEvent BETWEEN ? AND ? )', [parseInt(req.body.roomID), parseInt(req.body.EventCode), req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime], function(err, result) {
           con.release();
           console.log(this.sql);
           if(err){
