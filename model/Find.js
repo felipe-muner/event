@@ -1,5 +1,6 @@
 const conn = require(process.env.PWD + '/conn');
 const fs = require('fs')
+const moment = require('moment')
 
 function Find(){
   this.testaFunc = function(){
@@ -351,7 +352,7 @@ function Find(){
                   'AND (? BETWEEN StartEvent AND EndEvent ' +
                     'OR ? BETWEEN StartEvent AND EndEvent ' +
                     'OR StartEvent BETWEEN ? AND ? ' +
-                    'OR EndEvent BETWEEN ? AND ? )', [parseInt(req.body.roomID), parseInt(req.body.EventCode), req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime], function(err, result) {
+                    'OR EndEvent BETWEEN ? AND ? ) ORDER BY StartEvent', [parseInt(req.body.roomID), parseInt(req.body.EventCode), req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime, req.body.StartTime, req.body.EndTime], function(err, result) {
           con.release();
           console.log(this.sql);
           if(err){
@@ -362,14 +363,29 @@ function Find(){
               console.log('nenhum evento na sala, horario inicial e horario final')
               next()
             }else{
-              console.log('___sou evento interno')
+              console.log('já existe evento')
               console.log(result)
-              console.log('___sou evento interno')
+              console.log('já existe evento')
+
+              let reason
+              if (1 === result.length) {
+                reason = 'Another event is already scheduled'
+              }else{
+                reason = 'In the desired time there are already other events'
+              }
+
+              let content = result.reduce(function(acc, e){
+                  return acc + '<div style="border-bottom:1px solid black;"><b>Nº ' + e.EventCode + ' - </b>' + moment(e.StartEvent).format('DD/MM/YYYY HH:mm') + ' - ' + moment(e.EndEvent).format('DD/MM/YYYY HH:mm') + '</div>' +'<br>'
+              }, '')
+
               res.json({
-                "right":false,
-                "redirect":"/my-event",
-                "objeto":req.body,
-                "events":result
+                "right": false,
+                "reasonText": reason,
+                "reasonCode": 'noTime',
+                "redirect": "/my-event",
+                "objeto": req.body,
+                "events": result,
+                "content": content
               })
             }
           }

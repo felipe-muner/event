@@ -4,6 +4,9 @@
     .select2-container .select2-search__field {
         width: 100% !important;
     }
+    input:invalid {
+      background-color: #ffdddd;
+    }
   </style>
 {{/section}}
 
@@ -70,13 +73,13 @@
           {{#if Evento.isInternal}}
             <div class="row" style="margin-top:10px;">
               <div class="col-sm-3">
-                <input type="datetime-local" name="StartTime" id="StartTime" value="{{Evento.startFormated}}" class="form-control" data-container="body" title="Start" data-toggle="tooltip">
+                <input type="datetime-local" name="StartTime" id="StartTime" value="{{Evento.startFormated}}" class="form-control" data-container="body" title="Start" data-toggle="tooltip" required>
               </div>
               <div class="col-sm-3">
-                <input type="datetime-local" name="EndTime" id="EndTime" value="{{Evento.endFormated}}" class="form-control" data-container="body" title="End" data-toggle="tooltip">
+                <input type="datetime-local" name="EndTime" id="EndTime" value="{{Evento.endFormated}}" class="form-control" data-container="body" title="End" data-toggle="tooltip" required>
               </div>
               <div class="col-sm-6">
-                <input type="text" name="Name" value="{{Evento.title}}" class="form-control" data-container="body" title="Event Name" data-toggle="tooltip">
+                <input type="text" name="Name" value="{{Evento.title}}" class="form-control" data-container="body" title="Event Name" data-toggle="tooltip" required>
               </div>
             </div>
           {{/if}}
@@ -408,8 +411,9 @@
 
     $('#formEditEvent').submit(function(e){
       e.preventDefault()
+      if('I' === $('#Type').val()) checkSameDay()
       checkEndAfterStart()
-      checkVideoConference()
+      if('I' === $('#Type').val()) checkVideoConference()
       checkBudgetBalance()
       passou()
 
@@ -427,8 +431,20 @@
           $('#submitEdit').prop("value",'Update');
           if (data.right) {
             window.location.replace(data.redirect)
+          }else {
+
+            if('noTime' === data.reasonCode){
+              swal({
+                title: data.reasonText,
+                type: 'error',
+                html: data.content,
+                showCloseButton: true
+              })
+            }else if('alreadyApproved' === data.reasonCode){
+
+            }
           }
-          console.log(data)
+
         }
       })
     })
@@ -443,6 +459,16 @@
       let endEvent = moment($('#EndTime').val())
       if(startEvent >= endEvent){
         swal("End time must be later than initial", "", "error")
+        // alert('Horário Final deve ser após horário inicial')
+        throw new Error('Time + Room already in use.')
+      }
+    }
+
+    function checkSameDay(){
+      let startEvent = moment($('#StartTime').val())
+      let endEvent = moment($('#EndTime').val())
+      if(moment(startEvent).format('DD-MM-YYYY') !== moment(endEvent).format('DD-MM-YYYY')){
+        swal("Start date and End date should be the same day", "", "error")
         // alert('Horário Final deve ser após horário inicial')
         throw new Error('Time + Room already in use.')
       }
