@@ -42,10 +42,12 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
   //console.log(req.allEvents);
   res.json(req.allEvents)
 }).post('/create-event', a.getDirectApproval,ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, f.getRecipientsEmail, function(req, res, next) {
-  // console.log('_______________criei')
-  // console.log(req.findEventByCode)
-  // console.log('_______________criei')
-  req.findEventByCode.typeRoute = 'internal'
+  console.log('_______________criei')
+  console.log(req.findEventByCode)
+  console.log('_______________criei2')
+  console.log(req.findEventByCode.CreateBy)
+  console.log('_______________criei')
+  req.findEventByCode.msgDefault = 'Evento Interno criado por: ' + req.findEventByCode.CreateBy
   m.internalEvent(req.findEventByCode)
   res.json(req.nextEventCode)
 }).post('/find-event-by-code',ie.searchEventByCode, ie.getTemplateMoreInfo, g.guestOfEvent, mi.productOfEvent, function(req,res,next){

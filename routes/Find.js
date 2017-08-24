@@ -133,7 +133,7 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   console.log(req.findEventByCode)
   console.log('__+_+_+_+_req.nextEventCode')
   console.log('__+_+_+_+_req.nextEventCode')
-  req.findEventByCode.typeRoute = 'edit'
+  req.findEventByCode.msgDefault = 'Evento editado por ' + req.findEventByCode.CreatedByName
   m.editEvent(req.findEventByCode)
   res.json({
     "right":true,

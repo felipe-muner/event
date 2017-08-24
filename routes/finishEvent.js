@@ -41,9 +41,9 @@ router.get('/', fe.getAllFinishEvent, function(req, res, next) {
     statusName: 'Finalized',
     text: req.body.EventCode
   }
-  req.findEventByCode.typeRoute = 'finalized'
+  req.findEventByCode.msgDefault = 'Finalizado por' + req.findEventByCode.FinishedByMatricula_ID
   m.finishEvent(req.findEventByCode)
-  console.log(req.body);
+  console.log(req.body)
   res.redirect('/finish-event')
 })
 

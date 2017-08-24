@@ -30,14 +30,13 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
     e.btnCancel = (1 === e.EventStatus_ID || 2 === e.EventStatus_ID) ? true : false
     e.canEdit = (1 === e.EventStatus_ID) ? true : false
   })
-
   res.render('my-event/my-event',{
     allMyEvent: req.allMyEvent,
     sess: req.session,
     flashMsg
   })
 }).post('/cancel-event', myevent.cancelEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, f.getRecipientsEmail, function(req, res, next) {
-  req.findEventByCode.typeRoute = 'cancel'
+  req.findEventByCode.msgDefault = 'Evento Cancelado por ' + req.findEventByCode.CanceledByMatricula_ID
   m.cancelEvent(req.findEventByCode)
   req.session.flashMsg = req.body.EventCode
   res.redirect('/my-event')

@@ -60,6 +60,8 @@ function MailSender(){
           .then(function(processedSource) {
             const $ = cheerio.load(processedSource)
 
+            $('#infoDefault').text(eventFinded.msgDefault)
+
             $('#EventCode').text(eventFinded.EventCode)
             $('#EventName').text(Util.toTitleCase(eventFinded.title))
             $('#StatusName').text(eventFinded.StatusName)
@@ -146,14 +148,14 @@ function MailSender(){
           .then(function(processedSource) {
             const $ = cheerio.load(processedSource)
 
-            if ('edit' === eventFinded.typeRoute) {
-              $('#infoDefault').text('This event was edited.')
-            }else if('approved' === eventFinded.typeRoute){
-              $('#infoDefault').text('Approved.')
-            }else if('cancel' === eventFinded.typeRoute){
-              $('#infoDefault').text('Cancel.')
-            }
-
+            // if ('edit' === eventFinded.typeRoute) {
+            //   $('#infoDefault').text('This event was edited.')
+            // }else if('approved' === eventFinded.typeRoute){
+            //   $('#infoDefault').text('Approved.')
+            // }else if('cancel' === eventFinded.typeRoute){
+            //   $('#infoDefault').text('Cancel.')
+            // }
+            $('#infoDefault').text(eventFinded.msgDefault)
             $('#EventCode').text(eventFinded.EventCode)
             $('#EventName').text(Util.toTitleCase(eventFinded.title))
             $('#RoomName').text(Util.toTitleCase(eventFinded.RoomName))
@@ -252,13 +254,17 @@ function MailSender(){
           .then(function(processedSource) {
             const $ = cheerio.load(processedSource)
 
-            if ('edit' === eventFinded.typeRoute) {
-              $('#infoDefault').text('This event was edited.')
-            }else if('approved' === eventFinded.typeRoute){
-              $('#infoDefault').text('Approved.')
-            }else if('cancel' === eventFinded.typeRoute){
-              $('#infoDefault').text('Cancel.')
-            }
+            // $('#infoDefault')
+
+
+            $('#infoDefault').text(eventFinded.msgDefault)
+            // if ('edit' === eventFinded.typeRoute) {
+            //   $('#infoDefault').text('This event was edited.')
+            // }else if('approved' === eventFinded.typeRoute){
+            //   $('#infoDefault').text('Approved.')
+            // }else if('cancel' === eventFinded.typeRoute){
+            //   $('#infoDefault').text('Cancel.')
+            // }
 
             $('#EventCode').text(eventFinded.EventCode)
             $('#EventName').text(Util.toTitleCase(eventFinded.title))

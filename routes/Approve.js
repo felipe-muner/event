@@ -32,10 +32,12 @@ router.get('/', approve.getEventToApprove ,function(req, res, next) {
   req.session.flashMsg = {statusName, events, type: 'alert-info'}
 
   req.jsonAprove.map(function(e){
-    console.log('analisando ojb')
-    console.log(e)
-    console.log('analisando ojb')
-    e.typeRoute = 'approved'
+    console.log('analisando ojb');
+    console.log(e);
+    console.log('analisando ojb');
+    debugger
+    (2 === e.EventStatus_ID) ? e.msgDefault = 'Aprovado por: ' + e.ApprovedBy : e.msgDefault = 'Cancelado por: ' + e.ApprovedBy
+
     m.approveEvent(e)
   })
   res.redirect('/approve')

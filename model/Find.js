@@ -159,6 +159,7 @@ function Find(){
                   'orcamento.grupo, '+
                   'e.ReasonCanceled, '+
                   'e.CanceledByMatricula_ID, '+
+                  'e.FinishedByMatricula_ID, '+
                   'u3.nomeusuario AS CanceledByName, '+
                   'r.RoomID, '+
                   'r.Name as RoomName '+

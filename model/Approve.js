@@ -149,6 +149,7 @@ function Approve(){
           con.query('SELECT '+
                       'e.EventID, '+
                       'e.Type, '+
+                      'e.EventStatus_ID, '+
                       'e.EventCode, '+
                       'e.CreateBy, '+
                       'u1.nomeusuario AS CreatedByName, '+
@@ -186,6 +187,7 @@ function Approve(){
                       'orcamento.setor,'+
                       'orcamento.conta, '+
                       'orcamento.grupo, '+
+                      'e.ApprovedBy, '+
                       'e.ReasonCanceled, '+
                       'e.CanceledByMatricula_ID, '+
                       'u3.nomeusuario AS CanceledByName, '+
@@ -232,6 +234,7 @@ function Approve(){
         con.query('SELECT '+
                     'e.EventID, '+
                     'e.Type, '+
+                    'e.EventStatus_ID, '+
                     'e.EventCode, '+
                     'e.CreateBy, '+
                     'u1.nomeusuario AS CreatedByName, '+
@@ -269,6 +272,7 @@ function Approve(){
                     'orcamento.setor,'+
                     'orcamento.conta, '+
                     'orcamento.grupo, '+
+                    'e.ApprovedBy, '+
                     'e.ReasonCanceled, '+
                     'e.CanceledByMatricula_ID, '+
                     'u3.nomeusuario AS CanceledByName, '+
