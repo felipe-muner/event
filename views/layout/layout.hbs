@@ -13,10 +13,17 @@
     <link href="/vendor/select2/dist/css/select2.css" rel="stylesheet">
     <link href="/vendor/fullcalendar/dist/fullcalendar.css" rel="stylesheet">
     <link href="/vendor/sweetalert/sweetalert2.css" rel="stylesheet">
+    <link href="/vendor/introjs/introjs.min.css" rel="stylesheet">
     <link href="/vendor/data-tables/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <link href="/vendor/build/css/custom.css" rel="stylesheet">
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link href="/stylesheets/timer.css" rel="stylesheet">
+    <style media="screen">
+      .introjs-helperNumberLayer{
+        top: 5px !important;
+        left: 5px !important;
+      }
+    </style>
     {{{_sections.head}}}
   </head>
 
@@ -92,31 +99,33 @@
                 </li>
 
                 <li role="presentation" class="dropdown">
-                  <a href="javascript:;" class="dropdown-toggle info-number no-loading" data-toggle="dropdown" aria-expanded="false">
+                  <a class="dropdown-toggle info-number no-loading" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">6</span>
+                    <span class="badge bg-green">{{sess.functionalityProfile.length}}</span>
                   </a>
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                    <!-- <li>
-                      <a>
+                    {{#each sess.functionalityProfile}}
+                    <li>
+                      <a class="no-loading" href="{{Action}}?manual=true">
                         <span class="image"><img src="/images/british_logo.png" alt="Profile Image" /></span>
                         <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
+                          <span><i class="fa {{Icon}}"></i> {{Name}}</span>
+                          <!-- <span class="time">3 mins ago</span> -->
                         </span>
-                        <span class="message">
+                        <!-- <span class="message">
                           Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
+                        </span> -->
                       </a>
-                    </li> -->
-                    <li>
+                    </li>
+                    {{/each}}
+                    <!-- <li>
                       <div class="text-center">
                         <a class="no-loading">
                           <strong>See All Alerts</strong>
                           <i class="fa fa-angle-right"></i>
                         </a>
                       </div>
-                    </li>
+                    </li> -->
                   </ul>
                 </li>
               </ul>
@@ -158,11 +167,12 @@
     <script src="/vendor/data-tables/js/jquery.dataTables.min.js"></script>
     <script src="/vendor/data-tables/js/dataTables.bootstrap.min.js"></script>
     <script src="/vendor/sweetalert/sweetalert2.js"></script>
+    <script src="/vendor/introjs/intro.min.js"></script>
     <script src="/vendor/handlebars/handlebars-v4.0.10.js"></script>
 
     <script src="/vendor/build/js/custom.js"></script>
     <script src="/javascripts/muner.js"></script>
-
+    <script src="/vendor/introjs/config.js"></script>
     <script type="text/javascript">
 
       $('a:not(.no-loading)').click(function(){
@@ -180,6 +190,7 @@
           $('#relogio').css('display','none');
           // alert('voltei')
       })
+
     </script>
 
     {{{_sections.script}}}
