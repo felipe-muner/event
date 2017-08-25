@@ -180,6 +180,11 @@
         $('#relogio').css('display','block');
       })
 
+      $('a.introjs-button').click(function(){
+        $('#relogio').removeClass('in loadingscreen');
+        $('#relogio').css('display','none');
+      })
+
       $( document ).ajaxStart(function() {
           $('#relogio').addClass('in loadingscreen');
           $('#relogio').css('display','block');

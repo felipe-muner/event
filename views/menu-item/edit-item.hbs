@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" data-intro="Here, you can edit data of product">
   <div class="panel panel-info">
     <div class="panel-heading">
       Edit Product
@@ -6,16 +6,16 @@
     <div class="panel-body">
       <form method="POST" action="/menu-item/edit">
         <input type="hidden" name="EventProductID" value="{{findById.EventProductID}}">
-        <div class="col-sm-3">
+        <div class="col-sm-3" data-intro="New name in portuguese">
           <input value="{{findById.NamePort}}" type="text" class="form-control" placeholder=" Portuguese Product Name"  name="NamePort" required autofocus>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3" data-intro="New name in english">
           <input value="{{findById.NameEnglish}}" type="text" class="form-control" placeholder=" English Product Name"  name="NameEnglish" required>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2" data-intro="New price">
           <input value="{{findById.Price}}" type="number" class="form-control" placeholder="Price / Preço" name="Price" step="0.01" required>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2" data-intro="New Unit">
           <select class="form-control" name="Unit" placeholder="Unit" required>
             <option value="">Unit / Unidade</option>
             {{#each units}}
@@ -23,8 +23,8 @@
             {{/each}}
           </select>
         </div>
-        <div class="col-sm-1">
-          <input type="submit" value="Edit Product" class="btn btn-warning">
+        <div class="col-sm-1" data-intro="Click to update">
+          <input type="submit" value="Edit Product" class="btn btn-warning btn-xs btn-block">
         </div>
       </form>
     </div>
