@@ -1,12 +1,12 @@
-<div class="panel panel-primary">
+<div class="panel panel-primary" data-step="1" data-intro="Functionality to approve or cancel requests of event">
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-9">
         Approve
       </div>
       <div class="col-sm-3 text-right">
-        <span class="label label-danger" onclick="setEventToApprove(4);">Cancel</span>
-        <span class="label label-success" onclick="setEventToApprove(2);">Approve</span>
+        <span data-step="3" data-intro="After choose the event/events click here to cancel" class="label label-danger" onclick="setEventToApprove(4);">Cancel</span>
+        <span data-step="4" data-intro="After choose the event/events click here to approve" class="label label-success" onclick="setEventToApprove(2);">Approve</span>
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@
               <th>End</th>
               <th>Event Name</th>
               <th>More Info</th>
-              <th>Approve <input type="checkbox" name="markAllCB" id="markAllCB" onclick="toggleCheckBox(this);"></th>
+              <th data-step="2" data-intro="Check/Uncheck All Checkboxes">Approve <input type="checkbox" name="markAllCB" id="markAllCB" onclick="toggleCheckBox(this);"></th>
             </tr>
           </thead>
           <tbody>
