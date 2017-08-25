@@ -15,9 +15,10 @@ if("true" === getParameterByName('manual', window.location.href )) {
                       $(targetElement).data('step') === 5 ||
                       $(targetElement).data('step') === 6 ||
                       $(targetElement).data('step') === 7 ||
-                      $(targetElement).data('step') === 8
+                      $(targetElement).data('step') === 8 ||
+                      $(targetElement).data('step') === 9
                     )
-      ) {
+    ) {
       $('#modalFind').modal('show')
     }else {
       $('#modalFind').modal('hide')

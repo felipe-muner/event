@@ -4,9 +4,6 @@
     .select2-container .select2-search__field {
         width: 100% !important;
     }
-
-    .modal { z-index: 100000000000000000000 !important; }
-    .introjs-fixedTooltip { z-index: 200000000000000000000 !important; }
   </style>
 {{/section}}
 
@@ -66,8 +63,8 @@
       <form action="/find/searchFiltered" method="post" id="formFind">
         <div class="modal-body">
           <div class="row">
-            <div class="col-sm-3">
-              <input type="number" name="EventCode" value="" placeholder=" Event Code" class="form-control" data-step="3" data-intro="Here you can find any event and also search with filter" >
+            <div class="col-sm-3" data-step="3" data-intro="Here you can find any event and also search with filter">
+              <input type="number" name="EventCode" value="" placeholder=" Event Code" class="form-control">
             </div>
             <div class="col-sm-9" data-step="4" data-intro="Choose the type of event">
               <label class="checkbox-inline">
@@ -90,7 +87,7 @@
               </select>
             </div>
           </div>
-          <div class="row" style="margin-top:10px;" data-step="4" data-intro="Start and End Dates">
+          <div class="row" style="margin-top:10px;" data-step="5" data-intro="Start and End Dates">
             <div class="col-sm-6">
               <input type="date" name="StartTime" id="StartTime" data-toggle="tooltip" title="Start Date">
             </div>
@@ -98,12 +95,12 @@
               <input type="date" name="EndTime" id="EndTime" data-toggle="tooltip" title="End Date">
             </div>
           </div>
-          <div class="row" style="margin-top:10px;" data-step="5" data-intro="Any part of name of event">
+          <div class="row" style="margin-top:10px;" data-step="6" data-intro="Any part of name of event">
             <div class="col-sm-12">
               <input type="text" name="EventName" value="" class="form-control" placeholder=" Event Name">
             </div>
           </div>
-          <div class="row" style="margin-top:10px;" data-step="6" data-intro="Responsible or Creator">
+          <div class="row" style="margin-top:10px;" data-step="7" data-intro="Responsible or Creator">
             <div class="col-sm-12">
               <select id="ResponsibleOrCreator" name="ResponsibleOrCreator" style="width:100%;" multiple>
                 <option>Select the Creator or Responsible</option>
@@ -114,7 +111,7 @@
             </div>
           </div>
           <div class="row" style="margin-top:10px;">
-            <div class="col-sm-12" data-step="7" data-intro="Status of event">
+            <div class="col-sm-12" data-step="8" data-intro="Status of event">
               <label class="checkbox-inline">
                 <input type="checkbox" name="StatusName" value="1" style="margin-right:5px;" checked>Waiting For Approval
               </label>
@@ -131,7 +128,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <input type="submit" name="" value="Search" data-step="8" data-intro="Make search">
+          <input type="submit" name="" value="Search" data-step="9" data-intro="Make search">
         </div>
       </form>
     </div>
