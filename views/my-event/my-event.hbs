@@ -7,7 +7,7 @@
   </div>
 {{/if}}
 
-<div class="panel panel-primary">
+<div class="panel panel-primary" data-step="1" data-intro="All events created by you or that you are the responsibility are here">
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-2">
@@ -29,10 +29,18 @@
               <th>End</th>
               <th>Event Name</th>
               <th>Status</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th data-step="2" data-intro="Click in this column to edit before an event be approved, if the event already approved, you must cancel and create another reutilizing the data">
+                <i style="cursor:auto;" data-container="body" title="" data-toggle="tooltip" class="fa fa-edit" aria-hidden="true" data-original-title="Edit"></i>
+              </th>
+              <th data-step="3" data-intro="Click in this column to download PDF">
+                <i style="cursor:auto;" data-container="body" title="" data-toggle="tooltip" class="fa fa-file-pdf-o" aria-hidden="true" data-original-title="Edit"></i>
+              </th>
+              <th data-step="4" data-intro="Click in this column to se more information about event">
+                <i style="cursor:auto;" data-container="body" title="" data-toggle="tooltip" class="fa fa-search-plus" aria-hidden="true" data-original-title="Edit"></i>
+              </th>
+              <th data-step="5" data-intro="Click in this column to cancel an event">
+                <i style="cursor:auto;" data-container="body" title="" data-toggle="tooltip" class="fa fa-window-close" aria-hidden="true" data-original-title="Edit"></i>
+              </th>
             </tr>
           </thead>
           <tbody>
