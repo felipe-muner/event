@@ -3,3 +3,5 @@
 
 .modal { z-index: 100000000000000000000 !important; }
 .introjs-fixedTooltip { z-index: 200000000000000000000 !important; }
+.select2-dropdown { z-index: 300000000000000000000; }
+.swal2-container { z-index: 400000000000000000000; }

@@ -714,7 +714,8 @@
         swal({
           title: "Saved successfully",
           text: data,
-          type:"success"
+          type:"success",
+          allowOutsideClick: false
         }).then(
           function () {
             $('#modalNewEvent').modal('hide')
