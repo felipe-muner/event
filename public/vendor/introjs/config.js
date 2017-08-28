@@ -8,23 +8,19 @@ if("true" === getParameterByName('manual', window.location.href )) {
       $('#modalFind').modal('hide')
     }).onchange(function(targetElement) {
 
+      if('/internal-event' === document.location.pathname && $(targetElement).data('step') > 2){
+        $('#modalNewEvent').modal('show')
+      }else {
+        $('#modalNewEvent').modal('hide')
+      }
+
       if('/external-event' === document.location.pathname && $(targetElement).data('step') > 5){
         $('#modalNewEventExternal').modal('show')
       }else {
         $('#modalNewEventExternal').modal('hide')
       }
 
-      if('/find' === document.location.pathname &&
-                      (
-                        $(targetElement).data('step') === 3 ||
-                        $(targetElement).data('step') === 4 ||
-                        $(targetElement).data('step') === 5 ||
-                        $(targetElement).data('step') === 6 ||
-                        $(targetElement).data('step') === 7 ||
-                        $(targetElement).data('step') === 8 ||
-                        $(targetElement).data('step') === 9
-                      )
-      ) {
+      if('/find' === document.location.pathname && $(targetElement).data('step') > 2){
         $('#modalFind').modal('show')
       }else {
         $('#modalFind').modal('hide')

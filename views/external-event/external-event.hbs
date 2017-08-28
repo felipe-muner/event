@@ -74,7 +74,7 @@
           <div class="col-sm-6">
             <h5 class="modal-title">New External Event</h5>
           </div>
-          <div class="col-sm-6" data-step="7" data-intro="Reuse info from past event, search an event in the past and the system will fill the fields">
+          <div class="col-sm-6" data-step="7" data-intro="Select an event from the list to fill in the fields automatically">
             <select class="form-control" name="" id="selectReuseEvent" style="width:100%;">
               <option value="">Reuse Info Event:</option>
               {{#each myEvents}}
@@ -223,22 +223,22 @@
                           <option data-group-name="visitor" value="Visitor">Visitor</option>
                         </select>
                       </div>
-                        <div class="col-sm-10" data-step="28" data-intro="After choose the type, write the name and press enter">
+                        <div class="col-sm-10" data-step="29" data-intro="After choose the type, write the name and press enter">
                           <input type="text" name="nameParticipantNewEvent" id="nameParticipantNewEvent" class="form-control" placeholder=" Insert name and press enter">
                         </div>
                     </div>
                     <div class="col-sm-12" style="margin-top:10px;">
                       <div class="row">
-                        <div class="col-sm-3 text-center" data-step="29" data-intro="Amount of names of parent">
+                        <div class="col-sm-3 text-center" data-step="30" data-intro="Amount of names of parent">
                           <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Parent <span id="sumparent" class="badge">0</span></button>
                         </div>
-                        <div class="col-sm-3 text-center" data-step="30" data-intro="Amount of names of pupil">
+                        <div class="col-sm-3 text-center" data-step="31" data-intro="Amount of names of pupil">
                           <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Pupil <span id="sumpupil" class="badge">0</span></button>
                         </div>
-                        <div class="col-sm-3 text-center" data-step="31" data-intro="Amount of names of staff">
+                        <div class="col-sm-3 text-center" data-step="32" data-intro="Amount of names of staff">
                           <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Staff <span id="sumstaff" class="badge">0</span></button>
                         </div>
-                        <div class="col-sm-3 text-center" data-step="32" data-intro="Amount of names of visitor">
+                        <div class="col-sm-3 text-center" data-step="33" data-intro="Amount of names of visitor">
                           <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Visitor <span id="sumvisitor" class="badge">0</span></button>
                         </div>
                       </div>
@@ -257,11 +257,11 @@
                 </div>
               </div>
               <div class="col-sm-6">
-                <div class="panel panel-primary" data-step="33" data-intro="Here you can choose the budget, select the products, insert the amount and press enter">
+                <div class="panel panel-primary" data-step="34" data-intro="Here you can choose the budget, select the products, insert the amount and press enter">
                   <div class="panel-heading">Menu</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-12" data-step="34" data-intro="Select the budget">
+                      <div class="col-sm-12" data-step="35" data-intro="Select the budget">
                         <select id="id_budget" name="id_budget" style="width:100%;">
                           <option value="">SELECT THE BUDGET</option>
                           {{#each sess.budgets}}
@@ -271,21 +271,21 @@
                       </div>
                     </div>
                     <div class="row" style="margin-top:5px;">
-                      <div class="col-sm-10" data-step="35" data-intro="Choose all product">
+                      <div class="col-sm-10" data-step="36" data-intro="Choose all product">
                         <select id="listProduct" name="allProductActive" multiple style="width:100%;">
                           {{#each allProductActive}}
                             <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} data-event-product-id="{{EventProductID}}" value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
                           {{/each}}
                         </select>
                       </div>
-                      <div class="col-sm-2" data-step="36" data-intro="After choose products, insert the amount and press enter to save">
+                      <div class="col-sm-2" data-step="37" data-intro="After choose products, insert the amount and press enter to save">
                         <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control" style="height:33px;" title="Insert amount and press enter" data-toggle="tooltip">
                       </div>
                     </div>
                     <div class="row" style="margin-top:10px;">
                       <div class="col-sm-12">
                         <div class="table-responsive">
-                          <table class="table" id="tableItemEvent" style="margin-bottom: 0px;" data-step="37" data-intro="Table with all selected products">
+                          <table class="table" id="tableItemEvent" style="margin-bottom: 0px;" data-step="38" data-intro="Table with all selected products">
                             <thead>
                               <th style="width:5%;border-right: 1px solid white;">Remove</th>
                               <th style="width:65%;border-right: 1px solid white;">Product</th>
@@ -305,7 +305,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <input type="submit" value="Create" class="btn btn-success" id="submitFormNewEvent" data-step="38" data-intro="Click here to create new event">
+          <input type="submit" value="Create" class="btn btn-success" id="submitFormNewEvent" data-step="39" data-intro="Click here to create new event">
         </div>
       </form>
     </div>
