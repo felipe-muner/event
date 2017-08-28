@@ -23,24 +23,24 @@
 {{/section}}
 
 <div class="row">
-  <div class="col-sm-2">
+  <div class="col-sm-2" data-step="1" data-intro="Click here to create new event">
     <button onclick="showModalNewEventExternal();" style="margin-top:16px;font-size:11px;" class="btn btn-primary" id="newEventExternal" type="button" name="button">New Event External</button>
   </div>
   <div class="col-sm-4"></div>
-  <div class="col-sm-2">
+  <div class="col-sm-2" data-step="2" data-intro="If you want make a new search, insert here the start date">
     <label for="firstDayFind">From:</label>
     <input type="date" name="firstDayFind" id="firstDayFind" value="" class="form-control">
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-2" data-step="3" data-intro="If you want make a new search, insert here the end date">
     <label for="lastDayFind">To:</label>
     <input type="date" name="lastDayFind" id="lastDayFind" value="" class="form-control">
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-2" data-step="4" data-intro="Make the search again">
     <button onclick="searchEvents();" style="margin-top:16px;font-size:11px;" class="btn btn-primary" id="newEventExternal" type="button" name="button">Search Event External</button>
   </div>
 </div>
 
-<div class="row" style="margin-top:15px;">
+<div class="row" style="margin-top:15px;" data-step="5" data-intro="Table with all event between dates above">
   <div class="col-md-12">
     <div class="x_panel">
       <div class="x_content">
@@ -65,16 +65,16 @@
   </div>
 </div>
 
-<div id="modalNewEventExternal" class="modal fade" role="dialog">
+<div id="modalNewEventExternal" class="modal" role="dialog">
   <div class="modal-dialog" style="width:90%;">
     <!-- Modal content-->
-    <div class="modal-content">
+    <div class="modal-content" data-step="6" data-intro="Form to create new external event">
       <div class="modal-header">
         <div class="row">
           <div class="col-sm-6">
             <h5 class="modal-title">New External Event</h5>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-6" data-step="7" data-intro="Reuse info from past event, search an event in the past and the system will fill the fields">
             <select class="form-control" name="" id="selectReuseEvent" style="width:100%;">
               <option value="">Reuse Info Event:</option>
               {{#each myEvents}}
@@ -93,23 +93,23 @@
                   <div class="panel-heading">Main information</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="8" data-intro="When event will start">
                         <label for="StartEvent">Departure</label>
                         <input type="datetime-local" name="StartEvent" id="StartEvent" class="form-control" required>
                       </div>
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="9" data-intro="When people will leave of event site">
                         <label for="LeavingFromEvent">Leaving the Event Site</label>
                         <input type="datetime-local" name="LeavingFromEvent" id="LeavingFromEvent" class="form-control">
                       </div>
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="10" data-intro="When the people will arrived back to the school">
                         <label for="EndEvent">Arrival at School</label>
                         <input type="datetime-local" name="EndEvent" id="EndEvent" class="form-control" required>
                       </div>
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="11" data-intro="Event Name">
                         <label for="nameNewEvent"></label>
                         <input type="text" name="nameNewEvent" id="nameNewEvent" class="form-control" placeholder=" Event Name" required>
                       </div>
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="12" data-intro="Responsible by event, if empty, the system will consider you as responsible">
                         <label for="responsibleNewEvent"></label>
                         <select id="responsibleNewEvent" name="responsibleNewEvent" style="width:100%;">
                           <option value="">RESPONSIVE BY EVENT</option>
@@ -118,7 +118,7 @@
                           {{/each}}
                         </select>
                       </div>
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="13" data-intro="Choose the departament">
                         <label for="iddepartamento"></label>
                         <select id="iddepartamento" name="iddepartamento" style="width:100%;">
                           <option value="">SELECT THE DEPARTAMENT</option>
@@ -134,15 +134,15 @@
             </div>
             <div class="row">
               <div class="col-sm-4">
-                <div class="panel panel-primary">
+                <div class="panel panel-primary" data-step="14" data-intro="Transport information">
                   <div class="panel-heading">Transport Information</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-6">
+                      <div class="col-sm-6" data-step="15" data-intro="Location name of event">
                         <label for="locationEvent">Location Name</label>
                         <input type="text" name="locationEvent" id="locationEvent" class="form-control">
                       </div>
-                      <div class="col-sm-6">
+                      <div class="col-sm-6" data-step="16" data-intro="Which site the departure will be">
                         <label for="departureFrom">Departure Location</label>
                         <select name="departureFrom" id="departureFrom" class="form-control" name="departureFrom">
                           <option value=""></option>
@@ -153,11 +153,11 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-4">
+                      <div class="col-sm-4" data-step="17" data-intro="Amount of passenger to recepcionist hire the bus company">
                         <label for="qtdPerson">Nº of passengers</label>
                         <input type="number" name="qtdPerson" id="qtdPerson" class="form-control" required>
                       </div>
-                      <div class="col-sm-8">
+                      <div class="col-sm-8" data-step="18" data-intro="Choose what is the best type of transport for your event">
                         <div class="">
                           <label for="meansOfTransport">Means of Transport</label>
                         </div>
@@ -171,7 +171,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row" style="margin-top:3px;">
+                    <div class="row" style="margin-top:3px;" data-step="19" data-intro="Check Yes if transport will wait at the venue to passenger to get on the bus">
                       <div class="col-sm-8">
                         <span style="font-weight:bold;font-size:11px;">The transport will wait at the venue?</span>
                       </div>
@@ -187,35 +187,35 @@
                 <div class="panel panel-primary">
                   <div class="panel-heading">Additional Information</div>
                   <div class="panel-body">
-                    <textarea name="additionalInformation" id="additionalInformation" style="height:111px;" rows="4" class="form-control btn-block"></textarea>
+                    <textarea  data-step="20" data-intro="If you want add more information of your event, please write here" name="additionalInformation" id="additionalInformation" style="height:111px;" rows="4" class="form-control btn-block"></textarea>
                   </div>
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="col-sm-6">
-                <div class="panel panel-primary">
+                <div class="panel panel-primary" data-step="21" data-intro="Local to insert amount of people and respective name if necessary">
                   <div class="panel-heading">Participants</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="22" data-intro="Amount of Parent">
                         <input type="number" min="0" name="qtdParentNewEvent" id="qtdParentNewEvent" class="form-control nParticipant" placeholder=" Nº Parent" style="padding-right: 2px;" data-toggle="tooltip" title="Nº Parent">
                       </div>
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="23" data-intro="Amount of Pupil">
                         <input type="number" min="0" name="qtdPupilNewEvent" id="qtdPupilNewEvent" class="form-control nParticipant" placeholder=" Nº Pupil" data-toggle="tooltip" title="Nº Pupil">
                       </div>
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="24" data-intro="Amount of Staff">
                         <input type="number" min="0" name="qtdStaffNewEvent" id="qtdStaffNewEvent" class="form-control nParticipant" placeholder=" Nº Staff" data-toggle="tooltip" title="Nº Staff">
                       </div>
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="25" data-intro="Amount of Visitor">
                         <input type="number" min="0" name="qtdVisitorNewEvent" id="qtdVisitorNewEvent" class="form-control nParticipant" placeholder=" Nº Visitor" data-toggle="tooltip" title="Nº Visitor">
                       </div>
-                      <div class="col-sm-4">
+                      <div class="col-sm-4" data-step="26" data-intro="Sum of left input">
                         <input type="text" min="0" name="qtdTotalParticipant" id="qtdTotalParticipant" class="form-control" placeholder=" Total" disabled style="text-align: right;">
                       </div>
                     </div>
-                    <div class="row" style="margin-top:5px;">
-                      <div class="col-sm-2">
+                    <div class="row" style="margin-top:5px;" data-step="27" data-intro="You can insert the type of participant and his name">
+                      <div class="col-sm-2" data-step="28" data-intro="If you want to specify the type and names, please choose between parent, pupil, staff or visitor">
                         <select class="form-control" id="listTypeName">
                           <option data-group-name="parent" value="Parent">Parent</option>
                           <option data-group-name="pupil" value="Pupil">Pupil</option>
@@ -223,22 +223,22 @@
                           <option data-group-name="visitor" value="Visitor">Visitor</option>
                         </select>
                       </div>
-                        <div class="col-sm-10">
+                        <div class="col-sm-10" data-step="28" data-intro="After choose the type, write the name and press enter">
                           <input type="text" name="nameParticipantNewEvent" id="nameParticipantNewEvent" class="form-control" placeholder=" Insert name and press enter">
                         </div>
                     </div>
                     <div class="col-sm-12" style="margin-top:10px;">
                       <div class="row">
-                        <div class="col-sm-3 text-center">
+                        <div class="col-sm-3 text-center" data-step="29" data-intro="Amount of names of parent">
                           <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Parent <span id="sumparent" class="badge">0</span></button>
                         </div>
-                        <div class="col-sm-3 text-center">
+                        <div class="col-sm-3 text-center" data-step="30" data-intro="Amount of names of pupil">
                           <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Pupil <span id="sumpupil" class="badge">0</span></button>
                         </div>
-                        <div class="col-sm-3 text-center">
+                        <div class="col-sm-3 text-center" data-step="31" data-intro="Amount of names of staff">
                           <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Staff <span id="sumstaff" class="badge">0</span></button>
                         </div>
-                        <div class="col-sm-3 text-center">
+                        <div class="col-sm-3 text-center" data-step="32" data-intro="Amount of names of visitor">
                           <button type="button" class="btn btn-primary" style="padding-top: 0px;padding-bottom: 0px;margin-bottom:3px;">Visitor <span id="sumvisitor" class="badge">0</span></button>
                         </div>
                       </div>
@@ -257,11 +257,11 @@
                 </div>
               </div>
               <div class="col-sm-6">
-                <div class="panel panel-primary">
+                <div class="panel panel-primary" data-step="33" data-intro="Here you can choose the budget, select the products, insert the amount and press enter">
                   <div class="panel-heading">Menu</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-12">
+                      <div class="col-sm-12" data-step="34" data-intro="Select the budget">
                         <select id="id_budget" name="id_budget" style="width:100%;">
                           <option value="">SELECT THE BUDGET</option>
                           {{#each sess.budgets}}
@@ -271,21 +271,21 @@
                       </div>
                     </div>
                     <div class="row" style="margin-top:5px;">
-                      <div class="col-sm-10">
+                      <div class="col-sm-10" data-step="35" data-intro="Choose all product">
                         <select id="listProduct" name="allProductActive" multiple style="width:100%;">
                           {{#each allProductActive}}
                             <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} data-event-product-id="{{EventProductID}}" value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
                           {{/each}}
                         </select>
                       </div>
-                      <div class="col-sm-2">
+                      <div class="col-sm-2" data-step="36" data-intro="After choose products, insert the amount and press enter to save">
                         <input type="number" min="0" name="qtdProduct" id="qtdProduct" class="form-control" style="height:33px;" title="Insert amount and press enter" data-toggle="tooltip">
                       </div>
                     </div>
                     <div class="row" style="margin-top:10px;">
                       <div class="col-sm-12">
                         <div class="table-responsive">
-                          <table class="table" id="tableItemEvent" style="margin-bottom: 0px;">
+                          <table class="table" id="tableItemEvent" style="margin-bottom: 0px;" data-step="37" data-intro="Table with all selected products">
                             <thead>
                               <th style="width:5%;border-right: 1px solid white;">Remove</th>
                               <th style="width:65%;border-right: 1px solid white;">Product</th>
@@ -305,7 +305,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <input type="submit" value="Create" class="btn btn-success" id="submitFormNewEvent">
+          <input type="submit" value="Create" class="btn btn-success" id="submitFormNewEvent" data-step="38" data-intro="Click here to create new event">
         </div>
       </form>
     </div>

@@ -7,7 +7,13 @@ if("true" === getParameterByName('manual', window.location.href )) {
       $('.nav.side-menu > li > a').css('color','#E7E7E7')
       $('#modalFind').modal('hide')
     }).onchange(function(targetElement) {
-      console.log(targetElement)
+
+      if('/external-event' === document.location.pathname && $(targetElement).data('step') > 5){
+        $('#modalNewEventExternal').modal('show')
+      }else {
+        $('#modalNewEventExternal').modal('hide')
+      }
+
       if('/find' === document.location.pathname &&
                       (
                         $(targetElement).data('step') === 3 ||
