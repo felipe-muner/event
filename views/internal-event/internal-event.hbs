@@ -690,6 +690,7 @@
   $( "#formNewEvent" ).submit(function( e ) {
     e.preventDefault()
     checkEndAfterStart()
+    checkStartAfterNow()
     checkNewTimeDay()
     checkVideoConference()
     checkBudgetBalance()
@@ -761,6 +762,16 @@
         }
       )
       throw new Error('Please choose Video Conference to')
+    }
+  }
+
+  function checkStartAfterNow(){
+    let startEvent = moment($('#dateNewEvent').val() + 'T' + $('#startTimeNewEvent').val())
+    let now = moment()
+
+    if(startEvent.isBefore(now)){
+      swal("Incorrect Time", "Please, choose a start time after now", "error")
+      throw new Error('Please, choose a start time after now')
     }
   }
 

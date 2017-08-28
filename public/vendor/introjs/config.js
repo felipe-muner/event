@@ -6,6 +6,9 @@ if("true" === getParameterByName('manual', window.location.href )) {
     introGuide.onexit(function(e){
       $('.nav.side-menu > li > a').css('color','#E7E7E7')
       $('#modalFind').modal('hide')
+      $('#modalNewEvent').modal('hide')
+      $('#modalNewEventExternal').modal('hide')
+
     }).onchange(function(targetElement) {
 
       if('/internal-event' === document.location.pathname && $(targetElement).data('step') > 2){
