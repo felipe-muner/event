@@ -36,7 +36,7 @@ router.get('/', function(req, res, next) {
     console.log('entrei aqui NNNNN tem session!');
     res.render('login',{layout:false})
   }
-});
+})
 
 router.post('/login', l.searchMatricula, l.incrementAttempt, l.checkFirstAccess, l.changeSenhaBecauseTime, l.getFunctionality, l.getBudgets, l.clearAttempt, function (req, res, next){
   console.log('___')

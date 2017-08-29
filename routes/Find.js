@@ -43,10 +43,10 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   req.findEventByCode.end = moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm')
   req.findEventByCode.LeavingFromEvent = moment(req.findEventByCode.LeavingFromEvent).format('DD/MM/YYYY HH:mm')
 
-  req.findEventByCode.TotalFinalProd = req.findEventByCode.products.reduce((acc,ele)=> acc + (ele.Amount * ele.Price * 1.14),0)
+  req.findEventByCode.TotalFinalProd = req.findEventByCode.products.reduce((acc,ele)=> acc + (ele.Amount * ele.Price),0)
   req.findEventByCode.TotalFinalProd = req.findEventByCode.TotalFinalProd.toFixed(2)
 
-  req.findEventByCode.products.map((e) => e.TotalProd = (e.TotalProd * 1.14).toFixed(2))
+  req.findEventByCode.products.map((e) => e.TotalProd = (e.TotalProd).toFixed(2))
 
   req.findEventByCode.guests.map(e => {
     e.Type = Util.toTitleCase(e.Type)
@@ -65,10 +65,10 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   req.findEventByCode.title = Util.toTitleCase(req.findEventByCode.title)
   req.findEventByCode.LocationEvent = Util.toTitleCase(req.findEventByCode.LocationEvent)
 
-  req.findEventByCode.TotalFinalProd = req.findEventByCode.products.reduce((acc,ele)=> acc + (ele.Amount * ele.Price * 1.14),0)
+  req.findEventByCode.TotalFinalProd = req.findEventByCode.products.reduce((acc,ele)=> acc + (ele.Amount * ele.Price),0)
   req.findEventByCode.TotalFinalProd = req.findEventByCode.TotalFinalProd.toFixed(2)
 
-  req.findEventByCode.products.map((e) => e.TotalProd = (e.TotalProd * 1.14).toFixed(2))
+  req.findEventByCode.products.map((e) => e.TotalProd = (e.TotalProd).toFixed(2))
 
   req.findEventByCode.guests.map(e => {
     e.Type = Util.toTitleCase(e.Type)

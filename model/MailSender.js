@@ -188,12 +188,12 @@ function MailSender(){
             }else{
               let totalProduct = 0
               eventFinded.products.map(function(e){
-                totalProduct += (e.Amount * e.Price * 1.14)
+                totalProduct += (e.Amount * e.Price)
                 $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
                                             '<td style="border:1px solid black;padding-left:3px;">'+ e.ProductNameEnglish + '/' + e.ProductNamePort + ' - ' + e.UnitInEnglish + '/' + e.UnitInPort +'</td>'+
                                             '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Amount +'</td>'+
                                             '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Price +'</td>'+
-                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ (e.Amount * e.Price * 1.14).toFixed(2) +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ (e.Amount * e.Price).toFixed(2) +'</td>'+
                                           '</tr>')
               })
               $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
@@ -300,12 +300,12 @@ function MailSender(){
             }else{
               let totalProduct = 0
               eventFinded.products.map(function(e){
-                totalProduct += (e.Amount * e.Price * 1.14)
+                totalProduct += (e.Amount * e.Price)
                 $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
                                             '<td style="border:1px solid black;padding-left:3px;">'+ e.ProductNameEnglish + '/' + e.ProductNamePort + ' - ' + e.UnitInEnglish + '/' + e.UnitInPort +'</td>'+
                                             '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Amount +'</td>'+
                                             '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Price +'</td>'+
-                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ (e.Amount * e.Price * 1.14).toFixed(2) +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ (e.Amount * e.Price).toFixed(2) +'</td>'+
                                           '</tr>')
               })
               $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+

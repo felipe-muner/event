@@ -56,7 +56,7 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
   req.findEventByCode.guests.map((e) => e.Type = Util.toTitleCase(e.Type))
   req.findEventByCode.guests.map((e) => e.NameGuest = Util.toTitleCase(e.NameGuest))
   req.findEventByCode.TotalGeralProduct = req.findEventByCode.products.reduce((acc,ele) => acc + (ele.Price * ele.Amount),0)
-  req.findEventByCode.TotalGeralProduct = (req.findEventByCode.TotalGeralProduct * 1.14).toFixed(2)
+  req.findEventByCode.TotalGeralProduct = (req.findEventByCode.TotalGeralProduct).toFixed(2)
   res.json(req.findEventByCode)
 }).get('/downloadPDF', f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, HtmlPDF.genPDFInternal)
 

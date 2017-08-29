@@ -507,7 +507,7 @@
 
       let sum = 0
       $('.totalProduct').each(function(){
-        sum += (parseFloat($(this).text()) * 1.14)
+        sum += (parseFloat($(this).text()))
       })
 
       if ($('#id_budget').find(":selected").data('saldo') < sum) {
@@ -531,7 +531,7 @@
     function updateValueAmont(el){
       let newValue = parseInt($(el).val()) * parseFloat($(el).closest('tr').data('price-prod'))
       if($(el).val() === '') newValue = 0
-      $(el).closest('tr').find('.totalProduct').text((newValue * 1.14).toFixed(2))
+      $(el).closest('tr').find('.totalProduct').text((newValue).toFixed(2))
       $(el).closest('tr').data('qtd', parseInt($(el).val()))
 
       let sum = 0;

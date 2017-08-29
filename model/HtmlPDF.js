@@ -51,12 +51,12 @@ function HtmlPDF(){
 
             //prod
             let products = req.findEventByCode.products.reduce(function(acc,ele){
-              acc.total = acc.total + (ele.Price * ele.Amount * 1.14)
+              acc.total = acc.total + (ele.Price * ele.Amount)
               acc.tabelaProd = acc.tabelaProd + '<tr style="line-height: 15px;">'+
                                         '  <td style="border:1px solid black;">'+ ele.ProductNameEnglish + '/' + ele.ProductNamePort + '(' + ele.UnitInEnglish + '/' + ele.UnitInPort + ')' + '</td>'+
                                         '  <td style="padding-right:3px;border:1px solid black;text-align:right;">'+ ele.Amount + '</td>'+
                                           '<td style="padding-right:3px;border:1px solid black;text-align:right;">'+ ele.Price.toFixed(2) +' </td>'+
-                                          '<td style="padding-right:3px;border:1px solid black;text-align:right;">'+ (ele.Price * ele.Amount * 1.14).toFixed(2) +'</td>'+
+                                          '<td style="padding-right:3px;border:1px solid black;text-align:right;">'+ (ele.Price * ele.Amount).toFixed(2) +'</td>'+
                                         '</tr>'
               return acc
             },{tabelaProd:'',total:0})
@@ -152,12 +152,12 @@ function HtmlPDF(){
 
             //prod
             let products = req.findEventByCode.products.reduce(function(acc,ele){
-              acc.total = acc.total + (ele.Price * ele.Amount * 1.14)
+              acc.total = acc.total + (ele.Price * ele.Amount)
               acc.tabelaProd = acc.tabelaProd + '<tr style="line-height: 15px;">'+
                                         '  <td style="border:1px solid black;">'+ ele.ProductNameEnglish + '/' + ele.ProductNamePort + '(' + ele.UnitInEnglish + '/' + ele.UnitInPort + ')' + '</td>'+
                                         '  <td style="padding-right:3px;border:1px solid black;text-align:right;">'+ ele.Amount + '</td>'+
                                           '<td style="padding-right:3px;border:1px solid black;text-align:right;">'+ ele.Price.toFixed(2) +' </td>'+
-                                          '<td style="padding-right:3px;border:1px solid black;text-align:right;">'+ (ele.Price * ele.Amount * 1.14).toFixed(2) +'</td>'+
+                                          '<td style="padding-right:3px;border:1px solid black;text-align:right;">'+ (ele.Price * ele.Amount).toFixed(2) +'</td>'+
                                         '</tr>'
               return acc
             },{tabelaProd:'',total:0})
