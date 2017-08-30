@@ -47,6 +47,8 @@ function MailSender(){
   }
 
   this.finishEvent = function(eventFinded){
+
+
     console.log('______typerota')
     console.log(eventFinded.typeRoute)
     console.log('______typerota')
@@ -85,13 +87,19 @@ function MailSender(){
             if(eventFinded.products.length === 0){
               $('#tableProducts').append('<tr><td style="text-align:center;" colspan="4">Don\'t have products.</td></tr>')
             }else{
+              let total = 0
               eventFinded.products.map(function(e){
+                total += (e.Price * e.UsedAmount)
                 $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
                                             '<td style="border:1px solid black;padding-left:3px;">'+ e.ProductNameEnglish + '/' + e.ProductNamePort + ' - ' + e.UnitInEnglish + '/' + e.UnitInPort +'</td>'+
-                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.UsedAmount +'</td>'+
-                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Amount +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.Price.toFixed(2) +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ e.UsedAmount + ' / ' + e.Amount +'</td>'+
+                                            '<td style="border:1px solid black;padding-right:3px;text-align:right;">'+ (e.Price * e.UsedAmount).toFixed(2) +'</td>'+
                                           '</tr>')
               })
+              $('#tableProducts').append('<tr style="border-bottom:1px solid black;">'+
+                                          '<td colspan="5" style="text-align:right;">'+ total.toFixed(2) +'</td>'+
+                                         '</tr>')
             }
 
 
