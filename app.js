@@ -17,17 +17,6 @@ var connPurchasing = require('./conn-purchasing');
 conn.init()
 connPurchasing.init()
 
-var index = require('./routes/index');
-var createInternalEvent = require('./routes/InternalEvent');
-var createExternalEvent = require('./routes/ExternalEvent');
-var finishEvent = require('./routes/finishEvent');
-var menuItem = require('./routes/menuItem');
-var manageProfile = require('./routes/manage-profile');
-var approve = require('./routes/Approve');
-var find = require('./routes/Find');
-var myEvent = require('./routes/MyEvent');
-var user = require('./routes/user');
-
 var app = express()
 
 app.use(helmet())
@@ -46,16 +35,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSession({secret:'e2r3$r!q0oIl', saveUninitialized:false, resave:false, name:'event'}));
 
-app.use('/', index);
-app.use('/manage-profile', manageProfile);
-app.use('/internal-event', createInternalEvent);
-app.use('/external-event', createExternalEvent);
-app.use('/finish-event', finishEvent);
-app.use('/menu-item', menuItem);
-app.use('/user', user);
-app.use('/approve', approve);
-app.use('/find', find);
-app.use('/my-event', myEvent);
+app.use('/', require('./routes/index'));
+app.use('/manage-profile', require('./routes/manage-profile'));
+app.use('/internal-event', require('./routes/InternalEvent'));
+app.use('/external-event', require('./routes/ExternalEvent'));
+app.use('/finish-event', require('./routes/finishEvent'));
+app.use('/menu-item', require('./routes/menuItem'));
+app.use('/user', require('./routes/user'));
+app.use('/approve', require('./routes/Approve'));
+app.use('/find', require('./routes/Find'));
+app.use('/my-event', require('./routes/MyEvent'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -66,7 +55,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  
+
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
