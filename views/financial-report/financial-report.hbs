@@ -1,0 +1,56 @@
+<div class="row">
+  <form id="formReport">
+    <div class="col-sm-6">
+      <select id="id_budget" name="id_budget[]" style="width:100%;" multiple>
+        <option value="">SELECT THE BUDGETs</option>
+        {{#each allBudgets}}
+          <option data-setor="{{setor}}" data-grupo="{{grupo}}" data-conta="{{conta}}" data-ncont="{{nomecont}}" data-saldo="{{saldo}}" value="{{id_orca}}">{{pad setor 3 0}} {{pad grupo 3 0}} {{conta}} {{ncont}} - R${{addDecimalCases saldo}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="col-sm-2">
+      <input type="date" name="startDate" id="startDate">
+    </div>
+    <div class="col-sm-2">
+      <input type="date" name="endDate" id="endDate">
+    </div>
+    <div class="col-sm-1">
+      <input type="submit" name="" value="Generate Report" class="btn btn-success btn-xs">
+    </div>
+  </form>
+</div>
+
+
+{{#section 'script'}}
+  <script type="text/javascript">
+    $(document).ready(function(e){
+      $("#id_budget").select2({
+        placeholder:"Select the budgets"
+      })
+      $('#startDate').val(moment().startOf('month').format('YYYY-MM-DD'))
+      $('#endDate').val(moment().endOf('month').format('YYYY-MM-DD'))
+    })
+
+    $('#formReport').submit(function(e){
+      console.log(e)
+      e.preventDefault()
+      debugger
+
+
+
+      $.ajax({
+        url: '/financial-report/generate-report',
+        type: 'POST',
+        data: $(this).serializeArray(),
+        dataType:'json',
+        success: function(data) {
+
+        }
+      })
+    })
+
+    // 57 E2FB 913
+    // 58 0E2R 916
+    // 59 RFA4 815
+  </script>
+{{/section}}

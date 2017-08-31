@@ -27,6 +27,31 @@ function Login(){
     }
   }
 
+  this.getAllBudgets = function(req, res, next){
+    connPurchasing.acquire(function(err,con){
+      con.query('SELECT '+
+                  'o.id_orca, '+
+                  'o.setor, '+
+                  'o.grupo, '+
+                  'o.conta, '+
+                  'o.nomecont, '+
+                  'o.saldo '+
+                  'FROM '+
+                  'orcamento AS o '+
+                  'ORDER BY o.setor, o.grupo, o.conta', function(err, budgets) {
+        con.release()
+        if(err){
+          console.log(err);
+          res.render('error', { error: err } )
+        }else{
+          console.log(budgets);
+          req.allBudgets = budgets
+          next()
+        }
+      })
+    })
+  }
+
   this.getBudgets = function(req, res, next){
     console.log();
     if (req.userOkpassOk) {
@@ -62,7 +87,7 @@ function Login(){
                       'WHERE '+
                       'u.ID_USER = ?', [req.foundUser.Purchasing_ID], function(err, budgets) {
             con.release()
-            // console.log('BUDGETS ASSOCIADOS: ' + this.sql);
+            console.log('BUDGETS ASSOCIADOS: ' + this.sql);
             // console.log('BUDGETS ASSOCIADOS: ' + budgets);
             req.budgets = budgets
             next()
