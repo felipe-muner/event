@@ -7,6 +7,7 @@ const fe = require(process.env.PWD + '/model/FinishEvent')
 const myevent = require(process.env.PWD + '/model/MyEvent')
 const m = require(process.env.PWD + '/model/MailSender')
 const f = require(process.env.PWD + '/model/Find')
+const fr = require(process.env.PWD + '/model/FinancialReport')
 const g = require(process.env.PWD + '/model/Guest')
 const mi = require(process.env.PWD + '/model/MenuItem')
 const l = require(process.env.PWD + '/model/Login')
@@ -21,9 +22,16 @@ router.get('/', l.getAllBudgets, function(req, res, next) {
     sess: req.session,
     allBudgets: req.allBudgets
   })
-}).post('/generate-report', function(req,res,next){
-  console.log('entrei');
-  console.log(req.body);
+}).post('/generate-report', fr.getDistinctBudget, fr.appendEventToBudget, fr.appendProductToEvent, function(req,res,next){
+  // console.log('entrei')
+  // console.log(req.body)
+  // console.log('hhahahahaha')
+  // console.log('hhahahahaha')
+  // console.log('hhahahahaha')
+  // console.log('hhahahahaha')
+  // console.log('hhahahahaha')
+
+  m.financialReport(req)
   res.json(req.body)
 })
 

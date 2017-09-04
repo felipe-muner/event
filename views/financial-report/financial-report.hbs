@@ -1,7 +1,7 @@
 <div class="row">
   <form id="formReport">
     <div class="col-sm-6">
-      <select id="id_budget" name="id_budget[]" style="width:100%;" multiple>
+      <select id="id_budget" name="id_budget" style="width:100%;" multiple>
         <option value="">SELECT THE BUDGETs</option>
         {{#each allBudgets}}
           <option data-setor="{{setor}}" data-grupo="{{grupo}}" data-conta="{{conta}}" data-ncont="{{nomecont}}" data-saldo="{{saldo}}" value="{{id_orca}}">{{pad setor 3 0}} {{pad grupo 3 0}} {{conta}} {{ncont}} - R${{addDecimalCases saldo}}</option>
@@ -9,10 +9,10 @@
       </select>
     </div>
     <div class="col-sm-2">
-      <input type="date" name="startDate" id="startDate">
+      <input type="date" name="startDate" id="startDate" class="form-control">
     </div>
     <div class="col-sm-2">
-      <input type="date" name="endDate" id="endDate">
+      <input type="date" name="endDate" id="endDate" class="form-control">
     </div>
     <div class="col-sm-1">
       <input type="submit" name="" value="Generate Report" class="btn btn-success btn-xs">
@@ -32,16 +32,19 @@
     })
 
     $('#formReport').submit(function(e){
-      console.log(e)
+
       e.preventDefault()
-      debugger
-
-
+      let arrayIDBudget = $(this).serializeArray().filter((x)=> x.name === 'id_budget')
+      let dataSend = $(this).serializeArray()
+      dataSend.push({
+        name:'arrayIDBudget',
+        value: JSON.stringify(arrayIDBudget)
+      })
 
       $.ajax({
         url: '/financial-report/generate-report',
         type: 'POST',
-        data: $(this).serializeArray(),
+        data: dataSend,
         dataType:'json',
         success: function(data) {
 
