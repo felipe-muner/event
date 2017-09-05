@@ -59,8 +59,6 @@ function MailSender(){
             let contentHTML = ''
 
 
-
-
             req.getDistinctBudget.map(function(budget){
               console.log(budget);
               if(0 !== budget.events.length){
@@ -92,9 +90,16 @@ function MailSender(){
                 contentHTML += '<br>'
               }
             })
+
             console.log('----HTML')
             console.log(contentHTML)
             console.log('----HTML')
+
+
+            $('#startDateReport').text(moment(req.body.startDate).format('DD/MM/YYYY'))
+            $('#endDateReport').text(moment(req.body.endDate).format('DD/MM/YYYY'))
+
+            $('#analitico').html(contentHTML)
 
             let subjectConcat = 'Financial Report '
             let mailOptions = {};
@@ -104,7 +109,7 @@ function MailSender(){
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Financial Report'
             // mailOptions.html = $('body').html()
-            mailOptions.html = contentHTML
+            mailOptions.html = $('body').html()
 
             transporter.sendMail(mailOptions, (error, info) => {
               if (error) {
