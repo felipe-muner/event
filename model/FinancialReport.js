@@ -51,7 +51,7 @@ function FinancialReport(){
     // console.log('---teste');
     async.forEach((req.getDistinctBudget), function (item, callback){
       conn.acquire(function(err,con){
-        con.query('SELECT EventCode FROM Event WHERE Budget_ID = ?', [item.Budget_ID],function(err, result) {
+        con.query('SELECT EventCode, Name FROM Event WHERE Budget_ID = ? AND EventStatus_ID = 3', [item.Budget_ID],function(err, result) {
           con.release();
           if(err){
             console.log(err);
@@ -60,6 +60,7 @@ function FinancialReport(){
             result.map((x)=>{
               item.events.push({
                 "EventCode": x.EventCode,
+                "Name": x.Name,
                 products: []
               })
             })

@@ -56,74 +56,46 @@ function MailSender(){
             const $ = cheerio.load(processedSource)
 
             // console.log(JSON.stringify(req.getDistinctBudget,null,1))
-
             let contentHTML = ''
-            contentHTML += '<div style="width:96%;border:1px solid black;">'
+
+
+
+
             req.getDistinctBudget.map(function(budget){
               console.log(budget);
-              contentHTML += '<div style="font-size:18px;background-color:#00394D;color:white;">' + budget.Budget_ID + '</div>'
-              contentHTML += '<div>'
-              budget.events.map(function(evento, indexEvent){
-                contentHTML += '<table style="width:100%;">'
-                contentHTML += '<tr style="background-color:#0099CC;"><td colspan="4">'+ evento.EventCode +'</td><tr>'
-                contentHTML += '<tr>'
-                  contentHTML += '<td style="width:55%;">Name</td>'
-                  contentHTML += '<td style="width:15%;">Price</td>'
-                  contentHTML += '<td style="width:15%;">Amount Used/Requested</td>'
-                  contentHTML += '<td style="width:15%;">Total</td>'
-                contentHTML += '</tr>'
-                evento.products.map(function(p, indexProduct){
+              if(0 !== budget.events.length){
+                contentHTML += '<table cellspacing="0" style="width:100%;">'
+                contentHTML += '<tr style="background-color:#3F51B5;color:white;"><td colspan="4">'+ budget.Budget_ID +'</td></tr>'
+                budget.events.map(function(evento, indexEvent){
+                  contentHTML += '<tr style="background-color:#00BCD4;color:white;"><td colspan="4">'+ evento.EventCode + ' - ' + evento.Name +'</td></tr>'
+                  contentHTML += '<tr>'
+                    contentHTML += '<td style="width:55%;">Name</td>'
+                    contentHTML += '<td style="">Price</td>'
+                    contentHTML += '<td style="">Amount Used/Requested</td>'
+                    contentHTML += '<td style="">Total</td>'
+                  contentHTML += '</tr>'
+                  let totEvent = 0;
+                  evento.products.map(function(p, indexProduct){
+                    totEvent += (p.UsedAmount * p.Price)
                     contentHTML += '<tr>'
-                      contentHTML += '<td style="width:55%;">'+ p.ProductNameEnglish + '/' + p.ProductNamePort + '('+ p.UnitInEnglish + '/' + p.UnitInPort +')' +'</td>'
-                      contentHTML += '<td style="width:15%;">'+ (p.Price).toFixed(2) +'</td>'
-                      contentHTML += '<td style="width:15%;">'+ p.UsedAmount + '/' + p.Amount +'</td>'
-                      contentHTML += '<td style="width:15%;">'+ (p.Amount * p.Price).toFixed(2) +'</td>'
+                      contentHTML += '<td style="width:55%;">'+ p.ProductNameEnglish + '/' + p.ProductNamePort + ' ('+ p.UnitInEnglish + '/' + p.UnitInPort +')' +'</td>'
+                      contentHTML += '<td style="">'+ (p.Price).toFixed(2) +'</td>'
+                      contentHTML += '<td style="">'+ p.UsedAmount + '/' + p.Amount +'</td>'
+                      contentHTML += '<td style="text-align:right;">'+ (p.UsedAmount * p.Price).toFixed(2) +'</td>'
                     contentHTML += '</tr>'
+                  })
+                  contentHTML += '<tr>'
+                    contentHTML += '<td colspan="4" style="text-align:right;background-color:#EEE;">'+ totEvent.toFixed(2) +'</td>'
+                  contentHTML += '</tr>'
                 })
                 contentHTML += '</table>'
                 contentHTML += '<br>'
-              })
-              contentHTML += '</div>'
-              contentHTML += '<br>'
+              }
             })
-            contentHTML += '</div>'
-            console.log('qwewqewq')
+            console.log('----HTML')
             console.log(contentHTML)
-              // contentHTML += '<div>'
-              // e.events.map(function(f, index, arr){
-              //   console.log(f);
-              //   debugger
-              //   console.log(arr.length);
-              //   if(0 === index){
-              //     contentHTML += '<table>'
-              //     contentHTML += '<tr>'
-              //     contentHTML += '<td colspan="4">' + f.EventCode + '</td>'
-              //     contentHTML += '</tr>'
-              //     contentHTML += '<tr>'
-              //     contentHTML += '<td>Name</td>'
-              //     contentHTML += '<td>Price</td>'
-              //     contentHTML += '<td>Amount Used / Amount Requested</td>'
-              //     contentHTML += '<td>Total</td>'
-              //     contentHTML += '</tr>'
-              //   }
-              //   console.log(f)
-              //   contentHTML += '<tr>'
-              //   contentHTML += '<td>'+ f.ProductNameEnglish + '/' + f.ProductNamePort + '('+ f.UnitInEnglish + '/' + f.UnitInPort +')' +'</td>'
-              //   contentHTML += '<td>'+ f.Price +'</td>'
-              //   contentHTML += '<td>'+ f.UsedAmount + '/' + f.Amount +'</td>'
-              //   contentHTML += '<td>'+ (f.UsedAmount * f.Price).toFixed(2) +'</td>'
-              //   contentHTML += '</tr>'
-              //
-              // })
-              // contentHTML += '</div>'
-            // })
-            // let contentHTML = req.getDistinctBudget.reduce(function(acc, e){
-            //   let currentBudget = '<div>'+ e.Budget_ID +'</div>'
-            //
-            //   return acc + currentBudget
-            // }, '')
+            console.log('----HTML')
 
-            console.log('felipedps');
             let subjectConcat = 'Financial Report '
             let mailOptions = {};
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Financial Report" <noreply@britishschool.g12.br>'
@@ -133,7 +105,7 @@ function MailSender(){
             mailOptions.text = 'Financial Report'
             // mailOptions.html = $('body').html()
             mailOptions.html = contentHTML
-            console.log('wqes');
+
             transporter.sendMail(mailOptions, (error, info) => {
               if (error) {
                 console.log(error);
