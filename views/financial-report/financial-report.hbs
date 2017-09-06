@@ -1,6 +1,6 @@
-<div class="row">
+<div class="row" data-intro="With this functionality, you can generate an e-mail with a resume of all finalized events grouped by desired budget">
   <form id="formReport">
-    <div class="col-sm-6">
+    <div class="col-sm-6" data-intro="Select the desired budgets, empty = all budget">
       <select id="id_budget" name="id_budget" style="width:100%;" multiple>
         <option value="">SELECT THE BUDGETs</option>
         {{#each allBudgets}}
@@ -8,13 +8,13 @@
         {{/each}}
       </select>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-2" data-intro="To insert the first day of search">
       <input type="date" name="startDate" id="startDate" class="form-control">
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-2" data-intro="To insert the last day of search">
       <input type="date" name="endDate" id="endDate" class="form-control">
     </div>
-    <div class="col-sm-1">
+    <div class="col-sm-1" data-intro="Click here to send an e-mail to adm_financeiro@britishschool.g12.br">
       <input type="submit" name="" value="Generate Report" class="btn btn-success btn-xs">
     </div>
   </form>
