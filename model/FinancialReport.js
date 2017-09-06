@@ -80,9 +80,9 @@ function FinancialReport(){
     // console.log(typeof clauseIn)
     let sqlString = ''
     if(0 === req.body.arrayIDBudget.length){
-      sqlString = 'SELECT DISTINCT(Budget_ID) FROM Event WHERE Budget_ID IS NOT NULL AND (StartEvent BETWEEN ? AND ?)'
+      sqlString = 'SELECT DISTINCT(Budget_ID), o.nconta FROM Event Inner Join orcamento o ON Event.Budget_ID = o.id WHERE Budget_ID IS NOT NULL AND (StartEvent BETWEEN ? AND ?)'
     }else{
-      sqlString = 'SELECT DISTINCT(Budget_ID) FROM Event WHERE Budget_ID IS NOT NULL AND (StartEvent BETWEEN ? AND ?) AND Budget_ID IN ('+clauseIn+')'
+      sqlString = 'SELECT DISTINCT(Budget_ID), o.nconta FROM Event Inner Join orcamento o ON Event.Budget_ID = o.id WHERE Budget_ID IS NOT NULL AND (StartEvent BETWEEN ? AND ?) AND Budget_ID IN ('+clauseIn+')'
     }
     conn.acquire(function(err,con){
       // console.log(req.body.arrayIDBudget)
@@ -98,6 +98,7 @@ function FinancialReport(){
           req.getDistinctBudget = result.map((x)=>{
             let a = {}
             a.Budget_ID = x.Budget_ID
+            a.nconta = x.nconta
             a.events = []
             return a
           })

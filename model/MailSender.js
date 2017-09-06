@@ -63,9 +63,9 @@ function MailSender(){
               console.log(budget);
               if(0 !== budget.events.length){
                 contentHTML += '<table cellspacing="0" style="width:100%;">'
-                contentHTML += '<tr style="background-color:#3F51B5;color:white;"><td colspan="4">'+ budget.Budget_ID +'</td></tr>'
+                contentHTML += '<tr style="background-color:#3F51B5;color:white;"><td style="text-align:center;padding:7px;font-weight:bold;" colspan="4">'+ budget.nconta +'</td></tr>'
                 budget.events.map(function(evento, indexEvent){
-                  contentHTML += '<tr style="background-color:#00BCD4;color:white;"><td colspan="4">'+ evento.EventCode + ' - ' + evento.Name +'</td></tr>'
+                  contentHTML += '<tr style="background-color:#00BCD4;color:white;"><td style="padding:5px;" colspan="4">'+ evento.EventCode + ' - ' + evento.Name +'</td></tr>'
                   contentHTML += '<tr>'
                     contentHTML += '<td style="width:55%;">Name</td>'
                     contentHTML += '<td style="">Price</td>'
@@ -83,7 +83,7 @@ function MailSender(){
                     contentHTML += '</tr>'
                   })
                   contentHTML += '<tr>'
-                    contentHTML += '<td colspan="4" style="text-align:right;background-color:#EEE;">'+ totEvent.toFixed(2) +'</td>'
+                    contentHTML += '<td colspan="4" style="font-weight:bold;text-align:right;background-color:#EEE;">'+ totEvent.toFixed(2) +'</td>'
                   contentHTML += '</tr>'
                 })
                 contentHTML += '</table>'
@@ -92,7 +92,7 @@ function MailSender(){
             })
 
             console.log('----HTML')
-            console.log(contentHTML)
+            // console.log(contentHTML)
             console.log('----HTML')
 
 
