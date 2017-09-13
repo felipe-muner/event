@@ -5,14 +5,14 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('orcamento:server');
+var debug = require('debug')('event:server');
 var http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
  const isDeveloping = process.env.NODE_ENV !== 'production'
- const port = isDeveloping ? 3000 : process.env.PORT
+ const port = isDeveloping ? 3002 : process.env.PORT
 
 //var port = normalizePort(process.env.PORT || '3000');
 //var port = normalizePort(process.env.PORT);
