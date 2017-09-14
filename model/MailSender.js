@@ -105,7 +105,7 @@ function MailSender(){
             let mailOptions = {};
             mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Financial Report" <noreply@britishschool.g12.br>'
             // mailOptions.to = listRecipientsEmail
-            mailOptions.to = 'adm_ict@britishschool.g12.br'
+            mailOptions.to = 'adm_ict@britishschool.g12.br,adm_tesouraria@britishschool.g12.br'
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Financial Report'
             // mailOptions.html = $('body').html()
