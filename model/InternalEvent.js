@@ -84,14 +84,17 @@ function InternalEvent(){
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
                 'WHERE '+
                   'e.Type = ? AND '+
+                  'e.EventStatus_ID <> ? AND '+
                   'Date(StartEvent) >= ? AND '+
                   'Date(StartEvent) < ? AND '+
-                  'e.Room_ID =  ?', ['I', req.body.firstDay, req.body.lastDay, req.body.roomID],function(err, result) {
+                  'e.Room_ID =  ?', ['I', 4, req.body.firstDay, req.body.lastDay, req.body.roomID],function(err, result) {
         con.release();
         console.log(this.sql);
         if(err){
+          console.log('err');
           res.render('error', { error: err } );
         }else{
+          console.log('suc');
           // console.log(this.sql);
           req.allEvents = result
           next()
