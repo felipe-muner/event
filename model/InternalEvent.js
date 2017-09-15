@@ -59,6 +59,7 @@ function InternalEvent(){
   // }
 
   this.searchEventTwoDate = function(req, res, next){
+    console.log('qweweqeqw');
     conn.acquire(function(err,con){
       // console.log(req.body);
       con.query('SELECT '+

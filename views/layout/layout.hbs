@@ -100,32 +100,18 @@
 
                 <li role="presentation" class="dropdown">
                   <a class="dropdown-toggle info-number no-loading" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">{{sess.functionalityProfile.length}}</span>
+                    <i class="fa fa-question-circle-o" data-toggle="tooltip" data-placement="bottom" title="Manual"></i>
                   </a>
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                     {{#each sess.functionalityProfile}}
                     <li>
                       <a class="no-loading" href="{{Action}}?manual=true">
-                        <span class="image"><img src="/images/british_logo.png" alt="Profile Image" /></span>
                         <span>
                           <span><i class="fa {{Icon}}"></i> {{Name}}</span>
-                          <!-- <span class="time">3 mins ago</span> -->
                         </span>
-                        <!-- <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span> -->
                       </a>
                     </li>
                     {{/each}}
-                    <!-- <li>
-                      <div class="text-center">
-                        <a class="no-loading">
-                          <strong>See All Alerts</strong>
-                          <i class="fa fa-angle-right"></i>
-                        </a>
-                      </div>
-                    </li> -->
                   </ul>
                 </li>
               </ul>
