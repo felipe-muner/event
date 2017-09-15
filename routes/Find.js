@@ -101,7 +101,7 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   req.findEventByCode.OptionsNeedComputer = [{"opt":""},{"opt":"No"},{"opt":"Yes"}];
   req.findEventByCode.OptionsNeedDataShow = [{"opt":""},{"opt":"No"},{"opt":"Yes"}];
 
-  req.findEventByCode.OptionsDepartureFrom = [{"opt":"Botafogo"},{"opt":"Urca"},{"opt":"Barra"}];
+  req.findEventByCode.OptionsDepartureFrom = [{"opt":""},{"opt":"Botafogo"},{"opt":"Urca"},{"opt":"Barra"}];
 
   req.findEventByCode.OptionsVideoConferenceFrom = [{"opt":""},{"opt":"ADM"},{"opt":"Botafogo"},{"opt":"Urca"},{"opt":"Barra"}];
   req.findEventByCode.OptionsVideoConferenceTo =   [{"opt":""},{"opt":"ADM"},{"opt":"Botafogo"},{"opt":"Urca"},{"opt":"Barra"},{"opt":"All"}];
