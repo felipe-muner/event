@@ -12,17 +12,19 @@ if("true" === getParameterByName('manual', window.location.href )) {
     }).onchange(function(targetElement) {
 
       if('/internal-event' === document.location.pathname && $(targetElement).data('step') > 2){
-        $('#submitFormNewEvent').prop("disabled", true)
+        setTimeout(function(){ $('#submitFormNewEvent').prop("disabled", true) }, 1)
         $('#modalNewEvent').modal('show')
       }else {
+        debugger
         $('#submitFormNewEvent').prop("disabled", false)
         $('#modalNewEvent').modal('hide')
       }
 
       if('/external-event' === document.location.pathname && $(targetElement).data('step') > 5){
-        $('#submitFormNewEvent').prop("disabled", true)
+        setTimeout(function(){ $('#submitFormNewEvent').prop("disabled", true) }, 1)
         $('#modalNewEventExternal').modal('show')
       }else {
+        debugger
         $('#submitFormNewEvent').prop("disabled", false)
         $('#modalNewEventExternal').modal('hide')
       }
