@@ -35,17 +35,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSession({secret:'e2r3$r!q0oIl', saveUninitialized:false, resave:false, name:'event'}));
 
-app.use('/', require('./routes/index'));
-app.use('/manage-profile', require('./routes/manage-profile'));
-app.use('/internal-event', require('./routes/InternalEvent'));
-app.use('/external-event', require('./routes/ExternalEvent'));
-app.use('/finish-event', require('./routes/finishEvent'));
-app.use('/menu-item', require('./routes/menuItem'));
-app.use('/user', require('./routes/user'));
-app.use('/approve', require('./routes/Approve'));
-app.use('/find', require('./routes/Find'));
-app.use('/my-event', require('./routes/MyEvent'));
-app.use('/financial-report', require('./routes/FinancialReport'));
+app.use('/', require('./routes/index'))
+app.use('/manage-profile', require('./routes/manage-profile'))
+app.use('/internal-event', require('./routes/InternalEvent'))
+app.use('/external-event', require('./routes/ExternalEvent'))
+app.use('/finish-event', require('./routes/finishEvent'))
+app.use('/menu-item', require('./routes/menuItem'))
+app.use('/user', require('./routes/user'))
+app.use('/approve', require('./routes/Approve'))
+app.use('/find', require('./routes/Find'))
+app.use('/my-event', require('./routes/MyEvent'))
+app.use('/financial-report', require('./routes/FinancialReport'))
+app.use('/reschedule', require('./routes/Reschedule'))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
