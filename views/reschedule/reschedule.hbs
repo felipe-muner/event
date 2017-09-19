@@ -1,38 +1,103 @@
 {{#if myEvents}}
-
   <div class="row">
     <div class="panel panel-primary">
       <div class="panel-heading">Reschedule</div>
       <div class="panel-body">
-        <div class="row">
-          <div class="col-sm-6">
-            <select class="form-control" name="eventoToReschedule" id="eventoToReschedule" style="width:100%;">
-              <option value="">First, select desired event to reschedule</option>
-              {{#each myEvents}}
-                <option value="{{EventCode}}" data-type="{{Type}}" data-start-time="{{start}}" data-end-time="{{end}}" data-leaving-from-event="{{LeavingFromEvent}}">{{EventCode}} - {{title}}</option>
-              {{/each}}
-            </select>
-          </div>
-          <div class="col-sm-2">
-            <button class="btn btn-info btn-xs" type="button" name="button" onclick="showMoreInfo();" style="height:27px;">More Info</button>
-          </div>
-        </div>
-        <div class="row rescheduleDiv" style="margin-top:10px;display:none;">
-          <div class="dateInformation">
-            <div class="col-sm-2">
-              <label for="">Start Event</label>
-              <input type="datetime-local" name="StartEvent" id="StartEvent">
-            </div>
-            <div class="col-sm-2 divLeavingFromEvent">
-              <label for="">Leaving From Event</label>
-              <input type="datetime-local" name="LeavingFromEvent" id="LeavingFromEvent">
+        <form id="formReschedule">
+          <div class="row">
+            <div class="col-sm-6">
+              <select class="form-control" name="eventoToReschedule" id="eventoToReschedule" style="width:100%;">
+                <option value="">First, select desired event to reschedule</option>
+                {{#each myEvents}}
+                  <option value="{{EventCode}}" data-type="{{Type}}" data-start-time="{{start}}" data-end-time="{{end}}" data-leaving-from-event="{{LeavingFromEvent}}">{{EventCode}} - {{title}}</option>
+                {{/each}}
+              </select>
             </div>
             <div class="col-sm-2">
-              <label for="">End Event</label>
-              <input type="datetime-local" name="EndEvent" id="EndEvent">
+              <button class="btn btn-info btn-xs" type="button" name="button" onclick="showMoreInfo();" style="height:27px;">More Info</button>
             </div>
           </div>
-        </div>
+          <div class="rescheduleDiv" style="display:none;">
+            <!-- <div class="row dateInformation">
+              <div class="col-sm-2">
+                <label for="">Start Event</label>
+                <input type="datetime-local" name="StartEvent" id="StartEvent">
+              </div>
+              <div class="col-sm-2 divLeavingFromEvent">
+                <label for="">Leaving From Event</label>
+                <input type="datetime-local" name="LeavingFromEvent" id="LeavingFromEvent">
+              </div>
+              <div class="col-sm-2">
+                <label for="">End Event</label>
+                <input type="datetime-local" name="EndEvent" id="EndEvent">
+              </div>
+            </div> -->
+            <!-- <div class="row" style="margin-top:10px;">
+              <div class="col-sm-6">
+                <div>
+                  <input type="radio" name="typeSchedule" value="day" id="typeScheduleDay"><label style="margin-left:5px;" for="typeScheduleDay">Daily</label>
+                </div>
+                <div>
+                  <input type="radio" name="typeSchedule" value="week" id="typeScheduleWeek"><label style="margin-left:5px;" for="typeScheduleWeek">Weekly</label>
+                </div>
+                <div>
+                  <input type="radio" name="typeSchedule" value="month" id="typeScheduleMonth"><label style="margin-left:5px;" for="typeScheduleMonth">Monthly</label>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <input type="checkbox" name="" value="">
+                <input type="checkbox" name="" value="">
+                <input type="checkbox" name="" value="">
+                <input type="checkbox" name="" value="">
+                <input type="checkbox" name="" value="">
+                <input type="checkbox" name="" value="">
+                <input type="checkbox" name="" value="">
+              </div>
+            </div> -->
+            <div class="row" style="margin-top:10px;">
+              <div class="col-sm-6">
+                <span style="font-weight:bold;">Every:</span>
+                <label class="checkbox-inline">
+                  <input type="checkbox" value="1" name="dayOfWeek">Monday
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" value="2" name="dayOfWeek">Tuesday
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" value="3" name="dayOfWeek">Wednesday
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" value="4" name="dayOfWeek">Thursday
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" value="5" name="dayOfWeek">Friday
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" value="6" name="dayOfWeek">Saturday
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" value="7" name="dayOfWeek">Sunday
+                </label>
+              </div>
+              <div class="col-sm-2" style="padding-right: 0px;padding-left: 0px;">
+                <span style="font-weight:bold;">From:</span>
+                <input type="date" name="FromDate" id="FromDate" onkeyup="updateMinToDateField(this);" required>
+              </div>
+              <div class="col-sm-2">
+                <span style="font-weight:bold;">To:</span>
+                <input type="date" name="ToDate" id="ToDate" required>
+              </div>
+              <div class="col-sm-2">
+                <button type="submit" name="button" class="btn btn-primary btn-xs">List Dates</button>
+              </div>
+            </div>
+            <div class="row" id="listRangeDate" style="margin-top:10px;">
+              <div class="col-sm-12">
+                listagem completa
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -60,6 +125,11 @@
   <script type="text/javascript">
     $("#eventoToReschedule").select2()
 
+    if( '' !== $("#eventoToReschedule").val() ){
+      debugger
+      $('.rescheduleDiv').css('display', 'block')
+    }
+
     function showMoreInfo(){
       if( '' !== $("#eventoToReschedule").val()){
         moreInformationEvent($("#eventoToReschedule").val())
@@ -67,14 +137,12 @@
     }
 
     $('#eventoToReschedule').change(function(e){
-      debugger
       if('' !== $('#eventoToReschedule').val()){
         $('.rescheduleDiv').css('display','block')
         $('#StartEvent').val('')
         $('#LeavingFromEvent').val('')
         $('#EndEvent').val('')
         if('I' === $('#eventoToReschedule option:selected').data('type')){
-          debugger
           $('#StartEvent').val($('#eventoToReschedule option:selected').data('start-time').replace(' ','T'))
           $('#EndEvent').val($('#eventoToReschedule option:selected').data('end-time').replace(' ','T'))
           $('.divLeavingFromEvent').css('display', 'none')
@@ -104,6 +172,33 @@
        form.submit()
     }
 
+    $('#formReschedule').submit(function(e){
+      e.preventDefault()
+
+      validateCheckBoxWeek()
+
+
+    })
+
+    function validateCheckBoxWeek(){
+      $('input[type=checkbox][name=dayOfWeek]').css('outline','1px solid #FFF')
+      if(0 === $('input[type=checkbox][name=dayOfWeek]:checked').size()){
+        swal({
+          title:"",
+          text:"Please select at least ONE day of week",
+          type: "info"
+        }).then(
+          function () {
+            $('input[type=checkbox][name=dayOfWeek]').css('outline','1px solid red')
+          }
+        )
+        throw new Error('Please select at least ONE day of week')
+      }
+    }
+
+    function updateMinToDateField(el){
+      $('#ToDate').attr('min',moment($(el).val()).add(1, 'days').format('YYYY-MM-DD'))
+    }
 
   </script>
 {{/section}}
