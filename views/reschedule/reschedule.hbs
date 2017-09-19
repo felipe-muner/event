@@ -1,0 +1,62 @@
+{{#if myEvents}}
+  <div class="row">
+    <div class="col-sm-6">
+      <select class="form-control" name="eventoToReschedule" id="eventoToReschedule" style="width:100%;">
+        <option value="">First, select desired evento to reschedule</option>
+        {{#each myEvents}}
+          <option value="{{EventCode}}">{{EventCode}} - {{title}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="col-sm-2">
+      <button class="btn btn-info btn-xs" type="button" name="button" onclick="showMoreInfo();" style="height:27px;">More Info</button>
+    </div>
+  </div>
+{{else}}
+  <div class="row">
+    <div class="alert alert-danger" role="alert">
+      <strong>You don't have any created event.</strong> First, create a new event.
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <a href="/internal-event">
+        <button type="button" class="btn btn-primary">Create Internal Event</button>
+      </a>
+    </div>
+    <div class="col-sm-3">
+      <a href="/external-event">
+        <button type="button" class="btn btn-primary">Create External Event</button>
+      </a>
+    </div>
+  </div>
+{{/if}}
+
+{{#section 'script'}}
+  <script type="text/javascript">
+    $("#eventoToReschedule").select2()
+
+    function showMoreInfo(){
+      if( '' !== $("#eventoToReschedule").val()){
+        moreInformationEvent($("#eventoToReschedule").val())
+      }
+    }
+
+    function moreInformationEvent(ecode){
+       let form = document.createElement("form")
+       form.method = "POST"
+       form.action = "/find/search-event-by-code"
+
+       var campo1 = document.createElement("input")
+       campo1.name= 'EventCode'
+       campo1.value= ecode
+
+       form.appendChild(campo1)
+       document.body.appendChild(form)
+
+       form.submit()
+    }
+
+
+  </script>
+{{/section}}

@@ -15,8 +15,11 @@ const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
-router.get('/', myevent.getMyEvent, function(req, res, next) {
-  res.json({"idade":10})
+router.get('/', f.myEvents, function(req, res, next) {
+  res.render('reschedule/reschedule',{
+    sess: req.session,
+    myEvents:req.myEvents
+  })
 })
 
 module.exports = router;
