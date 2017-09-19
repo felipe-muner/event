@@ -88,7 +88,7 @@
                 <input type="date" name="ToDate" id="ToDate" required>
               </div>
               <div class="col-sm-2">
-                <button type="submit" name="button" class="btn btn-primary btn-xs">List Dates</button>
+                <button type="submit" name="button" class="btn btn-primary btn-xs">Generate List of New Event</button>
               </div>
             </div>
             <div class="row" id="listRangeDate" style="margin-top:10px;">
@@ -177,6 +177,11 @@
 
       validateCheckBoxWeek()
 
+      let arrDates = genereateArrayDates()
+
+      // arrDates.map(function(e){
+      //   console.log(e)
+      // })
 
     })
 
@@ -184,9 +189,9 @@
       $('input[type=checkbox][name=dayOfWeek]').css('outline','1px solid #FFF')
       if(0 === $('input[type=checkbox][name=dayOfWeek]:checked').size()){
         swal({
-          title:"",
-          text:"Please select at least ONE day of week",
-          type: "info"
+          title: "",
+          text: "Please select at least ONE day of week",
+          type: "error"
         }).then(
           function () {
             $('input[type=checkbox][name=dayOfWeek]').css('outline','1px solid red')
@@ -198,6 +203,15 @@
 
     function updateMinToDateField(el){
       $('#ToDate').attr('min',moment($(el).val()).add(1, 'days').format('YYYY-MM-DD'))
+    }
+
+    function genereateArrayDates(){
+      let a = moment($('#FromDate').val())
+      let b = moment($('#ToDate').val())
+      debugger
+      for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days')) {
+        console.log(m._d + '-' + m.day())
+      }
     }
 
   </script>
