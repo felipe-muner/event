@@ -69,7 +69,7 @@
                 <button type="submit" name="button" class="btn btn-primary btn-xs">Generate List of New Event</button>
               </div>
             </div>
-            <div class="row" id="listRangeDate" style="margin-top:10px;">
+            <div class="row" id="divRangeDate" style="margin-top:10px;display:none;">
               <div class="col-sm-12">
                 <div class="panel panel-primary">
                   <div class="panel-heading">
@@ -86,7 +86,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="panel-body" id="listDesiredDates" style="display:none;">
+                  <div class="panel-body" id="listDesiredDates">
                   </div>
                 </div>
               </div>
@@ -218,8 +218,7 @@
           })
 
       console.log(arrayDatesDesired)
-
-      $('#listDesiredDates').css('display','block')
+      $('#divRangeDate').css('display','block')
       if(0 === arrayDatesDesired.length){
         let msgZeroData = '<div class="alert alert-danger" style="margin-bottom:0px;">'+
           '<strong>No dates!</strong> Please, make a valid filter.'
