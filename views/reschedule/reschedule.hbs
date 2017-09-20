@@ -1,15 +1,15 @@
-{{#if myEvents}}
+{{#if myInternalEvents}}
   <div class="row">
     <div class="panel panel-primary">
-      <div class="panel-heading">Reschedule</div>
+      <div class="panel-heading">Reschedule Internal Event</div>
       <div class="panel-body">
         <form id="formReschedule">
           <div class="row">
             <div class="col-sm-6">
               <select class="form-control" name="eventoToReschedule" id="eventoToReschedule" style="width:100%;">
                 <option value="">First, select desired event to reschedule</option>
-                {{#each myEvents}}
-                  <option value="{{EventCode}}" data-type="{{Type}}" data-start-time="{{start}}" data-end-time="{{end}}" data-leaving-from-event="{{LeavingFromEvent}}">{{EventCode}} - {{title}}</option>
+                {{#each myInternalEvents}}
+                  <option value="{{EventCode}}" data-type="{{Type}}" data-start-time="{{start}}" data-end-time="{{end}}" data-leaving-from-event="{{LeavingFromEvent}}" data-room-name="{{RoomName}}">{{EventCode}} - {{title}}</option>
                 {{/each}}
               </select>
             </div>
@@ -18,42 +18,20 @@
             </div>
           </div>
           <div class="rescheduleDiv" style="display:none;">
-            <!-- <div class="row dateInformation">
+            <div class="row">
               <div class="col-sm-2">
-                <label for="">Start Event</label>
-                <input type="datetime-local" name="StartEvent" id="StartEvent">
-              </div>
-              <div class="col-sm-2 divLeavingFromEvent">
-                <label for="">Leaving From Event</label>
-                <input type="datetime-local" name="LeavingFromEvent" id="LeavingFromEvent">
+                <label for="StartEvent">Start Event</label>
+                <input type="datetime-local" name="StartEvent" id="StartEvent" class="form-control" disabled>
               </div>
               <div class="col-sm-2">
-                <label for="">End Event</label>
-                <input type="datetime-local" name="EndEvent" id="EndEvent">
+                <label for="EndEvent">End Event</label>
+                <input type="datetime-local" name="EndEvent" id="EndEvent" class="form-control" disabled>
               </div>
-            </div> -->
-            <!-- <div class="row" style="margin-top:10px;">
-              <div class="col-sm-6">
-                <div>
-                  <input type="radio" name="typeSchedule" value="day" id="typeScheduleDay"><label style="margin-left:5px;" for="typeScheduleDay">Daily</label>
-                </div>
-                <div>
-                  <input type="radio" name="typeSchedule" value="week" id="typeScheduleWeek"><label style="margin-left:5px;" for="typeScheduleWeek">Weekly</label>
-                </div>
-                <div>
-                  <input type="radio" name="typeSchedule" value="month" id="typeScheduleMonth"><label style="margin-left:5px;" for="typeScheduleMonth">Monthly</label>
-                </div>
+              <div class="col-sm-4">
+                <label for="RoomName">Room</label>
+                <input type="text" name="RoomName" id="RoomName" class="form-control" disabled>
               </div>
-              <div class="col-sm-3">
-                <input type="checkbox" name="" value="">
-                <input type="checkbox" name="" value="">
-                <input type="checkbox" name="" value="">
-                <input type="checkbox" name="" value="">
-                <input type="checkbox" name="" value="">
-                <input type="checkbox" name="" value="">
-                <input type="checkbox" name="" value="">
-              </div>
-            </div> -->
+            </div>
             <div class="row" style="margin-top:10px;">
               <div class="col-sm-6">
                 <span style="font-weight:bold;">Every:</span>
@@ -76,7 +54,7 @@
                   <input type="checkbox" value="6" name="dayOfWeek">Saturday
                 </label>
                 <label class="checkbox-inline">
-                  <input type="checkbox" value="7" name="dayOfWeek">Sunday
+                  <input type="checkbox" value="0" name="dayOfWeek">Sunday
                 </label>
               </div>
               <div class="col-sm-2" style="padding-right: 0px;padding-left: 0px;">
@@ -87,13 +65,30 @@
                 <span style="font-weight:bold;">To:</span>
                 <input type="date" name="ToDate" id="ToDate" required>
               </div>
-              <div class="col-sm-2">
+              <div class="col-sm-2 text-right">
                 <button type="submit" name="button" class="btn btn-primary btn-xs">Generate List of New Event</button>
               </div>
             </div>
             <div class="row" id="listRangeDate" style="margin-top:10px;">
               <div class="col-sm-12">
-                listagem completa
+                <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <div class="row">
+                      <div class="col-sm-8">
+                        <div style="margin-top:3px;">
+                          New desired dates
+                        </div>
+                      </div>
+                      <div class="col-sm-4 text-right">
+                        <div>
+                          <button type="button" name="button" class="btn btn-success btn-xs">Confirm Creation</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-body" id="listDesiredDates" style="display:none;">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -145,6 +140,7 @@
         if('I' === $('#eventoToReschedule option:selected').data('type')){
           $('#StartEvent').val($('#eventoToReschedule option:selected').data('start-time').replace(' ','T'))
           $('#EndEvent').val($('#eventoToReschedule option:selected').data('end-time').replace(' ','T'))
+          $('#RoomName').val($('#eventoToReschedule option:selected').data('room-name'))
           $('.divLeavingFromEvent').css('display', 'none')
         }else{
           $('#StartEvent').val($('#eventoToReschedule option:selected').data('start-time').replace(' ','T'))
@@ -179,9 +175,6 @@
 
       let arrDates = genereateArrayDates()
 
-      // arrDates.map(function(e){
-      //   console.log(e)
-      // })
 
     })
 
@@ -206,13 +199,56 @@
     }
 
     function genereateArrayDates(){
+
+      let arrayWeekDay = []
+      $("input[type=checkbox][name=dayOfWeek]:checked").each(function(){
+        arrayWeekDay.push(parseInt($(this).val()))
+      })
+
       let a = moment($('#FromDate').val())
       let b = moment($('#ToDate').val())
-      debugger
-      for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days')) {
-        console.log(m._d + '-' + m.day())
-      }
-    }
 
+      let arrayDatesDesired = []
+      for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days'))
+        if( arrayWeekDay.includes(m.day()) )
+          arrayDatesDesired.push({
+              "dateDefault": m.format('YYYY-MM-DD'),
+              "dateFormated": m.format('DD/MM/YYYY'),
+              "weekDay": convertToDayString(m.day())
+          })
+
+      console.log(arrayDatesDesired)
+
+      $('#listDesiredDates').css('display','block')
+      if(0 === arrayDatesDesired.length){
+        let msgZeroData = '<div class="alert alert-danger" style="margin-bottom:0px;">'+
+          '<strong>No dates!</strong> Please, make a valid filter.'
+        '</div>'
+        $('#listDesiredDates').html(msgZeroData)
+      }else{
+        $('#listDesiredDates').empty()
+        $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
+        arrayDatesDesired.map(function(e){
+          $('#listDesiredDates ul').append('<li data-date-default="'+ e.dateDefault +'">'+
+            e.dateFormated  +
+          '</li>')
+        })
+      }
+
+    }
+    $('#FromDate').val('2017-09-01')
+    $('#ToDate').val('2017-09-10')
+
+    function convertToDayString(numberDay){
+      let weekday = []
+      weekday[0] =  "Sunday";
+      weekday[1] =  "Monday";
+      weekday[2] =  "Tuesday";
+      weekday[3] =  "Wednesday";
+      weekday[4] =  "Thursday";
+      weekday[5] =  "Friday";
+      weekday[6] =  "Saturday";
+      return weekday[numberDay]
+    }
   </script>
 {{/section}}
