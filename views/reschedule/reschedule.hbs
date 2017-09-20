@@ -121,7 +121,6 @@
     $("#eventoToReschedule").select2()
 
     if( '' !== $("#eventoToReschedule").val() ){
-      debugger
       $('.rescheduleDiv').css('display', 'block')
     }
 
@@ -228,6 +227,8 @@
         $('#listDesiredDates').empty()
         $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
         arrayDatesDesired.map(function(e){
+          e.dateDefault = e.dateDefault + ' ' + $('#StartEvent').val().substr($('#StartEvent').val().length - 5)
+          e.dateFormated = e.dateFormated +
           $('#listDesiredDates ul').append('<li data-date-default="'+ e.dateDefault +'">'+
             e.dateFormated  +
           '</li>')
