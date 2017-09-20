@@ -180,19 +180,11 @@ function Find(){
           console.log(err);
           res.render('error', { error: err } );
         }else{
-          // console.log('_________');
-          // console.log('_________');
-          // console.log('_________');
-          // console.log(this.sql)
-          // console.log(result[0])
-          // console.log('_________');
-          // console.log('_________');
-          // console.log('_________');
           req.findEventByCode = result[0]
           next()
         }
-      });
-    });
+      })
+    })
   }
 
   this.myEvents = function(req, res, next){

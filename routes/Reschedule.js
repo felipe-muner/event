@@ -8,6 +8,7 @@ const myevent = require(process.env.PWD + '/model/MyEvent')
 const m = require(process.env.PWD + '/model/MailSender')
 const f = require(process.env.PWD + '/model/Find')
 const g = require(process.env.PWD + '/model/Guest')
+const r = require(process.env.PWD + '/model/Reschedule')
 const mi = require(process.env.PWD + '/model/MenuItem')
 const fs = require('fs');
 const moment = require('moment');
@@ -20,8 +21,20 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
     sess: req.session,
     myInternalEvents:req.myInternalEvents
   })
-}).post('/create', function(req, res, next) {
+}).post('/create', r.searchEventByCode, r.guestOfEvent, r.productOfEvent, function(req, res, next) {
+  console.log('________BODY')
   console.log(req.body)
+  console.log('________BODY')
+  console.log('____EVENT SEARCHED')
+  console.log(req.findEventByCode)
+  console.log('____EVENT SEARCHED')
+  console.log('____GUEST SEARCHED')
+  console.log(req.guests)
+  console.log('____GUEST SEARCHED')
+  console.log('____PRODUTO SEARCHED')
+  console.log(req.products)
+  console.log('____PRODUTO SEARCHED')
+
   res.json(
     {"nome":"felipe"}
   )

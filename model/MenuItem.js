@@ -174,8 +174,8 @@ function MenuItem(){
           req.findEventByCode.products = result
           next()
         }
-      });
-    });
+      })
+    })
   }
 }
 

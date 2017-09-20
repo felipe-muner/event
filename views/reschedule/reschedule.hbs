@@ -214,7 +214,9 @@
         if( arrayWeekDay.includes(m.day()) )
           arrayDatesDesired.push({
               "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
+              "dateDefaultStartDiv": m.format('YYYY-MM-DD') + 'T' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
               "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
+              "dateDefaultEndDiv": m.format('YYYY-MM-DD') + 'T' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
               "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
               "weekDay": convertToDayString(m.day())
           })
@@ -269,16 +271,30 @@
         )
         throw new Error('No dates selected')
       }else{
+
+        let dataSend = {
+          "EventCode" : parseInt( $('#eventoToReschedule option:selected').val() ),
+          "desiredDate" : JSON.stringify(serializeDesiredDate())
+        }
+
         $.ajax({
           url: '/reschedule/create',
           type: 'POST',
           data: dataSend,
           dataType:'json',
           success: function(data) {
-
+            console.log(data)
           }
         })
       }
+    }
+
+    function serializeDesiredDate(){
+      let arrayDesiredDate = []
+      $('.newEvent').each(function(e){
+        arrayDesiredDate.push($(this).data())
+      })
+      return arrayDesiredDate
     }
 
   </script>
