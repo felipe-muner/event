@@ -21,19 +21,19 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
     sess: req.session,
     myInternalEvents:req.myInternalEvents
   })
-}).post('/create', r.searchEventByCode, r.guestOfEvent, r.productOfEvent, function(req, res, next) {
+}).post('/create', r.convSerializedToObj, r.checkAvailability, r.searchEventByCode, r.guestOfEvent, r.productOfEvent, function(req, res, next) {
   console.log('________BODY')
   console.log(req.body)
   console.log('________BODY')
-  console.log('____EVENT SEARCHED')
-  console.log(req.findEventByCode)
-  console.log('____EVENT SEARCHED')
-  console.log('____GUEST SEARCHED')
-  console.log(req.guests)
-  console.log('____GUEST SEARCHED')
-  console.log('____PRODUTO SEARCHED')
-  console.log(req.products)
-  console.log('____PRODUTO SEARCHED')
+  // console.log('____EVENT SEARCHED')
+  // console.log(req.findEventByCode)
+  // console.log('____EVENT SEARCHED')
+  // console.log('____GUEST SEARCHED')
+  // console.log(req.guests)
+  // console.log('____GUEST SEARCHED')
+  // console.log('____PRODUTO SEARCHED')
+  // console.log(req.products)
+  // console.log('____PRODUTO SEARCHED')
 
   res.json(
     {"nome":"felipe"}

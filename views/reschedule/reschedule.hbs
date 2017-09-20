@@ -214,9 +214,9 @@
         if( arrayWeekDay.includes(m.day()) )
           arrayDatesDesired.push({
               "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
-              "dateDefaultStartDiv": m.format('YYYY-MM-DD') + 'T' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
+              "dateDefaultStartDiv": m.format('YYYY-MM-DD') + ' ' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
               "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
-              "dateDefaultEndDiv": m.format('YYYY-MM-DD') + 'T' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
+              "dateDefaultEndDiv": m.format('YYYY-MM-DD') + ' ' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
               "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
               "weekDay": convertToDayString(m.day())
           })
@@ -235,9 +235,10 @@
 
         $('#listDesiredDates').empty()
         $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
-        arrayDatesDesired.map(function(e){
+        debugger
+        arrayDatesDesired.forEach(function(e){
           $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateDefaultStart +'" data-date-end="'+ e.dateDefaultEnd +'">'+
-            moment(e.dateDefaultStart).format('DD/MM/YYYY HH:mm') + ' -  '  + moment(e.dateDefaultEnd).format('HH:mm') + ' - ' + e.weekDay +
+            moment(e.dateDefaultStartDiv).format('DD/MM/YYYY HH:mm') + ' -  '  + moment(e.dateDefaultEndDiv).format('HH:mm') + ' - ' + e.weekDay +
           '</li>')
         })
       }

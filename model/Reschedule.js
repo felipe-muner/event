@@ -109,7 +109,6 @@ function Reschedule(){
         if(err){
           res.render('error', { error: err } );
         }else{
-          console.log(result)
           req.products = result
           next()
         }
@@ -117,6 +116,15 @@ function Reschedule(){
     })
   }
 
+  this.convSerializedToObj = function(req, res, next){
+    console.log('convSerializedToObj')
+    next()
+  }
+
+  this.checkAvailability = function(req, res, next){
+    console.log('checkAvailability')
+    next()
+  }
 }
 
 module.exports = new Reschedule()
