@@ -20,6 +20,11 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
     sess: req.session,
     myInternalEvents:req.myInternalEvents
   })
+}).post('/create', function(req, res, next) {
+  console.log(req.body)
+  res.json(
+    {"nome":"felipe"}
+  )
 })
 
 module.exports = router;

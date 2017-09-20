@@ -81,7 +81,7 @@
                       </div>
                       <div class="col-sm-2 text-right">
                         <div>
-                          <button type="button" name="button" class="btn btn-success btn-xs btn-block">Confirm Creation</button>
+                          <button onclick="confirmCreation();" type="button" name="button" class="btn btn-success btn-xs btn-block">Confirm Creation</button>
                         </div>
                       </div>
                     </div>
@@ -213,8 +213,8 @@
       for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days'))
         if( arrayWeekDay.includes(m.day()) )
           arrayDatesDesired.push({
-              "dateDefaultStart": m.format('YYYY-MM-DD') + ' ' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
-              "dateDefaultEnd": m.format('YYYY-MM-DD') + ' ' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
+              "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
+              "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
               "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
               "weekDay": convertToDayString(m.day())
           })
@@ -222,6 +222,7 @@
       console.log(arrayDatesDesired)
       $('#divRangeDate').css('display','block')
       if(0 === arrayDatesDesired.length){
+        $('#amountEvent').text(0)
         let msgZeroData = '<div class="alert alert-danger" style="margin-bottom:0px;">'+
           '<strong>No dates!</strong> Please, make a valid filter.'
         '</div>'
@@ -233,8 +234,8 @@
         $('#listDesiredDates').empty()
         $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
         arrayDatesDesired.map(function(e){
-          $('#listDesiredDates ul').append('<li data-date-start="'+ e.dateDefaultStart +'" data-date-end="'+ e.dateDefaultEnd +'">'+
-            e.dateFormated  +
+          $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateDefaultStart +'" data-date-end="'+ e.dateDefaultEnd +'">'+
+            moment(e.dateDefaultStart).format('DD/MM/YYYY HH:mm') + ' -  '  + moment(e.dateDefaultEnd).format('HH:mm') + ' - ' + e.weekDay +
           '</li>')
         })
       }
@@ -254,5 +255,31 @@
       weekday[6] =  "Saturday";
       return weekday[numberDay]
     }
+
+    function confirmCreation(){
+      if( 0 === $('.newEvent').size() ){
+        swal({
+          title: "",
+          text: "No dates selected",
+          type: "error"
+        }).then(
+          function () {
+
+          }
+        )
+        throw new Error('No dates selected')
+      }else{
+        $.ajax({
+          url: '/reschedule/create',
+          type: 'POST',
+          data: dataSend,
+          dataType:'json',
+          success: function(data) {
+
+          }
+        })
+      }
+    }
+
   </script>
 {{/section}}
