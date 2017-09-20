@@ -76,7 +76,7 @@
                     <div class="row">
                       <div class="col-sm-10">
                         <div style="margin-top:3px;">
-                          New desired dates
+                          <span>New desired dates</span> <span class="badge" id="amountEvent"></span>
                         </div>
                       </div>
                       <div class="col-sm-2 text-right">
@@ -132,6 +132,8 @@
 
     $('#eventoToReschedule').change(function(e){
       if('' !== $('#eventoToReschedule').val()){
+        $('#divRangeDate').css('display','none')
+        $('#listDesiredDates').empty()
         $('.rescheduleDiv').css('display','block')
         $('#StartEvent').val('')
         $('#LeavingFromEvent').val('')
@@ -211,8 +213,9 @@
       for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days'))
         if( arrayWeekDay.includes(m.day()) )
           arrayDatesDesired.push({
-              "dateDefault": m.format('YYYY-MM-DD'),
-              "dateFormated": m.format('DD/MM/YYYY'),
+              "dateDefaultStart": m.format('YYYY-MM-DD') + ' ' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
+              "dateDefaultEnd": m.format('YYYY-MM-DD') + ' ' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
+              "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
               "weekDay": convertToDayString(m.day())
           })
 
@@ -224,12 +227,13 @@
         '</div>'
         $('#listDesiredDates').html(msgZeroData)
       }else{
+
+        $('#amountEvent').text(arrayDatesDesired.length)
+
         $('#listDesiredDates').empty()
         $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
         arrayDatesDesired.map(function(e){
-          e.dateDefault = e.dateDefault + ' ' + $('#StartEvent').val().substr($('#StartEvent').val().length - 5)
-          e.dateFormated = e.dateFormated +
-          $('#listDesiredDates ul').append('<li data-date-default="'+ e.dateDefault +'">'+
+          $('#listDesiredDates ul').append('<li data-date-start="'+ e.dateDefaultStart +'" data-date-end="'+ e.dateDefaultEnd +'">'+
             e.dateFormated  +
           '</li>')
         })
