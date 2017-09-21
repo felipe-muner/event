@@ -219,12 +219,12 @@
       for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days')){
         if( arrayWeekDay.includes(m.day()) ){
           arrayDatesDesired.push({
-              "dateDefaultStart": m.format('YYYY-MM-DD'),
-              "dateDefaultEnd": m.format('YYYY-MM-DD'),
+              "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + moment($('#StartEvent').val()).format('HH:mm'),
+              "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' + moment($('#EndEvent').val()).format('HH:mm'),
               "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
               "weekDay": convertToDayString(m.day())
           })
-        }
+        } 
       }
 
       console.log(arrayDatesDesired)

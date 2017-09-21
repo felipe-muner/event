@@ -21,9 +21,12 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
     sess: req.session,
     myInternalEvents:req.myInternalEvents
   })
-}).post('/create', r.convSerializedToObj, r.checkAvailability, r.searchEventByCode, r.guestOfEvent, r.productOfEvent, function(req, res, next) {
+}).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode, r.guestOfEvent, r.productOfEvent, function(req, res, next) {
   console.log('________BODY')
-  console.log(req.body)
+  // console.log(req.body)
+  console.log(req.EventCode)
+  console.log(req.Room_ID)
+  console.log(req.DesiredDate)
   console.log('________BODY')
   // console.log('____EVENT SEARCHED')
   // console.log(req.findEventByCode)

@@ -1,5 +1,5 @@
 const conn = require(process.env.PWD + '/conn');
-
+const async = require('async')
 function Reschedule(){
 
   this.searchEventByCode = function(req, res, next){
@@ -76,7 +76,7 @@ function Reschedule(){
 
   this.guestOfEvent = function(req, res, next){
     conn.acquire(function(err,con){
-      con.query('SELECT Type, NameGuest FROM EventGuest WHERE Event_ID = ?', [req.body.EventCode], function(err, result) {
+      con.query('SELECT Type, NameGuest FROM EventGuest WHERE Event_ID = ?', [req.EventCode], function(err, result) {
         con.release();
         if(err){
           res.render('error', { error: err } );
@@ -104,8 +104,8 @@ function Reschedule(){
                 'Inner Join EventProduct ON EventItem.EventProduct_ID = EventProduct.EventProductID '+
                 'Inner Join EventProductUnit ON EventProduct.Unit = EventProductUnit.EventProductUnitID '+
                 'WHERE '+
-                  'EventItem.Event_ID = ?', [req.body.EventCode], function(err, result) {
-        con.release();
+                  'EventItem.Event_ID = ?', [req.EventCode], function(err, result) {
+        con.release()
         if(err){
           res.render('error', { error: err } );
         }else{
@@ -116,15 +116,47 @@ function Reschedule(){
     })
   }
 
-  this.convSerializedToObj = function(req, res, next){
-    console.log('convSerializedToObj')
+  this.convBodyToReq = function(req, res, next){
+    req.EventCode = req.body.EventCode
+    req.Room_ID = req.body.Room_ID
+    req.DesiredDate = JSON.parse(req.body.desiredDate)
     next()
   }
 
-  this.checkAvailability = function(req, res, next){
-    console.log('checkAvailability')
-    next()
+  this.checkAvailabilityReschedule = function(req, res, next){
+
+    async.forEach((req.DesiredDate), function (item, callback){
+      conn.acquire(function(err,con){
+        con.query('SELECT * FROM Event WHERE Room_ID = ? AND EventStatus_ID <> ? '+
+                  'AND (? BETWEEN StartEvent AND EndEvent ' +
+                    'OR ? BETWEEN StartEvent AND EndEvent ' +
+                    'OR StartEvent BETWEEN ? AND ? ' +
+                    'OR EndEvent BETWEEN ? AND ? ) ORDER BY StartEvent', [parseInt(req.Room_ID), 4, item.dateStart, item.dateEnd, item.dateStart, item.dateEnd, item.dateStart, item.dateEnd], function(err, result) {
+          con.release();
+          if(err){
+            console.log(err);
+            res.render('error', { error: err } );
+          }else{
+            console.log(this.sql)
+            if(0 === result.length){
+              item.Available = true
+            }else{
+              item.Available = result[0]
+            }
+            callback()
+          }
+        })
+      })
+    }, function(err) {
+      next()
+    })
+
   }
+
+
+
+
+
 }
 
 module.exports = new Reschedule()
