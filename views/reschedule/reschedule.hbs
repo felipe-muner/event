@@ -289,8 +289,20 @@
           data: dataSend,
           dataType:'json',
           success: function(data) {
-            console.log('voltei da criacao');
+            $('#listDesiredDates').empty()
+            $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
             console.log(data)
+            data.forEach(function(e){
+              if(e.Available){
+                $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateStart +'" data-date-end="'+ e.dateEnd +'" data-weekday="'+ e.weekday +'" >'+
+                  '<span class="label label-success">Rescheduled</span> - ' + moment(e.dateStart).format('DD/MM/YYYY') + ' - ' + e.weekday +
+                '</li>')
+              }else{
+                $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateStart +'" data-date-end="'+ e.dateEnd +'" data-weekday="'+ e.weekday +'" >'+
+                  '<span class="label label-danger">' + e.EventScheduled.EventCode + '</span> - ' + moment(e.dateStart).format('DD/MM/YYYY') + ' - ' + e.weekday +
+                '</li>')
+              }
+            })
           }
         })
       }

@@ -142,7 +142,8 @@ function Reschedule(){
             if(0 === result.length){
               item.Available = true
             }else{
-              item.Available = result[0]
+              item.Available = false
+              item.EventScheduled = result[0]
             }
             callback()
           }
