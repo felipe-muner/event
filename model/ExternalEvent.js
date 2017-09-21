@@ -88,7 +88,7 @@ function ExternalEvent(){
   }
 
   this.getLastEvent = function(req, res, next){
-    console.log(req.body);
+    console.log(req.body)    
     conn.acquire(function(err,con){
       con.query('SELECT EventID, EventCode FROM event WHERE YEAR(StartEvent) = YEAR(?) order by EventId desc limit 1', [req.body.StartEvent], function(err, result) {
         console.log('______________________________');
@@ -103,8 +103,8 @@ function ExternalEvent(){
           req.nextEventCode = eventCode
           next()
         }
-      });
-    });
+      })
+    })
   }
 
   this.createEvent = function(req, res, next){

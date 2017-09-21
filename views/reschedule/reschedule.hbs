@@ -219,21 +219,21 @@
       for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days')){
         if( arrayWeekDay.includes(m.day()) ){
           arrayDatesDesired.push({
-              "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + moment($('#StartEvent').val()).format('HH:mm'),
-              "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' + moment($('#EndEvent').val()).format('HH:mm'),
-              "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
-              "weekDay": convertToDayString(m.day())
+            "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + moment($('#StartEvent').val()).format('HH:mm'),
+            "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' + moment($('#EndEvent').val()).format('HH:mm'),
+            "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
+            "weekDay": convertToDayString(m.day())
           })
-        } 
+        }
       }
 
-      console.log(arrayDatesDesired)
       $('#divRangeDate').css('display','block')
       if(0 === arrayDatesDesired.length){
         $('#amountEvent').text(0)
         let msgZeroData = '<div class="alert alert-danger" style="margin-bottom:0px;">'+
-          '<strong>No dates!</strong> Please, make a valid filter.'
+          '<strong>No dates!</strong> Please, make a valid filter.'+
         '</div>'
+
         $('#listDesiredDates').html(msgZeroData)
       }else{
 
@@ -241,10 +241,9 @@
 
         $('#listDesiredDates').empty()
         $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
-        debugger
+
         arrayDatesDesired.forEach(function(e){
-          debugger
-          $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateDefaultStart +'" data-date-end="'+ e.dateDefaultEnd +'">'+
+          $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateDefaultStart +'" data-date-end="'+ e.dateDefaultEnd +'" data-weekday="'+ e.weekDay +'" >'+
             e.dateFormated +
           '</li>')
         })
@@ -290,6 +289,7 @@
           data: dataSend,
           dataType:'json',
           success: function(data) {
+            console.log('voltei da criacao');
             console.log(data)
           }
         })

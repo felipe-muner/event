@@ -120,6 +120,7 @@ function Reschedule(){
     req.EventCode = req.body.EventCode
     req.Room_ID = req.body.Room_ID
     req.DesiredDate = JSON.parse(req.body.desiredDate)
+    req.NewEvents = []
     next()
   }
 
@@ -154,8 +155,36 @@ function Reschedule(){
   }
 
 
+  // conn.acquire(function(err,con){
+  //   con.query('', [], function(err, result) {
+  //     con.release();
+  //     if(err){
+  //       console.log(err);
+  //       res.render('error', { error: err } );
+  //     }else{
+  //       console.log(this.sql)
+  //       if(0 === result.length){
+  //         item.Available = true
+  //       }else{
+  //         item.Available = result[0]
+  //       }
+  //       callback()
+  //     }
+  //   })
+  // })
 
-
+  this.createEvent = function(req, res, next){
+    next()
+    // async.forEach((req.DesiredDate), function (item, callback){
+    //   if(true === item.Available){
+    //
+    //   }else{
+    //
+    //   }
+    // }, function(err) {
+    //   next()
+    // })
+  }
 
 }
 

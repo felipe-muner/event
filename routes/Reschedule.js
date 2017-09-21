@@ -21,13 +21,16 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
     sess: req.session,
     myInternalEvents:req.myInternalEvents
   })
-}).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode, r.guestOfEvent, r.productOfEvent, function(req, res, next) {
-  console.log('________BODY')
+}).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode, r.guestOfEvent, r.productOfEvent, r.createEvent, function(req, res, next) {
+
+
+
+
   // console.log(req.body)
-  console.log(req.EventCode)
-  console.log(req.Room_ID)
-  console.log(req.DesiredDate)
-  console.log('________BODY')
+  // console.log(req.EventCode)
+  // console.log(req.Room_ID)
+  // console.log(req.DesiredDate)
+
   // console.log('____EVENT SEARCHED')
   // console.log(req.findEventByCode)
   // console.log('____EVENT SEARCHED')
@@ -38,9 +41,7 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
   // console.log(req.products)
   // console.log('____PRODUTO SEARCHED')
 
-  res.json(
-    {"nome":"felipe"}
-  )
+  res.json(req.DesiredDate)
 })
 
 module.exports = router;
