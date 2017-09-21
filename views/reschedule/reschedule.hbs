@@ -9,7 +9,7 @@
               <select class="form-control" name="eventoToReschedule" id="eventoToReschedule" style="width:100%;">
                 <option value="">First, select desired event to reschedule</option>
                 {{#each myInternalEvents}}
-                  <option value="{{EventCode}}" data-type="{{Type}}" data-start-time="{{start}}" data-end-time="{{end}}" data-leaving-from-event="{{LeavingFromEvent}}" data-room-name="{{RoomName}}">{{EventCode}} - {{title}}</option>
+                  <option value="{{EventCode}}" data-type="{{Type}}" data-start-time="{{start}}" data-end-time="{{end}}" data-leaving-from-event="{{LeavingFromEvent}}" data-room-id="{{Room_ID}}" data-room-name="{{RoomName}}">{{EventCode}} - {{title}}</option>
                 {{/each}}
               </select>
             </div>
@@ -276,6 +276,7 @@
 
         let dataSend = {
           "EventCode" : parseInt( $('#eventoToReschedule option:selected').val() ),
+          "Room_ID": $('#eventoToReschedule option:selected').data('room-id'),
           "desiredDate" : JSON.stringify(serializeDesiredDate())
         }
 
