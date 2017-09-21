@@ -119,6 +119,16 @@
 {{#section 'script'}}
   <script type="text/javascript">
     $("#eventoToReschedule").select2()
+    $('#FromDate').attr('min',moment().format('YYYY-MM-DD'))
+    $('#ToDate').attr('min',moment().add(1, 'days').format('YYYY-MM-DD'))
+
+
+    $('#FromDate').val(moment().format('YYYY-MM-DD'))
+    $('#ToDate').val('2017-10-10')
+
+    function updateMinToDateField(el){
+      $('#ToDate').attr('min',moment($(el).val()).add(1, 'days').format('YYYY-MM-DD'))
+    }
 
     if( '' !== $("#eventoToReschedule").val() ){
       $('.rescheduleDiv').css('display', 'block')
@@ -195,10 +205,6 @@
       }
     }
 
-    function updateMinToDateField(el){
-      $('#ToDate').attr('min',moment($(el).val()).add(1, 'days').format('YYYY-MM-DD'))
-    }
-
     function genereateArrayDates(){
 
       let arrayWeekDay = []
@@ -245,8 +251,6 @@
       }
 
     }
-    $('#FromDate').val('2017-09-01')
-    $('#ToDate').val('2017-09-10')
 
     function convertToDayString(numberDay){
       let weekday = []
