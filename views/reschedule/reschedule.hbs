@@ -210,16 +210,16 @@
       let b = moment($('#ToDate').val())
 
       let arrayDatesDesired = []
-      for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days'))
-        if( arrayWeekDay.includes(m.day()) )
+      for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days')){
+        if( arrayWeekDay.includes(m.day()) ){
           arrayDatesDesired.push({
-              "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
-              "dateDefaultStartDiv": m.format('YYYY-MM-DD') + ' ' + $('#StartEvent').val().substr($('#StartEvent').val().length - 8),
-              "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
-              "dateDefaultEndDiv": m.format('YYYY-MM-DD') + ' ' +  $('#EndEvent').val().substr($('#EndEvent').val().length - 8),
+              "dateDefaultStart": m.format('YYYY-MM-DD'),
+              "dateDefaultEnd": m.format('YYYY-MM-DD'),
               "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
               "weekDay": convertToDayString(m.day())
           })
+        }
+      }
 
       console.log(arrayDatesDesired)
       $('#divRangeDate').css('display','block')
@@ -237,8 +237,9 @@
         $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
         debugger
         arrayDatesDesired.forEach(function(e){
+          debugger
           $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateDefaultStart +'" data-date-end="'+ e.dateDefaultEnd +'">'+
-            moment(e.dateDefaultStartDiv).format('DD/MM/YYYY HH:mm') + ' -  '  + moment(e.dateDefaultEndDiv).format('HH:mm') + ' - ' + e.weekDay +
+            e.dateFormated +
           '</li>')
         })
       }
