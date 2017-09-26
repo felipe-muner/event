@@ -166,7 +166,7 @@ function InternalEvent(){
                   'Inner Join Building AS b ON r.Building_ID = b.BuildingID '+
                   'Inner Join unidades AS u ON b.Site_ID = u.idunidade '+
                 'WHERE '+
-                  'r.Status = 1 '+
+                  'r.Status = 1 AND r.CanEvent = 1 '+
                 'ORDER BY '+
                   'u.idunidade ASC, '+
                   'b.BuildingID ASC, '+
