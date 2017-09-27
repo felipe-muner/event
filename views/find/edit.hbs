@@ -545,7 +545,12 @@
     function serializeTableProduct(){
       let arrayProducts = []
       $('#tableItemEvent tbody tr').not(':last').each(function(e){
-        arrayProducts.push($(this).data())
+        let indexObjeto = arrayProducts.findIndex(x => x.productId === $(this).data('productId'))
+        if(-1 === indexObjeto){
+          arrayProducts.push($(this).data())
+        }else{
+          arrayProducts[indexObjeto].qtd += $(this).data('qtd')
+        }
       })
       return arrayProducts
     }
