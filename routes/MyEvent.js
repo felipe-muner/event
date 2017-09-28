@@ -20,6 +20,7 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
   if(flashMsg) delete req.session.flashMsg
 
   req.allMyEvent.map(e => {
+    e.DataStartOriginal = e.start
     e.pdf = ('I' === e.Type) ? '<a class="no-loading" href="/internal-event/downloadPDF?EventCode='+ e.EventCode +'" target="_blank"><i class="fa fa-file-pdf-o" data-container="body" title="PDF" data-toggle="tooltip" aria-hidden="true"></i></a>' : '<a class="no-loading" href="/external-event/downloadPDF?EventCode='+ e.EventCode +'" target="_blank"><i class="fa fa-file-pdf-o" data-container="body" title="PDF" data-toggle="tooltip" aria-hidden="true"></i></a>'
     e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
@@ -27,9 +28,12 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
     e.start = moment(e.start).format('DD/MM/YYYY HH:mm')
     e.end = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
-    e.btnCancel = (1 === e.EventStatus_ID || 2 === e.EventStatus_ID) ? true : false
-    e.canEdit = (1 === e.EventStatus_ID) ? true : false
+    e.btnCancel = (moment().isBefore(e.DataStartOriginal) && (1 === e.EventStatus_ID || 2 === e.EventStatus_ID)) ? true : false
+    e.canEdit = (moment().isBefore(e.DataStartOriginal) && 1 === e.EventStatus_ID) ? true : false
   })
+
+  console.log(req.allMyEvent)
+
   res.render('my-event/my-event',{
     allMyEvent: req.allMyEvent,
     sess: req.session,
