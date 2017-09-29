@@ -24,7 +24,7 @@ module.exports = {
           .then(function(processedSource) {
             const $ = cheerio.load(processedSource)
             let qs = '?m=' + matricula + '&p=' + newPassword + '&recoveremail=true'
-            $("#linkchangepassword").attr("href", "http://localhost:3002/change-password" + qs)
+            $("#linkchangepassword").attr("href", "http://192.168.4.51:3002/change-password" + qs)
             console.log($('body').html());
             let mailOptions = {};
             mailOptions.from = '"British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
