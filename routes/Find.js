@@ -18,7 +18,15 @@ const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,function(req, res, next) {
   req.lastHundredOccurrence.map(e => {
-    e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
+    console.log(e)
+    console.log('------')
+    if( e.Type === 'I'){
+      e.Type = 'Internal'
+      e.TypeFormatado = 'Internal('+ Util.toTitleCase(e.unidade) +')'
+    }else{
+      e.Type = 'External'
+      e.TypeFormatado = 'External('+e.DepartureFrom+')'
+    }
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
     e.CreatedByName = Util.toTitleCase(e.CreatedByName)
     e.startFormated = moment(e.start).format('DD/MM/YYYY HH:mm')
@@ -80,12 +88,22 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   // console.log(req.body)
 
   req.makeFind.map(e => {
-    e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
+    if( e.Type === 'I'){
+      e.Type = 'Internal'
+      e.TypeFormatado = 'Internal('+ Util.toTitleCase(e.unidade) +')'
+    }else{
+      e.Type = 'External'
+      e.TypeFormatado = 'External('+e.DepartureFrom+')'
+    }
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
     e.CreatedByName = Util.toTitleCase(e.CreatedByName)
     e.startFormated = moment(e.start).format('DD/MM/YYYY HH:mm')
     e.endFormated = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
+
+    console.log(e)
+    console.log('hahahaha-------hahahah')
+
   })
   // console.log(req.makeFind);
   res.json(req.makeFind)
