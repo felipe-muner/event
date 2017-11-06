@@ -453,6 +453,7 @@ function MailSender(){
     filteredList.push(eventFinded.EmailCreateBy)
     filteredList.push(eventFinded.EmailResponsibleBy)
     filteredList.push('adm_ict@britishschool.g12.br')
+    filteredList.push('adm_tesouraria@britishschool.g12.br')
     eventFinded.RecipientsEmail.map(function(e){
       filteredList.push(e.email)
     })
