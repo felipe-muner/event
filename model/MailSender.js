@@ -29,7 +29,7 @@ function MailSender(){
             $("#linkchangepassword").attr("href", "http://192.168.4.51:3002/change-password" + qs)
             console.log($('body').html());
             let mailOptions = {};
-            mailOptions.from = '"British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
+            mailOptions.from = '"- Event System - Recover Password" <noreply@britishschool.g12.br>'
             mailOptions.to = userEmail
             mailOptions.subject = 'System Recover Password'
             mailOptions.text = 'Recover Password'
@@ -103,7 +103,7 @@ function MailSender(){
 
             let subjectConcat = 'Financial Report '
             let mailOptions = {};
-            mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Financial Report" <noreply@britishschool.g12.br>'
+            mailOptions.from = '"- Event System - Financial Report" <noreply@britishschool.g12.br>'
             // mailOptions.to = listRecipientsEmail
             mailOptions.to = 'adm_ict@britishschool.g12.br,adm_tesouraria@britishschool.g12.br'
             mailOptions.subject = subjectConcat
@@ -183,7 +183,7 @@ function MailSender(){
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName
 
             let mailOptions = {};
-            mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Finish Event" <noreply@britishschool.g12.br>'
+            mailOptions.from = '"- Event System - Finish Event" <noreply@britishschool.g12.br>'
             // mailOptions.to = listRecipientsEmail
             mailOptions.to = 'adm_ict@britishschool.g12.br'
             mailOptions.subject = subjectConcat
@@ -300,7 +300,7 @@ function MailSender(){
             console.log('vou mandar emailll !');
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
-            mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System" <noreply@britishschool.g12.br>'
+            mailOptions.from = '"- Event System" <noreply@britishschool.g12.br>'
             // mailOptions.to = listRecipientsEmail
             mailOptions.to = 'adm_ict@britishschool.g12.br'
             mailOptions.subject = subjectConcat
@@ -413,7 +413,7 @@ function MailSender(){
             console.log('vou mandar emailll !');
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
-            mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System" <noreply@britishschool.g12.br>'
+            mailOptions.from = '"- Event System" <noreply@britishschool.g12.br>'
             // mailOptions.to = listRecipientsEmail
             mailOptions.to = 'adm_ict@britishschool.g12.br'
             mailOptions.subject = subjectConcat
@@ -433,7 +433,7 @@ function MailSender(){
 
   this.errorEvent = function(req, res, next){
     let mailOptions = {};
-    mailOptions.from = '"- PLEASE DISREGARD -  ---- British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
+    mailOptions.from = '"- Event System - Recover Password" <noreply@britishschool.g12.br>'
     // mailOptions.to = listRecipientsEmail
     mailOptions.to = 'adm_ict@britishschool.g12.br'
     mailOptions.subject = 'felipe muner teste'

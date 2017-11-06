@@ -27,7 +27,7 @@ module.exports = {
             $("#linkchangepassword").attr("href", "http://192.168.4.51:3002/change-password" + qs)
             console.log($('body').html());
             let mailOptions = {};
-            mailOptions.from = '"British School - Event System - Recover Password" <noreply@britishschool.g12.br>'
+            mailOptions.from = '"- Event System - Recover Password" <noreply@britishschool.g12.br>'
             mailOptions.to = userEmail
             mailOptions.subject = 'System Recover Password'
             mailOptions.text = 'Recover Password'
