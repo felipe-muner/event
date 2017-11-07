@@ -160,7 +160,8 @@
     $('#formFind').submit(function(e){
       e.preventDefault();
 
-      
+      checkLocationEmpty()
+      checkStatusEmpty()
 
       $.ajax({
         url: '/find/searchFiltered',
@@ -261,6 +262,34 @@
           $('#listRoom').val('').trigger("change")
         }
       })
+
+      function checkStatusEmpty(){
+        if (0 === $('input[name=Status]:checked').length) {
+          swal({
+            title:"",
+            text:"Please select at least 1 status.",
+            type: "error"
+          }).then(
+            function () {
+            }
+          )
+          throw new Error('Location Empty')
+        }
+      }
+
+      function checkLocationEmpty(){
+        if (0 === $('input[name=Location]:checked').length) {
+          swal({
+            title:"",
+            text:"Please select at least 1 location.",
+            type: "error"
+          }).then(
+            function () {
+            }
+          )
+          throw new Error('Location Empty')
+        }
+      }
 
 
   </script>

@@ -111,9 +111,7 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   console.log(filters)
   console.log('-----------------FILTERS-------------------')
 
-  if(filters.EventCode){
-    req.makeFind = req.makeFind.filter(e => e.EventCode === parseInt(filters.EventCode))
-  }else{
+    if(filters.EventCode) req.makeFind = req.makeFind.filter(e => e.EventCode === parseInt(filters.EventCode))
     if((filters.Type === 'I') || (filters.Type === 'E')) req.makeFind = req.makeFind.filter(e => e.Type === filters.Type)
     if(filters.EventName) req.makeFind = req.makeFind.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
     if(filters.ResponsibleOrCreator) req.makeFind = req.makeFind.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
@@ -123,7 +121,6 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
                                  'I' === e.Type && filters.Location.includes(e.unidade.toUpperCase()) ||
                                  'E' === e.Type && filters.Location.includes(e.DepartureFrom.toUpperCase())
                                )
-  }
 
   // if(filters.Status) req.makeFind = req.makeFind.filter(e =>  filters.Status.includes(e.EventStatus_ID))
   // if(filters.Location) req.makeFind = req.makeFind.filter(e => {
