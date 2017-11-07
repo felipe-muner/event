@@ -86,6 +86,16 @@ module.exports = {
       // objs.push(query[i]);
     //}
     // console.log(objs);
+  },
+  stringParseArray: function (obj) {
+    let list = []
+    if ('string' === typeof obj && '' !== obj) {
+      list.push(obj)
+    } else {
+      list = obj
+    }
+
+    return list
   }
 }
 

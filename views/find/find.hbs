@@ -28,6 +28,7 @@
               <th>Start</th>
               <th>End</th>
               <th>Event Name</th>
+              <th>Product?</th>
               <th data-step="4" data-intro="Click in desired row to show more info">More Info</th>
             </tr>
           </thead>
@@ -41,6 +42,7 @@
                 <td class="text-center" data-order="{{start}}">{{startFormated}}</td>
                 <td class="text-center" data-order="{{end}}">{{endFormated}}</td>
                 <td>{{title}}</td>
+                <td>{{ProductFormated}}</td>
                 <td style="text-align:center;">
                   <i class="fa fa-search-plus" aria-hidden="true" onclick="moreInformationEvent({{EventCode}});"></i>
                 </td>
@@ -68,19 +70,19 @@
             </div>
             <div class="col-sm-9" data-step="4" data-intro="Choose the type of event">
               <label class="checkbox-inline">
-                <input type="radio" name="Type" value="'I'" style="margin-right:5px;">Internal
+                <input type="radio" name="Type" value="I" style="margin-right:5px;">Internal
               </label>
               <label class="checkbox-inline">
-                <input type="radio" name="Type" value="'E'" style="margin-right:5px;">External
+                <input type="radio" name="Type" value="E" style="margin-right:5px;">External
               </label>
               <label class="checkbox-inline">
-                <input type="radio" name="Type" value="'I', 'E'" style="margin-right:5px;" checked>Both
+                <input type="radio" name="Type" value="all" style="margin-right:5px;" checked>Both
               </label>
             </div>
           </div>
           <div class="row" style="margin-top:10px;display:none;" id="divLineRoom">
             <div class="col-sm-12">
-              <select class="" name="listRoom" id="listRoom" style="width:100%;" multiple>
+              <select class="" name="ListRoom" id="listRoom" style="width:100%;" multiple>
                 {{#each getAllSiteBuildingRoom}}
                   <option value="{{RoomID}}">{{unidade}} - {{NameBuilding}} - {{NameRoom}}</option>
                 {{/each}}
@@ -89,10 +91,10 @@
           </div>
           <div class="row" style="margin-top:10px;" data-step="5" data-intro="Start and End Dates">
             <div class="col-sm-6">
-              <input type="date" name="StartTime" id="StartTime" data-toggle="tooltip" title="Start Date">
+              <input type="date" name="StartTime" id="StartTime" data-toggle="tooltip" title="Start Date" required>
             </div>
             <div class="col-sm-6">
-              <input type="date" name="EndTime" id="EndTime" data-toggle="tooltip" title="End Date">
+              <input type="date" name="EndTime" id="EndTime" data-toggle="tooltip" title="End Date" required>
             </div>
           </div>
           <div class="row" style="margin-top:10px;" data-step="6" data-intro="Any part of name of event">
@@ -113,16 +115,29 @@
           <div class="row" style="margin-top:10px;">
             <div class="col-sm-12" data-step="8" data-intro="Status of event">
               <label class="checkbox-inline">
-                <input type="checkbox" name="StatusName" value="1" style="margin-right:5px;" checked>Waiting For Approval
+                <input type="checkbox" name="Status" value="1" style="margin-right:5px;" checked>Waiting For Approval
               </label>
               <label class="checkbox-inline">
-                <input type="checkbox" name="StatusName" value="2" style="margin-right:5px;" checked>Approved
+                <input type="checkbox" name="Status" value="2" style="margin-right:5px;" checked>Approved
               </label>
               <label class="checkbox-inline">
-                <input type="checkbox" name="StatusName" value="3" style="margin-right:5px;" checked>Finalized
+                <input type="checkbox" name="Status" value="3" style="margin-right:5px;" checked>Finalized
               </label>
               <label class="checkbox-inline">
-                <input type="checkbox" name="StatusName" value="4" style="margin-right:5px;" checked>Canceled
+                <input type="checkbox" name="Status" value="4" style="margin-right:5px;" checked>Canceled
+              </label>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12" data-step="9" data-intro="Location of event">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Location" value="botafogo" style="margin-right:5px;" checked>Botafogo
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Location" value="urca" style="margin-right:5px;" checked>Urca
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Location" value="barra" style="margin-right:5px;" checked>Barra
               </label>
             </div>
           </div>
@@ -145,6 +160,8 @@
     $('#formFind').submit(function(e){
       e.preventDefault();
 
+      
+
       $.ajax({
         url: '/find/searchFiltered',
         type: 'POST',
@@ -162,6 +179,7 @@
                                     '<th>Start</th>'+
                                     '<th>End</th>'+
                                     '<th>Event Name</th>'+
+                                    '<th>Product?</th>'+
                                     '<th>More Info</th>'+
                                   '</tr>'+
                                 '</thead>'+
@@ -171,7 +189,6 @@
           $('#divTable').empty()
           $('#divTable').append(tableTemplate)
           for (var i = 0; i < data.length; i++) {
-            debugger
             let newLine = '<tr data-event-code="'+data[i].EventCode+'">'+
                             '<td class="text-center">'+data[i].EventCode+'</td>'+
                             '<td>'+data[i].TypeFormatado+'</td>'+
@@ -180,6 +197,7 @@
                             '<td class="text-center" data-order="'+ data[i].start +'">'+data[i].startFormated+'</td>'+
                             '<td class="text-center" data-order="'+ data[i].end +'">'+data[i].endFormated+'</td>'+
                             '<td>'+data[i].title+'</td>'+
+                            '<td>'+data[i].ProductFormated+'</td>'+
                             '<td style="text-align:center;">'+
                               '<i class="fa fa-search-plus" aria-hidden="true" onclick="moreInformationEvent('+data[i].EventCode+');"></i>'+
                             '</td>'+
@@ -234,8 +252,7 @@
     	})
 
       $('input[name=Type]').change(function(e){
-        debugger
-        if('\'I\'' === this.value){
+        if('I' === this.value){
           $('#listRoom').css('display','block')
           $('#divLineRoom').fadeIn()
         }else{

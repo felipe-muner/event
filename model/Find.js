@@ -9,46 +9,6 @@ function Find(){
   this.makeFind = function(req, res, next){
     conn.acquire(function(err,con){
 
-      console.log('___listorom')
-      let listRoom = []
-      if ('string' === typeof req.body.listRoom && '' !== req.body.listRoom){
-        listRoom.push(req.body.listRoom)
-      }else{
-        listRoom = req.body.listRoom
-      }
-      console.log(req.body)
-      console.log(listRoom)
-      console.log('___listorom')
-
-      let whereEventCode = ('' !== req.body.EventCode) ? 'e.EventCode = '+ req.body.EventCode +' ' : ''
-      // console.log(whereEventCode)
-      let whereType = 'e.Type IN ('+ req.body.Type +')'
-      // console.log(whereType)
-      let whereEventName = ('' !== req.body.EventName) ? 'e.Name LIKE \'%'+ req.body.EventName + '%\'' : ''
-      // console.log(whereEventName)
-      let whereOwner = (!!req.body.ResponsibleOrCreator) ? '(e.CreateBy IN('+ req.body.ResponsibleOrCreator +') OR e.ResponsibleByEvent IN('+ req.body.ResponsibleOrCreator+'))' : ''
-      // console.log(whereOwner)
-      let whereStatusName = (!!req.body.StatusName) ? 'e.EventStatus_ID IN('+ req.body.StatusName +')' : ''
-      // console.log(whereStatusName)
-      let whereRangeDate = (!!req.body.StartTime) ? 'CAST(StartEvent AS DATE) between \''+ req.body.StartTime +'\' and \''+ req.body.EndTime + '\'' : ''
-
-      let whereRoomSelect = (!!listRoom) ? 'e.Room_ID IN ('+ listRoom.join(', ') +')' : ''
-      console.log('___room selected' + whereRoomSelect)
-
-      let whereClause = 'WHERE '
-      if('' !== whereEventCode){
-        whereClause = whereClause += whereEventCode
-      }else{
-        whereClause = whereClause += whereType + ' '
-        if(whereEventName !== '') whereClause = whereClause += ' AND ' + whereEventName + ' '
-        if(whereOwner !== '') whereClause = whereClause += ' AND ' + whereOwner + ' '
-        if(whereStatusName !== '') whereClause = whereClause += ' AND ' + whereStatusName + ' '
-        if(whereRangeDate !== '') whereClause = whereClause += ' AND ' + whereRangeDate + ' '
-        if(whereRoomSelect !== '') whereClause = whereClause += ' AND ' + whereRoomSelect + ' '
-      }
-
-      whereClause = (whereClause === 'WHERE ') ? '' : whereClause
-
       let query = 'SELECT '+
                   'e.EventCode, '+
                   'e.Type, '+
@@ -58,10 +18,13 @@ function Find(){
                   'e.Name AS title, '+
                   'e.StartEvent AS start, '+
                   'e.EndEvent AS end, '+
+                  'e.EventStatus_ID, '+
                   'es.StatusName, '+
                   'e.DepartureFrom, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
-                  'u1.nomeusuario AS CreatedByName '+
+                  'u1.nomeusuario AS CreatedByName, '+
+                  'IF(COUNT(ei.EventItemID)>0, TRUE, FALSE) AS HasItem, '+
+                  'COUNT(ei.EventItemID) AS QtdItem '+
                 'FROM '+
                   'Event AS e '+
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
@@ -70,17 +33,18 @@ function Find(){
                   'Left Join Room ON e.Room_ID = Room.RoomID '+
                		'Left Join Building ON Room.Building_ID = Building.BuildingID '+
             		  'Left Join unidades ON Building.Site_ID = unidades.idunidade '+
-                  whereClause +
+                  'Left Join EventItem AS ei ON e.EventCode = ei.Event_ID '+
+                  'WHERE CAST(StartEvent AS DATE) BETWEEN ? AND ? '+
+                'GROUP BY e.EventCode '+
                 'ORDER BY EventID ASC'
 
-      con.query(query, function(err, result) {
+      con.query(query, [req.body.StartTime, req.body.EndTime], function(err, result) {
         con.release();
         if(err){
           console.log(this.sql);
           console.log(err);
           res.render('error', { error: err } );
         }else{
-          console.log(this.sql)
           req.makeFind = result
           next()
         }
@@ -101,7 +65,9 @@ function Find(){
                   'es.StatusName, '+
                   'e.DepartureFrom, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
-                  'u1.nomeusuario AS CreatedByName '+
+                  'u1.nomeusuario AS CreatedByName, '+
+                  'IF(COUNT(ei.EventItemID)>0, TRUE, FALSE) AS HasItem, '+
+                  'COUNT(ei.EventItemID) AS QtdItem '+
                 'FROM '+
                   'Event AS e '+
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
@@ -110,6 +76,8 @@ function Find(){
                   'Left Join Room ON e.Room_ID = Room.RoomID '+
                		'Left Join Building ON Room.Building_ID = Building.BuildingID '+
             		  'Left Join unidades ON Building.Site_ID = unidades.idunidade '+
+                  'Left Join EventItem AS ei ON e.EventCode = ei.Event_ID '+
+                'GROUP BY e.EventCode '+
                 'ORDER BY EventCode DESC', function(err, result) {
         con.release();
         if(err){

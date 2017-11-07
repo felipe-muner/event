@@ -32,6 +32,10 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
     e.startFormated = moment(e.start).format('DD/MM/YYYY HH:mm')
     e.endFormated = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
+    e.ProductFormated = (!!e.HasItem) ? 'Yes' + '('+e.QtdItem+')' : 'No' + '('+e.QtdItem+')'
+
+    console.log(e)
+    console.log('------')
   })
   res.render('find/find', {
     sess:req.session,
@@ -85,7 +89,64 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
 
   res.json({EventFound: req.findEventByCode})
 }).post('/searchFiltered', find.makeFind, function(req, res, next) {
-  // console.log(req.body)
+  let filters = req.body
+
+  console.log('-----------------BODY-------------------2')
+  console.log(req.body)
+  console.log('-----------------BODY-------------------2')
+  console.log('-----------------FILTERS-------------------2')
+  console.log(filters)
+  console.log('-----------------FILTERS------------------2-')
+
+  if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
+  if(filters.listRoom) filters.listRoom = Util.stringParseArray(filters.listRoom).map(e => parseInt(e))
+  if(filters.Status) filters.Status = Util.stringParseArray(filters.Status).map(e => parseInt(e))
+  if(filters.Location) filters.Location = Util.stringParseArray(filters.Location).map(e => e.toUpperCase())
+
+
+  console.log('-----------------BODY-------------------')
+  console.log(req.body)
+  console.log('-----------------BODY-------------------')
+  console.log('-----------------FILTERS-------------------')
+  console.log(filters)
+  console.log('-----------------FILTERS-------------------')
+
+  if(filters.EventCode){
+    req.makeFind = req.makeFind.filter(e => e.EventCode === parseInt(filters.EventCode))
+  }else{
+    if((filters.Type === 'I') || (filters.Type === 'E')) req.makeFind = req.makeFind.filter(e => e.Type === filters.Type)
+    if(filters.EventName) req.makeFind = req.makeFind.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
+    if(filters.ResponsibleOrCreator) req.makeFind = req.makeFind.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
+
+    req.makeFind = req.makeFind.filter(e => filters.Status.includes(e.EventStatus_ID))
+                               .filter(e =>
+                                 'I' === e.Type && filters.Location.includes(e.unidade.toUpperCase()) ||
+                                 'E' === e.Type && filters.Location.includes(e.DepartureFrom.toUpperCase())
+                               )
+  }
+
+  // if(filters.Status) req.makeFind = req.makeFind.filter(e =>  filters.Status.includes(e.EventStatus_ID))
+  // if(filters.Location) req.makeFind = req.makeFind.filter(e => {
+  //   let unit = e.unidade ? filters.Location.includes(e.unidade.toLowerCase()) : null
+  //   let departure = e.DepartureFrom ? filters.Location.includes(e.DepartureFrom.toLowerCase()) : null
+  //   return unit && departure
+  // })
+  // if(filters.ResponsibleOrCreator) req.makeFind = req.makeFind.filter(e => e.EventCode === filters.EventCode)
+  // if(filters.listRoom) req.makeFind = req.makeFind.filter(e => e.EventCode === filters.EventCode)
+
+  // let arrFiltered = req.makeFind.reduce((acc, el)=>{
+  //
+  //   // console.log(el)
+  //   // console.log(acc)
+  //   if(20170247 === el.EventCode || 20170248 === el.EventCode){
+  //     acc.push(el)
+  //   }
+  //   // console.log('reduce');
+  //   return acc
+  // },[])
+  // console.log('filtered');
+  // console.log(arrFiltered);
+  // console.log('filtered');
 
   req.makeFind.map(e => {
     if( e.Type === 'I'){
@@ -100,13 +161,11 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
     e.startFormated = moment(e.start).format('DD/MM/YYYY HH:mm')
     e.endFormated = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
-
-    console.log(e)
-    console.log('hahahaha-------hahahah')
-
+    e.ProductFormated = (!!e.HasItem) ? 'Yes' + '('+e.QtdItem+')' : 'No' + '('+e.QtdItem+')'
   })
-  // console.log(req.makeFind);
+
   res.json(req.makeFind)
+
 }).post('/edit', ie.getAllSiteBuildingRoom, mi.getAllProductActive, u.allActive, t.all, find.searchEventByCode, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
 
   (req.findEventByCode.Type === 'I') ? req.findEventByCode.isInternal = true : req.findEventByCode.isExternal = true
