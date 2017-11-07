@@ -29,7 +29,8 @@ router.get('/', myevent.getMyEvent, function(req, res, next) {
     e.end = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
     e.btnCancel = (moment().isBefore(e.DataStartOriginal) && (1 === e.EventStatus_ID || 2 === e.EventStatus_ID)) ? true : false
-    e.canEdit = (moment().isBefore(e.DataStartOriginal) && 1 === e.EventStatus_ID) ? true : false
+    // e.canEdit = (moment().isBefore(e.DataStartOriginal) && 1 === e.EventStatus_ID) ? true : false
+    e.canEdit = (moment().isBefore(e.DataStartOriginal) && (1 === e.EventStatus_ID || 2 === e.EventStatus_ID)) ? true : false
   })
 
   console.log(req.allMyEvent)
