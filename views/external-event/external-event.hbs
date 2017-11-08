@@ -495,6 +495,8 @@
     checkEventPast($('#StartEvent').val())
     checkEndAfterStart()
     checkBudgetBalance()
+    addItemUsuarioBurro()
+    checkItemWithoutAmount()
     passou()
 
     let data = $('#formNewEvent').serializeArray()
@@ -698,6 +700,19 @@
     if( moment(dataDesejada).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD') ){
       swal("Incorrect Date", "You can\'t create event to previous days", "error")
       throw new Error('Event can\'t be before today.')
+    }
+  }
+
+  function checkItemWithoutAmount(){
+    if(0 < $("#listProduct").select2().find(":selected").size() && '' === $('#qtdProduct').val()){
+      swal("Item without amount", "Please, insert the amount of product and press enter", "error")
+      throw new Error('Item without amount')
+    }
+  }
+
+  function addItemUsuarioBurro(){
+    if(0 < $("#listProduct").select2().find(":selected").size() && '' !== $('#qtdProduct').val()){
+      addItemEvent()
     }
   }
 

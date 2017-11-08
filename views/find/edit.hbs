@@ -416,6 +416,8 @@
       checkEndAfterStart()
       if('I' === $('#Type').val()) checkVideoConference()
       checkBudgetBalance()
+      addItemUsuarioBurro()
+      checkItemWithoutAmount()
       passou()
 
       let data = $('#formEditEvent').serializeArray()
@@ -496,6 +498,19 @@
           }
         )
         throw new Error('Please choose Video Conference to')
+      }
+    }
+
+    function checkItemWithoutAmount(){
+      if(0 < $("#listProduct").select2().find(":selected").size() && '' === $('#qtdProduct').val()){
+        swal("Item without amount", "Please, insert the amount of product and press enter", "error")
+        throw new Error('Item without amount')
+      }
+    }
+
+    function addItemUsuarioBurro(){
+      if(0 < $("#listProduct").select2().find(":selected").size() && '' !== $('#qtdProduct').val()){
+        addItemEvent()
       }
     }
 
