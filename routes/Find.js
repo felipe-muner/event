@@ -198,8 +198,10 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
     Evento:req.findEventByCode
   })
 
-// }).post('/update', find.clearEvent, find.updateEvent, function(req, res, next) {
-}).post('/update', find.checkAlreadyApproved, find.checkEventAvailable, find.clearEvent, find.updateEvent, g.clearGuest, g.bulkGuestEvent, mi.clearProduct, mi.bulkItemEvent, find.searchEventByCode, g.guestOfEvent, mi.productOfEvent, find.getRecipientsEmail, function(req, res, next) {
+//LINHA PARA CHECAR SE EVENTO JA FOI APROVADO ANTES DE EDITA-LO
+// }).post('/update', find.checkAlreadyApproved, find.checkEventAvailable, find.clearEvent, find.updateEvent, g.clearGuest, g.bulkGuestEvent, mi.clearProduct, mi.bulkItemEvent, find.searchEventByCode, g.guestOfEvent, mi.productOfEvent, find.getRecipientsEmail, function(req, res, next) {
+//LINHA PARA CHECAR SE EVENTO JA FOI APROVADO ANTES DE EDITA-LO
+}).post('/update', find.checkEventAvailable, find.clearEvent, find.updateEvent, g.clearGuest, g.bulkGuestEvent, mi.clearProduct, mi.bulkItemEvent, find.searchEventByCode, g.guestOfEvent, mi.productOfEvent, find.getRecipientsEmail, function(req, res, next) {
   console.log(req.resultadofinal)
   console.log(req.body)
   console.log('__+_+_+_+_req.nextEventCode')
