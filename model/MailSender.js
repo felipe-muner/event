@@ -58,7 +58,6 @@ function MailSender(){
             // console.log(JSON.stringify(req.getDistinctBudget,null,1))
             let contentHTML = ''
 
-
             req.getDistinctBudget.map(function(budget){
               console.log(budget);
               if(0 !== budget.events.length){
@@ -104,8 +103,8 @@ function MailSender(){
             let subjectConcat = 'Financial Report '
             let mailOptions = {};
             mailOptions.from = '"- Event System - Financial Report" <noreply@britishschool.g12.br>'
-            mailOptions.to = listRecipientsEmail
-            // mailOptions.to = 'adm_ict@britishschool.g12.br,adm_tesouraria@britishschool.g12.br'
+            // mailOptions.to = listRecipientsEmail
+            mailOptions.to = 'adm_ict@britishschool.g12.br,adm_tesouraria@britishschool.g12.br'
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Financial Report'
             // mailOptions.html = $('body').html()
@@ -118,7 +117,6 @@ function MailSender(){
               }
               console.log('Message %s sent: %s', info.messageId, info.response);
             })
-
           })
       }
     })
@@ -184,8 +182,11 @@ function MailSender(){
 
             let mailOptions = {};
             mailOptions.from = '"- Event System - Finish Event" <noreply@britishschool.g12.br>'
-            mailOptions.to = listRecipientsEmail
-            // mailOptions.to = 'adm_ict@britishschool.g12.br'
+            if('development' === process.env.NODE_ENV){
+              mailOptions.to = 'adm_ict@britishschool.g12.br'
+            }else{
+              mailOptions.to = listRecipientsEmail
+            }
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Finish Event'
             mailOptions.html = $('body').html()
@@ -301,8 +302,12 @@ function MailSender(){
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"- Event System" <noreply@britishschool.g12.br>'
-            mailOptions.to = listRecipientsEmail
-            // mailOptions.to = 'adm_ict@britishschool.g12.br'
+            if('development' === process.env.NODE_ENV){
+              console.log('soubaseteste');
+              mailOptions.to = 'adm_ict@britishschool.g12.br'
+            }else{
+              mailOptions.to = listRecipientsEmail
+            }
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Recover Password'
             mailOptions.html = $('body').html()
@@ -414,8 +419,11 @@ function MailSender(){
             let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
             let mailOptions = {}
             mailOptions.from = '"- Event System" <noreply@britishschool.g12.br>'
-            mailOptions.to = listRecipientsEmail
-            // mailOptions.to = 'adm_ict@britishschool.g12.br'
+            if('development' === process.env.NODE_ENV){
+              mailOptions.to = 'adm_ict@britishschool.g12.br'
+            }else{
+              mailOptions.to = listRecipientsEmail
+            }
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Recover Password'
             mailOptions.html = $('body').html()
@@ -450,13 +458,17 @@ function MailSender(){
 
   this.generateListEmail = function(eventFinded){
     let filteredList = []
-    filteredList.push(eventFinded.EmailCreateBy)
-    filteredList.push(eventFinded.EmailResponsibleBy)
-    filteredList.push('adm_ict@britishschool.g12.br')
-    filteredList.push('adm_tesouraria@britishschool.g12.br')
-    eventFinded.RecipientsEmail.map(function(e){
-      filteredList.push(e.email)
-    })
+    if('development' === process.env.NODE_ENV){
+      filteredList.push('adm_ict@britishschool.g12.br')
+    }else{
+      filteredList.push(eventFinded.EmailCreateBy)
+      filteredList.push(eventFinded.EmailResponsibleBy)
+      filteredList.push('adm_ict@britishschool.g12.br')
+      filteredList.push('adm_tesouraria@britishschool.g12.br')
+      eventFinded.RecipientsEmail.map(function(e){
+        filteredList.push(e.email)
+      })
+    }
     console.log(filteredList.join('\n'))
     return filteredList
   }
