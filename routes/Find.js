@@ -91,59 +91,21 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
 }).post('/searchFiltered', find.makeFind, function(req, res, next) {
   let filters = req.body
 
-  console.log('-----------------BODY-------------------2')
-  console.log(req.body)
-  console.log('-----------------BODY-------------------2')
-  console.log('-----------------FILTERS-------------------2')
-  console.log(filters)
-  console.log('-----------------FILTERS------------------2-')
-
   if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
   if(filters.listRoom) filters.listRoom = Util.stringParseArray(filters.listRoom).map(e => parseInt(e))
   if(filters.Status) filters.Status = Util.stringParseArray(filters.Status).map(e => parseInt(e))
   if(filters.Location) filters.Location = Util.stringParseArray(filters.Location).map(e => e.toUpperCase())
 
+  if(filters.EventCode) req.makeFind = req.makeFind.filter(e => e.EventCode === parseInt(filters.EventCode))
+  if((filters.Type === 'I') || (filters.Type === 'E')) req.makeFind = req.makeFind.filter(e => e.Type === filters.Type)
+  if(filters.EventName) req.makeFind = req.makeFind.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
+  if(filters.ResponsibleOrCreator) req.makeFind = req.makeFind.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
 
-  console.log('-----------------BODY-------------------')
-  console.log(req.body)
-  console.log('-----------------BODY-------------------')
-  console.log('-----------------FILTERS-------------------')
-  console.log(filters)
-  console.log('-----------------FILTERS-------------------')
-
-    if(filters.EventCode) req.makeFind = req.makeFind.filter(e => e.EventCode === parseInt(filters.EventCode))
-    if((filters.Type === 'I') || (filters.Type === 'E')) req.makeFind = req.makeFind.filter(e => e.Type === filters.Type)
-    if(filters.EventName) req.makeFind = req.makeFind.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
-    if(filters.ResponsibleOrCreator) req.makeFind = req.makeFind.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
-
-    req.makeFind = req.makeFind.filter(e => filters.Status.includes(e.EventStatus_ID))
-                               .filter(e =>
-                                 'I' === e.Type && filters.Location.includes(e.unidade.toUpperCase()) ||
-                                 'E' === e.Type && filters.Location.includes(e.DepartureFrom.toUpperCase())
-                               )
-
-  // if(filters.Status) req.makeFind = req.makeFind.filter(e =>  filters.Status.includes(e.EventStatus_ID))
-  // if(filters.Location) req.makeFind = req.makeFind.filter(e => {
-  //   let unit = e.unidade ? filters.Location.includes(e.unidade.toLowerCase()) : null
-  //   let departure = e.DepartureFrom ? filters.Location.includes(e.DepartureFrom.toLowerCase()) : null
-  //   return unit && departure
-  // })
-  // if(filters.ResponsibleOrCreator) req.makeFind = req.makeFind.filter(e => e.EventCode === filters.EventCode)
-  // if(filters.listRoom) req.makeFind = req.makeFind.filter(e => e.EventCode === filters.EventCode)
-
-  // let arrFiltered = req.makeFind.reduce((acc, el)=>{
-  //
-  //   // console.log(el)
-  //   // console.log(acc)
-  //   if(20170247 === el.EventCode || 20170248 === el.EventCode){
-  //     acc.push(el)
-  //   }
-  //   // console.log('reduce');
-  //   return acc
-  // },[])
-  // console.log('filtered');
-  // console.log(arrFiltered);
-  // console.log('filtered');
+  req.makeFind = req.makeFind.filter(e => filters.Status.includes(e.EventStatus_ID))
+                             .filter(e =>
+                               'I' === e.Type && filters.Location.includes(e.unidade.toUpperCase()) ||
+                               'E' === e.Type && filters.Location.includes(e.DepartureFrom.toUpperCase())
+                             )
 
   req.makeFind.map(e => {
     if( e.Type === 'I'){
