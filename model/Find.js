@@ -337,7 +337,7 @@ function Find(){
   this.clearEvent = function(req, res, next){
     conn.acquire(function(err,con){
       con.query('UPDATE Event set '+
-                  'EventStatus_ID = NULL,'+
+                  // 'EventStatus_ID = NULL,'+
                   'Type = NULL,'+
                   'Room_ID = NULL,'+
                   'Name = NULL,'+
@@ -352,8 +352,8 @@ function Find(){
                   'Nstaff = NULL,'+
                   'Nvisitor = NULL,'+
                   'Budget_ID = NULL,'+
-                  'ApprovedBy = NULL,'+
-                  'ApprovedAt = NULL,'+
+                  // 'ApprovedBy = NULL,'+
+                  // 'ApprovedAt = NULL,'+
                   'DepartureFrom = NULL,'+
                   'AmountPerson = NULL,'+
                   'TransportWaitAvenue = NULL,'+
@@ -380,7 +380,7 @@ function Find(){
   this.checkEventAvailable = function(req, res, next){
     if ('I' === req.body.Type) {
       conn.acquire(function(err,con){
-        con.query('SELECT * FROM Event WHERE Room_ID = ? AND EventCode <> ? '+
+        con.query('SELECT * FROM Event WHERE Room_ID = ? AND EventCode <> ? AND EventStatus_ID <> 4 '+
                   'AND (? BETWEEN StartEvent AND EndEvent ' +
                     'OR ? BETWEEN StartEvent AND EndEvent ' +
                     'OR StartEvent BETWEEN ? AND ? ' +
@@ -472,7 +472,7 @@ function Find(){
     let event = {
       EventCode: req.body.EventCode,
       Type: req.body.Type,
-      EventStatus_ID: 1,
+      // EventStatus_ID: 1,
       StartEvent: req.body.StartTime,
       EndEvent: req.body.EndTime,
       Room_ID: req.body.roomID || null,
