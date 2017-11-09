@@ -20,6 +20,7 @@ connPurchasing.init()
 var app = express()
 
 app.use(helmet())
+app.use(helmet.noCache())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
