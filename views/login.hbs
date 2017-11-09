@@ -52,7 +52,7 @@
     <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/vendor/sweetalert/sweetalert2.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
-    
+
     <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -74,15 +74,9 @@
     <script type="text/javascript">
 
       if (!( !!window.chrome && !!window.chrome.webstore )) {
-        swal({
-          title:"",
-          text:"Please, use Google Chrome Browser",
-          type: "error"
-        }).then(
-          function () {
-            window.location.replace("//www.google.com/chrome/browser/desktop/index.html");
-          }
-        )
+
+        alert('Hi =D, please use Google Chrome')
+        window.location.replace("//www.google.com/chrome/browser/desktop/index.html");
         throw new Error('Not Google Chrome')
       }
 
