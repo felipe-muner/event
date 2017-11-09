@@ -2,7 +2,7 @@
   <div class="panel-heading">
     <div class="row">
       <div class="col-sm-12">
-        Finish Event
+        Finish Event <span data-step="2" data-intro="This button will open a modal with option to filter your search" style="margin-left:10px;" class="label label-warning" onclick="showModalFind();">Filter</span>
       </div>
     </div>
   </div>
@@ -18,7 +18,7 @@
     </div>
     <div class="row">
       <div class="col-sm-12">
-        <table class="table table-hover table-striped" data-step="1" data-intro="All pending events to finalize">
+        <table id="tableFinishEvent" class="table table-hover table-striped" data-step="1" data-intro="All pending events to finalize">
           <thead>
             <tr>
               <th>Event Number</th>
@@ -57,11 +57,186 @@
   </div>
 </div>
 
+<div id="modalFind" class="modal introJs-Bs3-modal" role="dialog">
+  <div class="modal-dialog" style="width:40%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Choose your filter</h4>
+      </div>
+      <form action="/finish-event/searchFiltered" method="post" id="formFind">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-3" data-step="3" data-intro="Here you can find any event and also search with filter">
+              <input type="number" name="EventCode" value="" placeholder=" Event Code" class="form-control">
+            </div>
+            <div class="col-sm-9" data-step="4" data-intro="Choose the type of event">
+              <label class="checkbox-inline">
+                <input type="radio" name="Type" value="I" style="margin-right:5px;">Internal
+              </label>
+              <label class="checkbox-inline">
+                <input type="radio" name="Type" value="E" style="margin-right:5px;">External
+              </label>
+              <label class="checkbox-inline">
+                <input type="radio" name="Type" value="all" style="margin-right:5px;" checked>Both
+              </label>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;display:none;" id="divLineRoom">
+            <div class="col-sm-12">
+              <select class="" name="ListRoom" id="listRoom" style="width:100%;" multiple>
+                {{#each getAllSiteBuildingRoom}}
+                  <option value="{{RoomID}}">{{unidade}} - {{NameBuilding}} - {{NameRoom}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;" data-step="5" data-intro="Start and End Dates">
+            <div class="col-sm-6">
+              <input type="date" name="StartTime" id="StartTime" data-toggle="tooltip" title="Start Date" required>
+            </div>
+            <div class="col-sm-6">
+              <input type="date" name="EndTime" id="EndTime" data-toggle="tooltip" title="End Date" required>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;" data-step="6" data-intro="Any part of name of event">
+            <div class="col-sm-12">
+              <input type="text" name="EventName" value="" class="form-control" placeholder=" Event Name">
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;" data-step="7" data-intro="Responsible or Creator">
+            <div class="col-sm-12">
+              <select id="ResponsibleOrCreator" name="ResponsibleOrCreator" style="width:100%;" multiple>
+                {{#each allActiveUser}}
+                  <option value="{{matricula}}">{{pad matricula 4 0}} - {{toTitleCase nomeusuario}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12" data-step="8" data-intro="Status of event">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Status" value="1" style="margin-right:5px;" checked>Waiting For Approval
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Status" value="2" style="margin-right:5px;" checked>Approved
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Status" value="3" style="margin-right:5px;" checked>Finalized
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Status" value="4" style="margin-right:5px;" checked>Canceled
+              </label>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12" data-step="9" data-intro="Location of event">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Location" value="botafogo" style="margin-right:5px;" checked>Botafogo
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Location" value="urca" style="margin-right:5px;" checked>Urca
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Location" value="barra" style="margin-right:5px;" checked>Barra
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" name="" value="Search" data-step="9" data-intro="Make search">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <form action="/finish-event/write-down-page" method="post" id="formWriteDown" style="display:none;"></form>
 
 {{#section 'script'}}
 
   <script type="text/javascript">
+
+    $(document).ready(function(e){
+      $('#formFind').submit()
+    })
+
+    function showModalFind(){
+      $('#modalFind').modal()
+    }
+
+    $('#ResponsibleOrCreator').select2({placeholder: 'Select the Creator or Responsible'})
+
+    $('#StartTime').val(moment().startOf('year').format('YYYY-MM-DD'))
+    $('#EndTime').val(moment().endOf('year').format('YYYY-MM-DD'))
+
+    function checkStatusEmpty(){
+      if (0 === $('input[name=Status]:checked').length) {
+        swal({
+          title:"",
+          text:"Please select at least 1 status.",
+          type: "error"
+        }).then(
+          function () {
+          }
+        )
+        throw new Error('Location Empty')
+      }
+    }
+
+    function checkLocationEmpty(){
+      if (0 === $('input[name=Location]:checked').length) {
+        swal({
+          title:"",
+          text:"Please select at least 1 location.",
+          type: "error"
+        }).then(
+          function () {
+          }
+        )
+        throw new Error('Location Empty')
+      }
+    }
+
+    $('#formFind').submit(function(e){
+      e.preventDefault();
+
+      checkLocationEmpty()
+      checkStatusEmpty()
+
+      $.ajax({
+        url: '/finish-event/searchFiltered',
+        type: 'POST',
+        data: $('#formFind').serialize(),
+        dataType:'json',
+        success: function(data) {
+          $('#tableFinishEvent tbody').empty()
+
+          var dataTableBody = data.reduce(function(acc,ele){
+            let newLine = '<tr data-event-code="'+ele.EventCode+'" data-title="'+ele.title+'" data-created-by="'+ele.CreatedByName+'" data-responsible-by="'+ele.ResponsibleByName+'">'
+                            +'<td class="text-center">'+ele.EventCode+'</td>'
+                            +'<td>'+ ele.Type +'</td>'
+                            +'<td>'+ ele.CreatedByName +'</td>'
+                            +'<td>'+ ele.ResponsibleByName +'</td>'
+                            +'<td class="text-center">'+ ele.start +'</td>'
+                            +'<td class="text-center">'+ ele.end +'</td>'
+                            +'<td>'+ ele.title +'</td>'
+                            +'<td style="text-align:center;">'
+                              +'<i onclick="loadMoreInfo(this);" class="fa fa-search-plus" aria-hidden="true"></i>'
+                            +'</td>'
+                            +'<td style="text-align:center;">'
+                              +'<i onclick="loadPageWriteDown(this);" class="fa fa-sign-in" aria-hidden="true"></i>'
+                            +'</td>'
+                         +'</tr>'
+            acc = acc + newLine
+            return acc
+          }, '')
+
+          $('#tableFinishEvent tbody').append(dataTableBody)
+          $('#modalFind').modal('hide')
+        }
+      })
+    })
 
     function loadMoreInfo(el){
        let form = document.createElement("form")

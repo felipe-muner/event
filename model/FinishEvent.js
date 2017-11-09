@@ -1,16 +1,21 @@
 const conn = require(process.env.PWD + '/conn');
+const moment = require('moment')
 
 function FinishEvent(){
   this.getAllFinishEvent = function(req, res, next){
+    let StartTime = req.body.StartTime || moment().startOf('year').format('YYYY-MM-DD')
+    let EndTime = req.body.EndTime || moment().endOf('year').format('YYYY-MM-DD')
     conn.acquire(function(err,con){
       con.query('SELECT '+
                   'e.EventCode, '+
                   'e.Type, '+
+                  'unidades.unidade, '+
                   'e.CreateBy, '+
                   'e.ResponsibleByEvent, '+
                   'e.Name AS title, '+
                   'e.StartEvent AS start, '+
                   'e.EndEvent AS end, '+
+                  'e.EventStatus_ID, '+
                   'es.StatusName, '+
                   'e.DepartureFrom, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
@@ -20,9 +25,15 @@ function FinishEvent(){
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
+                  'Left Join Room ON e.Room_ID = Room.RoomID '+
+               		'Left Join Building ON Room.Building_ID = Building.BuildingID '+
+            		  'Left Join unidades ON Building.Site_ID = unidades.idunidade '+
                 'WHERE '+
-                  'e.EventStatus_ID = 2', function(err, result) {
+                  'Date(e.StartEvent) >= ? AND '+
+                  'Date(e.EndEvent) <= ? AND '+
+                  'e.EventStatus_ID = 2', [StartTime, EndTime], function(err, result) {
         con.release();
+        console.log(this.sql);
         if(err){
           res.render('error', { error: err } );
         }else{
