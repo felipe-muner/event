@@ -15,6 +15,7 @@ function ExternalEvent(){
                   'e.Name AS title, '+
                   'e.StartEvent AS start, '+
                   'e.EndEvent AS end, '+
+                  'e.EventStatus_ID, '+
                   'es.StatusName, '+
                   'e.DepartureFrom, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
@@ -88,7 +89,7 @@ function ExternalEvent(){
   }
 
   this.getLastEvent = function(req, res, next){
-    console.log(req.body)    
+    console.log(req.body)
     conn.acquire(function(err,con){
       con.query('SELECT EventID, EventCode FROM event WHERE YEAR(StartEvent) = YEAR(?) order by EventId desc limit 1', [req.body.StartEvent], function(err, result) {
         console.log('______________________________');

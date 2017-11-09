@@ -43,6 +43,27 @@ router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, f
   req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
 
   res.json(req.allEvents)
+}).post('/searchFiltered', ee.searchEventTwoDate, function(req, res, next) {
+  let filters = req.body
+
+  if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
+  if(filters.Status) filters.Status = Util.stringParseArray(filters.Status).map(e => parseInt(e))
+  if(filters.Location) filters.Location = Util.stringParseArray(filters.Location).map(e => e.toUpperCase())
+
+  if(filters.EventCode) req.allEvents = req.allEvents.filter(e => e.EventCode === parseInt(filters.EventCode))
+  if(filters.EventName) req.allEvents = req.allEvents.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
+  if(filters.ResponsibleOrCreator) req.allEvents = req.allEvents.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
+
+  req.allEvents = req.allEvents.filter(e => filters.Status.includes(e.EventStatus_ID))
+                              .filter(e => filters.Location.includes(e.DepartureFrom.toUpperCase()))
+
+   req.allEvents.map(e => e.title = Util.toTitleCase(e.title))
+   req.allEvents.map(e => e.CreatedByName = Util.toTitleCase(e.CreatedByName))
+   req.allEvents.map(e => e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName) || 'Not Reported')
+   req.allEvents.map(e => e.start = moment(e.start).format('DD/MM/YYYY HH:mm'))
+   req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
+
+   res.json(req.allEvents)
 }).post('/create-event', a.getDirectApproval,ee.getLastEvent, ee.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, f.getRecipientsEmail, function(req, res, next) {
   req.findEventByCode.msgDefault = 'Evento externo criado por: ' + req.findEventByCode.CreateBy
   m.externalEvent(req.findEventByCode)
