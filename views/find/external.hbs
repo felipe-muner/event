@@ -9,7 +9,7 @@
 
 <div class="panel panel-primary">
   <div class="panel-heading">
-    More Information
+    More Information <a style="margin-left:10px;" class="label label-primary" onclick="backFind();">Back</a>
   </div>
   <div class="panel-body">
     <table class="table table-bordered" style="margin-bottom:10px;">
@@ -123,3 +123,11 @@
 
   </div>
 </div>
+
+{{#section 'script'}}
+  <script type="text/javascript">
+    function backFind() {
+      window.history.back()
+    }
+  </script>
+{{/section}}

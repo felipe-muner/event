@@ -167,8 +167,8 @@
 
     $('#ResponsibleOrCreator').select2({placeholder: 'Select the Creator or Responsible'})
 
-    $('#StartTime').val(moment().startOf('year').format('YYYY-MM-DD'))
-    $('#EndTime').val(moment().endOf('year').format('YYYY-MM-DD'))
+    if(!$('#StartTime').val()) $('#StartTime').val(moment().startOf('year').format('YYYY-MM-DD'))
+    if(!$('#EndTime').val()) $('#EndTime').val(moment().endOf('year').format('YYYY-MM-DD'))
 
     function checkStatusEmpty(){
       if (0 === $('input[name=Status]:checked').length) {

@@ -414,8 +414,8 @@
 
   $('#ResponsibleOrCreator').select2({placeholder: 'Select the Creator or Responsible'})
 
-  $('#firstDay').val(moment().startOf('year').format('YYYY-MM-DD'))
-  $('#lastDay').val(moment().endOf('year').format('YYYY-MM-DD'))
+  if(!$('#firstDay').val()) $('#firstDay').val(moment().startOf('year').format('YYYY-MM-DD'))
+  if(!$('#lastDay').val()) $('#lastDay').val(moment().endOf('year').format('YYYY-MM-DD'))
 
   function checkStatusEmpty(){
     if (0 === $('input[name=Status]:checked').length) {

@@ -89,6 +89,7 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
 
   res.json({EventFound: req.findEventByCode})
 }).post('/searchFiltered', find.makeFind, function(req, res, next) {
+  req.session.bodyFilterFind = req.body
   let filters = req.body
 
   if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
