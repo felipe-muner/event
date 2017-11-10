@@ -62,7 +62,21 @@
               <th>Status</th>
               <th></th>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {{#each allEvents}}
+                <tr data-event-code="{{EventCode}}">
+                  <td class="text-center">{{EventCode}}</td>
+                  <td>{{CreatedByName}}</td>
+                  <td>{{ResponsibleByName}}</td>
+                  <td class="text-center">{{start}}</td>
+                  <td class="text-center">{{end}}</td>
+                  <td>{{title}}</td>
+                  <td>{{DepartureFrom}}</td>
+                  <td>{{StatusName}}</td>
+                  <td><i onclick="loadMoreInfoExternal(this);" class="fa fa-search-plus" aria-hidden="true"></i></td>
+                </tr>
+              {{/each}}
+            </tbody>
           </table>
         </div>
       </div>
@@ -402,10 +416,10 @@
     })
     $('[data-toggle="tooltip"]').tooltip();
 
-    initializeDatesSearch();
-    searchEvents()
+    // initializeDatesSearch();
+    // searchEvents()
 
-    $('#formFind').submit()
+    // $('#formFind').submit()
   })
 
   function showModalFind(){
@@ -414,8 +428,8 @@
 
   $('#ResponsibleOrCreator').select2({placeholder: 'Select the Creator or Responsible'})
 
-  if(!$('#firstDay').val()) $('#firstDay').val(moment().startOf('year').format('YYYY-MM-DD'))
-  if(!$('#lastDay').val()) $('#lastDay').val(moment().endOf('year').format('YYYY-MM-DD'))
+  if(!$('#firstDay').val()) $('#firstDay').val(moment().format('YYYY-MM-DD'))
+  if(!$('#lastDay').val()) $('#lastDay').val(moment().format('YYYY-MM-DD'))
 
   function checkStatusEmpty(){
     if (0 === $('input[name=Status]:checked').length) {

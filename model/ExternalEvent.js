@@ -1,12 +1,18 @@
 const conn = require(process.env.PWD + '/conn');
 const moment = require('moment')
 const fs = require('fs');
+const Util = require(process.env.PWD + '/util/Util')
 
 function ExternalEvent(){
 
   this.searchEventTwoDate = function(req, res, next){
+    delete req.session.findFilters
+    delete req.session.finishFilters
+
+    let firstDay = req.body.firstDay ? req.body.firstDay : req.session.externalFilters && req.session.externalFilters.firstDay ? req.session.externalFilters.firstDay : moment().format('YYYY-MM-DD')
+    let lastDay = req.body.lastDay ? req.body.lastDay : req.session.externalFilters && req.session.externalFilters.lastDay ? req.session.externalFilters.lastDay : moment().format('YYYY-MM-DD')
+
     conn.acquire(function(err,con){
-      // console.log(req.body);
       con.query('SELECT '+
                   'e.EventID, '+
                   'e.EventCode, '+
@@ -29,19 +35,42 @@ function ExternalEvent(){
                   'e.Type = ? AND '+
                   'Date(StartEvent) >= ? AND '+
                   'Date(EndEvent) <= ? '+
-                  'ORDER BY EventCode DESC', ['E', req.body.firstDay, req.body.lastDay],function(err, result) {
+                  'ORDER BY EventCode DESC', ['E', firstDay, lastDay],function(err, result) {
         con.release();
-        console.log(this.sql);
-
         if(err){
+          console.log(this.sql);
+          console.log(err);
           res.render('error', { error: err } );
         }else{
-          // console.log(this.sql);
           req.allEvents = result
           next()
         }
       });
     });
+  }
+
+  this.filterEvents = function(req, res, next) {
+    let filters = req.originalUrl === '/external-event/searchFiltered' ? req.body : req.session.externalFilters
+    if(req.originalUrl === '/external-event/searchFiltered') req.session.externalFilters = req.body
+
+    if(filters && Object.keys(filters).length > 0) {
+      if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
+      if(filters.Status) filters.Status = Util.stringParseArray(filters.Status).map(e => parseInt(e))
+      if(filters.Location) filters.Location = Util.stringParseArray(filters.Location).map(e => e.toUpperCase())
+
+      if(filters.EventCode) req.allEvents = req.allEvents.filter(e => e.EventCode === parseInt(filters.EventCode))
+      if(filters.EventName) req.allEvents = req.allEvents.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
+      if(filters.ResponsibleOrCreator) req.allEvents = req.allEvents.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
+
+      req.allEvents = req.allEvents.filter(e => filters.Status.includes(e.EventStatus_ID))
+                                  .filter(e => filters.Location.includes(e.DepartureFrom.toUpperCase()))
+    }
+
+    let externalFilters = req.session.externalFilters ? req.session.externalFilters : {}
+    req.session.backupExternalFilters = req.session.externalFilters ? req.session.externalFilters : {}
+    delete req.session.externalFilters
+
+    next()
   }
 
   this.searchEventByCode = function(req, res, next){

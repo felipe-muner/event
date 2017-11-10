@@ -14,7 +14,7 @@ const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
-router.get('/', fe.getAllFinishEvent, u.allActive, function(req, res, next) {
+router.get('/', fe.getAllFinishEvent, fe.filterEvents, u.allActive, function(req, res, next) {
   let flashMsg = req.session.flashMsg
   if(flashMsg) delete req.session.flashMsg
   req.allEventToFinish.map(e => {
@@ -31,24 +31,7 @@ router.get('/', fe.getAllFinishEvent, u.allActive, function(req, res, next) {
     allActiveUser:req.allActiveUser,
     flashMsg
   })
-}).post('/searchFiltered', fe.getAllFinishEvent, function(req, res, next) {
-  let filters = req.body
-
-  if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
-  if(filters.Status) filters.Status = Util.stringParseArray(filters.Status).map(e => parseInt(e))
-  if(filters.Location) filters.Location = Util.stringParseArray(filters.Location).map(e => e.toUpperCase())
-
-  if(filters.EventCode) req.allEventToFinish = req.allEventToFinish.filter(e => e.EventCode === parseInt(filters.EventCode))
-  if((filters.Type === 'I') || (filters.Type === 'E')) req.allEventToFinish = req.allEventToFinish.filter(e => e.Type === filters.Type)
-  if(filters.EventName) req.allEventToFinish = req.allEventToFinish.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
-  if(filters.ResponsibleOrCreator) req.allEventToFinish = req.allEventToFinish.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
-
-  req.allEventToFinish = req.allEventToFinish.filter(e => filters.Status.includes(e.EventStatus_ID))
-                             .filter(e =>
-                               'I' === e.Type && filters.Location.includes(e.unidade.toUpperCase()) ||
-                               'E' === e.Type && filters.Location.includes(e.DepartureFrom.toUpperCase())
-                             )
-
+}).post('/searchFiltered', fe.getAllFinishEvent, fe.filterEvents, function(req, res, next) {
   req.allEventToFinish.map(e => {
     e.Type === 'I' ? e.Type = 'Internal' : e.Type = 'External'
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)

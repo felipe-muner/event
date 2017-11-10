@@ -21,17 +21,21 @@ const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
-router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, function(req, res, next) {
-  console.log('entrei evento routa externo');
-  console.log(req.myEvents)
-  console.log('_________LOG');
+router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, ee.searchEventTwoDate, ee.filterEvents, function(req, res, next) {
+  req.allEvents.map(e => e.title = Util.toTitleCase(e.title))
+  req.allEvents.map(e => e.CreatedByName = Util.toTitleCase(e.CreatedByName))
+  req.allEvents.map(e => e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName) || 'Not Reported')
+  req.allEvents.map(e => e.start = moment(e.start).format('DD/MM/YYYY HH:mm'))
+  req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
+
   res.render('external-event/external-event',{
     sess:req.session,
     allProductActive: req.allProductActive,
     allDepartament:req.allDepartament,
     meansOfTransport:req.allMeansOfTransport,
     allActiveUser:req.allActiveUser,
-    myEvents:req.myEvents
+    myEvents:req.myEvents,
+    allEvents:req.allEvents
   })
 }).post('/search-events', ee.searchEventTwoDate, function(req, res, next) {
   console.log(req.allEvents);
@@ -43,27 +47,14 @@ router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, f
   req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
 
   res.json(req.allEvents)
-}).post('/searchFiltered', ee.searchEventTwoDate, function(req, res, next) {
-  let filters = req.body
+}).post('/searchFiltered', ee.searchEventTwoDate, ee.filterEvents, function(req, res, next) {
+  req.allEvents.map(e => e.title = Util.toTitleCase(e.title))
+  req.allEvents.map(e => e.CreatedByName = Util.toTitleCase(e.CreatedByName))
+  req.allEvents.map(e => e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName) || 'Not Reported')
+  req.allEvents.map(e => e.start = moment(e.start).format('DD/MM/YYYY HH:mm'))
+  req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
 
-  if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
-  if(filters.Status) filters.Status = Util.stringParseArray(filters.Status).map(e => parseInt(e))
-  if(filters.Location) filters.Location = Util.stringParseArray(filters.Location).map(e => e.toUpperCase())
-
-  if(filters.EventCode) req.allEvents = req.allEvents.filter(e => e.EventCode === parseInt(filters.EventCode))
-  if(filters.EventName) req.allEvents = req.allEvents.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
-  if(filters.ResponsibleOrCreator) req.allEvents = req.allEvents.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
-
-  req.allEvents = req.allEvents.filter(e => filters.Status.includes(e.EventStatus_ID))
-                              .filter(e => filters.Location.includes(e.DepartureFrom.toUpperCase()))
-
-   req.allEvents.map(e => e.title = Util.toTitleCase(e.title))
-   req.allEvents.map(e => e.CreatedByName = Util.toTitleCase(e.CreatedByName))
-   req.allEvents.map(e => e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName) || 'Not Reported')
-   req.allEvents.map(e => e.start = moment(e.start).format('DD/MM/YYYY HH:mm'))
-   req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
-
-   res.json(req.allEvents)
+  res.json(req.allEvents)
 }).post('/create-event', a.getDirectApproval,ee.getLastEvent, ee.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, f.getRecipientsEmail, function(req, res, next) {
   req.findEventByCode.msgDefault = 'Evento externo criado por: ' + req.findEventByCode.CreateBy
   m.externalEvent(req.findEventByCode)
