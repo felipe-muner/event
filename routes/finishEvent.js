@@ -29,13 +29,15 @@ router.get('/', fe.getAllFinishEvent, function(req, res, next) {
     allEventToFinish:req.allEventToFinish,
     flashMsg
   })
-}).post('/write-down-page', fe.productOfEvent, function(req,res,next){
+}).post('/write-down-page', fe.productOfEvent, mi.getAllProduct, function(req,res,next){
   res.render('finish-event/write-down-page',{
     sess:req.session,
     camposAproveitados:req.body,
-    products: req.products
+    products: req.products,
+    allProducts: req.allProduct
   })
-}).post('/close-event', fe.updateItemsFinishEvent, fe.updateStatusEvent, f.searchEventByCode, mi.productOfEvent, f.getRecipientsEmail, function(req,res,next){
+// }).post('/close-event', fe.updateItemsFinishEvent, fe.updateStatusEvent, f.searchEventByCode, mi.productOfEvent, f.getRecipientsEmail, function(req,res,next){
+}).post('/close-event', fe.clearProduct, fe.addProductUpdated, fe.updateStatusEvent, f.searchEventByCode, mi.productOfEvent, f.getRecipientsEmail, function(req,res,next){
   req.session.flashMsg = {
     type: 'alert-success',
     statusName: 'Finalized',

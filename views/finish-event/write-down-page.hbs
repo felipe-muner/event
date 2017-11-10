@@ -31,7 +31,27 @@
             </tr>
           </tbody>
         </table>
-        <table class="table table-hover table-striped table-bordered" style="margin-bottom:0px;">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <select id="listProduct" name="allProductActive" style="width:100%;">
+          <option value=""></option>
+          {{#each allProducts}}
+            <option data-name-english="{{NameEnglish}}" data-name-port="{{NamePort}}" data-name-unit-engl="{{NameUnitEngl}}" data-name-unit-port="{{NameUnitPort}}" data-price={{Price}} data-event-product-id="{{EventProductID}}" value="{{EventProductID}}">{{NameEnglish}}/{{NamePort}} | {{NameUnitEngl}}/{{NameUnitPort}} | R$ {{Price}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="col-sm-1">
+        <input type="number" min="0" step="1" class="form-control" style="height:28px;" id="qtdNewProd">
+      </div>
+      <div class="col-sm-3">
+        <input type="button" name="" value="Add extra item" class="btn btn-danger btn-xs" style="height:28px;" onclick="addNewProduct();">
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <div class="col-sm-12">
+        <table class="table table-hover table-striped table-bordered" style="margin-bottom:0px;" id="tableProdRequested">
           <thead>
             <tr>
               <th style="">Name</th>
@@ -40,7 +60,7 @@
           </thead>
           <tbody>
             {{#each products}}
-              <tr data-event-code={{../camposAproveitados.EventCode}} data-event-product-id="{{EventProduct_ID}}" data-amount="{{Amount}}" data-event-item-id="{{EventItemID}}" class="lineProduct">
+              <tr data-event-code="{{../camposAproveitados.EventCode}}" data-event-product-id="{{EventProduct_ID}}" data-amount="{{Amount}}" data-price="{{Price}}" data-event-item-id="{{EventItemID}}" class="lineProduct">
                 <td style="text-align:right;">{{ProductNameEnglish}} / {{ProductNamePort}} - {{UnitInEnglish}} / {{UnitInPort}}</td>
                 <td><input style="text-align:right;" min="0" step="1" type="number" name="amountUsed" value="{{Amount}}" class="amountUsed"> / <span class="amountRequested">{{Amount}}</span> </td>
               </tr>
@@ -62,6 +82,42 @@
 {{#section 'script'}}
 
   <script type="text/javascript">
+
+    function addNewProduct(){
+      if( '' !== $('#listProduct').val() && '' !== $('#qtdNewProd').val() ){
+        let exist = Array.prototype.find.call(document.getElementsByClassName('lineProduct'), function(e){
+          return $(e).data('event-product-id') === parseInt($('#listProduct').val())
+        })
+        if(exist){
+          alert('Item already exist, please update the amount.')
+        }else{
+          let nomeIngles = $("#listProduct").select2().find(":selected").data('name-english')
+          let nomePort = $("#listProduct").select2().find(":selected").data('name-port')
+          let unitIngles = $("#listProduct").select2().find(":selected").data('name-unit-engl')
+          let unitPort = $("#listProduct").select2().find(":selected").data('name-unit-port')
+
+          let eventCode = $('#EventToSet').data('event-code')
+          let eventProductID = $("#listProduct").select2().find(":selected").data('event-product-id')
+          let amount = $('#qtdNewProd').val()
+          let price = $("#listProduct").select2().find(":selected").data('price')
+          let eventItemID = $("#listProduct").select2().find(":selected").data('name-unit-port')
+
+          let productFormated = nomeIngles + ' / ' + nomePort  + ' - ' + unitIngles + ' / ' + unitPort
+
+          $('#tableProdRequested tbody').prepend('<tr data-event-code="'+ $('#EventToSet').data('event-code') +'" data-event-product-id="'+eventProductID+'" data-amount="'+amount+'" data-price="'+price+'" data-event-item-id="" class="lineProduct">'+
+                                                    '<td style="text-align:right;">'+ productFormated +'</td>'+
+                                                    '<td><input style="text-align:right;" min="0" step="1" type="number" name="amountUsed" value="'+ $('#qtdNewProd').val() +'" class="amountUsed"> / <span class="amountRequested">'+ $('#qtdNewProd').val() +'</span> </td>'+
+          '</tr>')
+        }
+      }
+    }
+
+
+
+    $("#listProduct").select2({
+      placeholder: "New product"
+    })
+
     function closeEvent(){
 
       $('#formCloseEvent').empty()
@@ -77,6 +133,7 @@
         let EventCode = $(this).data('event-code')
         let EventProduct_ID = $(this).data('event-product-id')
         let amountUsed = $(this).find('.amountUsed').val()
+        let price = $(this).data('price')
         let amountRequested = $(this).find('.amountRequested').text()
         arrayBaixa.push({
           EventItemID,
@@ -84,8 +141,11 @@
           EventProduct_ID,
           amountUsed,
           amountRequested,
+          Price: price
         })
       })
+
+      console.log(arrayBaixa)
 
       $('<input />', {
         type: 'hidden',

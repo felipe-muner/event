@@ -1,4 +1,5 @@
 const conn = require(process.env.PWD + '/conn');
+const async = require('async')
 
 function FinishEvent(){
   this.getAllFinishEvent = function(req, res, next){
@@ -80,33 +81,89 @@ function FinishEvent(){
     });
   }
 
-  this.updateItemsFinishEvent = function(req, res, next){
-    if(0 === JSON.parse(req.body.darBaixa).length){
-       next()
-    }else {
-      conn.acquire(function(err,con){
-        console.log(JSON.parse(req.body.darBaixa))
-        let bulkUpdate = JSON.parse(req.body.darBaixa).reduce(function(acc, e){
-          return acc + 'UPDATE EventItem SET UsedAmount = '+ e.amountUsed +', Matricula_ID = '+ req.session.matricula +' WHERE EventItemID = '+ e.EventItemID + ';'
-        },'')
-        console.log('bulupdate');
-        console.log(bulkUpdate);
+  this.clearProduct = function(req, res, next){
+    conn.acquire(function(err,con){
+      con.query('DELETE FROM EventItem WHERE Event_ID = ?', [req.body.EventCode], function(err, result) {
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          console.log('deletei os produtos');
+          console.log(result);
+          console.log('deletei os produtos');
+          next()
+        }
+      })
+    })
+  }
 
-        con.query(bulkUpdate, function(err, result) {
+  this.addProductUpdated = function(req, res, next){
+    console.log(req.body);
+    async.forEach(JSON.parse(req.body.darBaixa), function (item, callback){
+      item.Event_ID = item.EventCode
+      item.UsedAmount = item.amountUsed
+      item.Amount = item.amountRequested
+      item.Matricula_ID = req.session.matricula
+
+      delete item.EventCode
+      delete item.amountUsed
+      delete item.amountRequested
+      delete item.EventItemID
+
+      console.log(item);
+      console.log('qwe');
+      conn.acquire(function(err,con){
+        con.query('INSERT INTO EventItem SET ?', [item],function(err, result) {
           con.release();
           if(err){
             console.log(err);
             res.render('error', { error: err } );
           }else{
-            console.log('atualizei os valores dos itens usados no evento');
-            console.log(result);
-            req.baixas = result
-            next()
+            callback()
           }
         })
       })
-    }
+    }, function(err) {
+      console.log('acabei de gravar itens no fechamento ');
+      // console.log(req.jsonAprove)
+      next()
+    })
+
+
+    // console.log('----addProductUpdated');
+    // console.log(JSON.stringify(JSON.parse(req.body.darBaixa),null,2));
+    // console.log('----addProductUpdated');
+    // next()
   }
+
+  // this.updateItemsFinishEvent = function(req, res, next){
+  //   if(0 === JSON.parse(req.body.darBaixa).length){
+  //      next()
+  //   }else {
+  //
+  //     conn.acquire(function(err,con){
+  //       console.log(JSON.parse(req.body.darBaixa))
+  //       let bulkUpdate = JSON.parse(req.body.darBaixa).reduce(function(acc, e){
+  //         return acc + 'UPDATE EventItem SET UsedAmount = '+ e.amountUsed +', Matricula_ID = '+ req.session.matricula +' WHERE EventItemID = '+ e.EventItemID + ';'
+  //       },'')
+  //       console.log('bulupdate');
+  //       console.log(bulkUpdate);
+  //
+  //       con.query(bulkUpdate, function(err, result) {
+  //         con.release();
+  //         if(err){
+  //           console.log(err);
+  //           res.render('error', { error: err } );
+  //         }else{
+  //           console.log('atualizei os valores dos itens usados no evento');
+  //           console.log(result);
+  //           req.baixas = result
+  //           next()
+  //         }
+  //       })
+  //     })
+  //   }
+  // }
 }
 
 module.exports = new FinishEvent()
