@@ -154,7 +154,7 @@
   <script type="text/javascript">
 
     $(document).ready(function() {
-      $('#formFind').submit()
+      // $('#formFind').submit()
     })
 
     function showModalFind(){
@@ -244,8 +244,9 @@
 
       $('#listRoom').select2()
 
-      $('#StartTime').val(moment().startOf('year').format('YYYY-MM-DD'))
-      $('#EndTime').val(moment().endOf('year').format('YYYY-MM-DD'))
+      if(!$('#StartTime').val()) $('#StartTime').val(moment().format('YYYY-MM-DD'))
+      if(!$('#EndTime').val()) $('#EndTime').val(moment().format('YYYY-MM-DD'))
+
       $('[data-toggle="tooltip"]').tooltip()
 
       $('#tableSearchEvent').DataTable({

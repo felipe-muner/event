@@ -21,21 +21,33 @@ const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
-router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, function(req, res, next) {
-  console.log('entrei evento routa externo');
-  console.log(req.myEvents)
-  console.log('_________LOG');
+router.get('/', mi.getAllProductActive, t.all, d.all, u.allActive, f.myEvents, ee.searchEventTwoDate, ee.filterEvents, function(req, res, next) {
+  req.allEvents.map(e => e.title = Util.toTitleCase(e.title))
+  req.allEvents.map(e => e.CreatedByName = Util.toTitleCase(e.CreatedByName))
+  req.allEvents.map(e => e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName) || 'Not Reported')
+  req.allEvents.map(e => e.start = moment(e.start).format('DD/MM/YYYY HH:mm'))
+  req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
+
   res.render('external-event/external-event',{
     sess:req.session,
     allProductActive: req.allProductActive,
     allDepartament:req.allDepartament,
     meansOfTransport:req.allMeansOfTransport,
     allActiveUser:req.allActiveUser,
-    myEvents:req.myEvents
+    myEvents:req.myEvents,
+    allEvents:req.allEvents
   })
 }).post('/search-events', ee.searchEventTwoDate, function(req, res, next) {
   console.log(req.allEvents);
 
+  req.allEvents.map(e => e.title = Util.toTitleCase(e.title))
+  req.allEvents.map(e => e.CreatedByName = Util.toTitleCase(e.CreatedByName))
+  req.allEvents.map(e => e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName) || 'Not Reported')
+  req.allEvents.map(e => e.start = moment(e.start).format('DD/MM/YYYY HH:mm'))
+  req.allEvents.map(e => e.end = moment(e.end).format('DD/MM/YYYY HH:mm'))
+
+  res.json(req.allEvents)
+}).post('/searchFiltered', ee.searchEventTwoDate, ee.filterEvents, function(req, res, next) {
   req.allEvents.map(e => e.title = Util.toTitleCase(e.title))
   req.allEvents.map(e => e.CreatedByName = Util.toTitleCase(e.CreatedByName))
   req.allEvents.map(e => e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName) || 'Not Reported')

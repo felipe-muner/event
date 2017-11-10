@@ -1,17 +1,28 @@
 const conn = require(process.env.PWD + '/conn');
+const moment = require('moment')
+const Util = require(process.env.PWD + '/util/Util')
 const async = require('async')
+
 
 function FinishEvent(){
   this.getAllFinishEvent = function(req, res, next){
+    delete req.session.findFilters
+    delete req.session.externalFilters
+
+    let StartTime = req.body.StartTime ? req.body.StartTime : req.session.finishFilters && req.session.finishFilters.StartTime ? req.session.finishFilters.StartTime : moment().startOf('year').format('YYYY-MM-DD')
+    let EndTime = req.body.EndTime ? req.body.EndTime : req.session.finishFilters && req.session.finishFilters.EndTime ? req.session.finishFilters.EndTime : moment().endOf('year').format('YYYY-MM-DD')
+
     conn.acquire(function(err,con){
       con.query('SELECT '+
                   'e.EventCode, '+
                   'e.Type, '+
+                  'unidades.unidade, '+
                   'e.CreateBy, '+
                   'e.ResponsibleByEvent, '+
                   'e.Name AS title, '+
                   'e.StartEvent AS start, '+
                   'e.EndEvent AS end, '+
+                  'e.EventStatus_ID, '+
                   'es.StatusName, '+
                   'e.DepartureFrom, '+
                   'u2.nomeusuario AS ResponsibleByName, '+
@@ -21,9 +32,15 @@ function FinishEvent(){
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
+                  'Left Join Room ON e.Room_ID = Room.RoomID '+
+               		'Left Join Building ON Room.Building_ID = Building.BuildingID '+
+            		  'Left Join unidades ON Building.Site_ID = unidades.idunidade '+
                 'WHERE '+
-                  'e.EventStatus_ID = 2', function(err, result) {
+                  'Date(e.StartEvent) >= ? AND '+
+                  'Date(e.EndEvent) <= ? AND '+
+                  'e.EventStatus_ID = 2', [StartTime, EndTime], function(err, result) {
         con.release();
+        console.log(this.sql);
         if(err){
           res.render('error', { error: err } );
         }else{
@@ -32,6 +49,34 @@ function FinishEvent(){
         }
       });
     });
+  }
+
+  this.filterEvents = function(req, res, next) {
+    let filters = req.originalUrl === '/finish-event/searchFiltered' ? req.body : req.session.finishFilters
+    if(req.originalUrl === '/finish-event/searchFiltered') req.session.finishFilters = req.body
+
+    if(filters && Object.keys(filters).length > 0) {
+      if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
+      if(filters.Status) filters.Status = Util.stringParseArray(filters.Status).map(e => parseInt(e))
+      if(filters.Location) filters.Location = Util.stringParseArray(filters.Location).map(e => e.toUpperCase())
+
+      if(filters.EventCode) req.allEventToFinish = req.allEventToFinish.filter(e => e.EventCode === parseInt(filters.EventCode))
+      if((filters.Type === 'I') || (filters.Type === 'E')) req.allEventToFinish = req.allEventToFinish.filter(e => e.Type === filters.Type)
+      if(filters.EventName) req.allEventToFinish = req.allEventToFinish.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
+      if(filters.ResponsibleOrCreator) req.allEventToFinish = req.allEventToFinish.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
+
+      req.allEventToFinish = req.allEventToFinish.filter(e => filters.Status.includes(e.EventStatus_ID))
+                                 .filter(e =>
+                                   'I' === e.Type && filters.Location.includes(e.unidade.toUpperCase()) ||
+                                   'E' === e.Type && filters.Location.includes(e.DepartureFrom.toUpperCase())
+                                 )
+    }
+
+    let finishFilters = req.session.finishFilters ? req.session.finishFilters : {}
+    req.session.backupFinishFilters = req.session.finishFilters ? req.session.finishFilters : {}
+    delete req.session.finishFilters
+
+    next()
   }
 
   this.productOfEvent = function(req, res, next){

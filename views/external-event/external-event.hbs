@@ -26,17 +26,22 @@
   <div class="col-sm-2" data-step="1" data-intro="Click here to create new event">
     <button onclick="showModalNewEventExternal();" style="margin-top:16px;font-size:11px;" class="btn btn-primary" id="newEventExternal" type="button" name="button">New Event External</button>
   </div>
-  <div class="col-sm-4"></div>
-  <div class="col-sm-2" data-step="2" data-intro="If you want make a new search, insert here the start date">
+  <!-- <div class="col-sm-4"></div> -->
+  <div class="col-sm-8"></div>
+  <!-- <div class="col-sm-8"></div> -->
+  <!-- <div class="col-sm-2" data-step="2" data-intro="If you want make a new search, insert here the start date">
     <label for="firstDayFind">From:</label>
     <input type="date" name="firstDayFind" id="firstDayFind" value="" class="form-control">
-  </div>
-  <div class="col-sm-2" data-step="3" data-intro="If you want make a new search, insert here the end date">
+  </div> -->
+  <!-- <div class="col-sm-2" data-step="3" data-intro="If you want make a new search, insert here the end date">
     <label for="lastDayFind">To:</label>
     <input type="date" name="lastDayFind" id="lastDayFind" value="" class="form-control">
-  </div>
-  <div class="col-sm-2" data-step="4" data-intro="Make the search again">
+  </div> -->
+  <!-- <div class="col-sm-2" data-step="4" data-intro="Make the search again">
     <button onclick="searchEvents();" style="margin-top:16px;font-size:11px;" class="btn btn-primary" id="newEventExternal" type="button" name="button">Search Event External</button>
+  </div> -->
+  <div class="col-sm-2" data-step="4" data-intro="Make the search again">
+    <button onclick="showModalFind();" style="margin-top:16px;font-size:11px;" class="btn btn-primary" id="newEventExternal" type="button" name="button">Search Event External</button>
   </div>
 </div>
 
@@ -57,7 +62,21 @@
               <th>Status</th>
               <th></th>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {{#each allEvents}}
+                <tr data-event-code="{{EventCode}}">
+                  <td class="text-center">{{EventCode}}</td>
+                  <td>{{CreatedByName}}</td>
+                  <td>{{ResponsibleByName}}</td>
+                  <td class="text-center">{{start}}</td>
+                  <td class="text-center">{{end}}</td>
+                  <td>{{title}}</td>
+                  <td>{{DepartureFrom}}</td>
+                  <td>{{StatusName}}</td>
+                  <td><i onclick="loadMoreInfoExternal(this);" class="fa fa-search-plus" aria-hidden="true"></i></td>
+                </tr>
+              {{/each}}
+            </tbody>
           </table>
         </div>
       </div>
@@ -313,9 +332,79 @@
   </div>
 </div>
 
+<div id="modalFind" class="modal introJs-Bs3-modal" role="dialog">
+  <div class="modal-dialog" style="width:40%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Choose your filter</h4>
+      </div>
+      <form action="/external-event/searchFiltered" method="post" id="formFind">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-4">
+              <input type="number" name="EventCode" value="" placeholder=" Event Code" class="form-control">
+            </div>
+            <div class="col-sm-4">
+              <input type="date" name="firstDay" id="firstDay" data-toggle="tooltip" title="Start Date" required>
+            </div>
+            <div class="col-sm-4">
+              <input type="date" name="lastDay" id="lastDay" data-toggle="tooltip" title="End Date" required>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;" data-step="6" data-intro="Any part of name of event">
+            <div class="col-sm-12">
+              <input type="text" name="EventName" value="" class="form-control" placeholder=" Event Name">
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;" data-step="7" data-intro="Responsible or Creator">
+            <div class="col-sm-12">
+              <select id="ResponsibleOrCreator" name="ResponsibleOrCreator" style="width:100%;" multiple>
+                {{#each allActiveUser}}
+                  <option value="{{matricula}}">{{pad matricula 4 0}} - {{toTitleCase nomeusuario}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12" data-step="8" data-intro="Status of event">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Status" value="1" style="margin-right:5px;" checked>Waiting For Approval
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Status" value="2" style="margin-right:5px;" checked>Approved
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Status" value="3" style="margin-right:5px;" checked>Finalized
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Status" value="4" style="margin-right:5px;" checked>Canceled
+              </label>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12" data-step="9" data-intro="Location of event">
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Location" value="botafogo" style="margin-right:5px;" checked>Botafogo
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Location" value="urca" style="margin-right:5px;" checked>Urca
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="Location" value="barra" style="margin-right:5px;" checked>Barra
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" name="" value="Search" data-step="9" data-intro="Make search">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 {{#section 'script'}}
-
   <script type="text/javascript">
 
   $(document).ready(function(e){
@@ -327,8 +416,84 @@
     })
     $('[data-toggle="tooltip"]').tooltip();
 
-    initializeDatesSearch();
-    searchEvents()
+    // initializeDatesSearch();
+    // searchEvents()
+
+    // $('#formFind').submit()
+  })
+
+  function showModalFind(){
+    $('#modalFind').modal()
+  }
+
+  $('#ResponsibleOrCreator').select2({placeholder: 'Select the Creator or Responsible'})
+
+  if(!$('#firstDay').val()) $('#firstDay').val(moment().format('YYYY-MM-DD'))
+  if(!$('#lastDay').val()) $('#lastDay').val(moment().format('YYYY-MM-DD'))
+
+  function checkStatusEmpty(){
+    if (0 === $('input[name=Status]:checked').length) {
+      swal({
+        title:"",
+        text:"Please select at least 1 status.",
+        type: "error"
+      }).then(
+        function () {
+        }
+      )
+      throw new Error('Location Empty')
+    }
+  }
+
+  function checkLocationEmpty(){
+    if (0 === $('input[name=Location]:checked').length) {
+      swal({
+        title:"",
+        text:"Please select at least 1 location.",
+        type: "error"
+      }).then(
+        function () {
+        }
+      )
+      throw new Error('Location Empty')
+    }
+  }
+
+  $('#formFind').submit(function(e){
+    e.preventDefault();
+
+    checkLocationEmpty()
+    checkStatusEmpty()
+
+    $.ajax({
+      url: '/external-event/searchFiltered',
+      type: 'POST',
+      data: $('#formFind').serialize(),
+      dataType:'json',
+      success: function(data) {
+        console.log(data);
+        $('#externalEvents tbody').empty()
+
+        var dataTableBody = data.reduce(function(acc,ele){
+          let newLine = '<tr data-event-code="'+ele.EventCode+'">'
+                          +'<td class="text-center">'+ ele.EventCode +'</td>'
+                          +'<td>'+ ele.CreatedByName +'</td>'
+                          +'<td>'+ ele.ResponsibleByName +'</td>'
+                          +'<td class="text-center">'+ ele.start +'</td>'
+                          +'<td class="text-center">'+ ele.end +'</td>'
+                          +'<td>'+ ele.title +'</td>'
+                          +'<td>'+ ele.DepartureFrom +'</td>'
+                          +'<td>'+ ele.StatusName +'</td>'
+                          +'<td><i onclick="loadMoreInfoExternal(this);" class="fa fa-search-plus" aria-hidden="true"></i></td>'
+                       +'</tr>'
+          acc = acc + newLine
+          return acc
+        }, '')
+
+        $('#externalEvents tbody').append(dataTableBody)
+        $('#modalFind').modal('hide')
+      }
+    })
   })
 
   $("#selectReuseEvent").on("change", function (e) {
@@ -433,8 +598,10 @@
 
   function searchEvents(){
     let dataSend = {
-      firstDay: $('#firstDayFind').val(),
-      lastDay: $('#lastDayFind').val()
+      // firstDay: $('#firstDayFind').val(),
+      // lastDay: $('#lastDayFind').val()
+      firstDay: $('#firstDay').val(),
+      lastDay: $('#lastDay').val()
     }
     $.ajax({
         url: '/external-event/search-events',

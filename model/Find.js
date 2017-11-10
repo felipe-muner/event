@@ -1,14 +1,21 @@
 const conn = require(process.env.PWD + '/conn');
 const fs = require('fs')
 const moment = require('moment')
+const Util = require(process.env.PWD + '/util/Util')
 
 function Find(){
   this.testaFunc = function(){
     console.log('testaFunc')
   }
-  this.makeFind = function(req, res, next){
-    conn.acquire(function(err,con){
 
+  this.makeFind = function(req, res, next){
+    delete req.session.externalFilters
+    delete req.session.finishFilters
+
+    let StartTime = req.body.StartTime ? req.body.StartTime : req.session.findFilters && req.session.findFilters.StartTime ? req.session.findFilters.StartTime : moment().format('YYYY-MM-DD')
+    let EndTime = req.body.EndTime ? req.body.EndTime : req.session.findFilters && req.session.findFilters.EndTime ? req.session.findFilters.EndTime : moment().format('YYYY-MM-DD')
+
+    conn.acquire(function(err,con){
       let query = 'SELECT '+
                   'e.EventCode, '+
                   'e.Type, '+
@@ -38,7 +45,7 @@ function Find(){
                 'GROUP BY e.EventCode '+
                 'ORDER BY EventID ASC'
 
-      con.query(query, [req.body.StartTime, req.body.EndTime], function(err, result) {
+      con.query(query, [StartTime, EndTime], function(err, result) {
         con.release();
         if(err){
           console.log(this.sql);
@@ -51,6 +58,36 @@ function Find(){
       })
     })
   }
+
+  this.filterEvents = function(req, res, next) {
+    let filters = req.originalUrl === '/find/searchFiltered' ? req.body : req.session.findFilters
+    if(req.originalUrl === '/find/searchFiltered') req.session.findFilters = req.body
+
+    if(filters && Object.keys(filters).length > 0) {
+      if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
+      if(filters.listRoom) filters.listRoom = Util.stringParseArray(filters.listRoom).map(e => parseInt(e))
+      if(filters.Status) filters.Status = Util.stringParseArray(filters.Status).map(e => parseInt(e))
+      if(filters.Location) filters.Location = Util.stringParseArray(filters.Location).map(e => e.toUpperCase())
+
+      if(filters.EventCode) req.makeFind = req.makeFind.filter(e => e.EventCode === parseInt(filters.EventCode))
+      if((filters.Type === 'I') || (filters.Type === 'E')) req.makeFind = req.makeFind.filter(e => e.Type === filters.Type)
+      if(filters.EventName) req.makeFind = req.makeFind.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
+      if(filters.ResponsibleOrCreator) req.makeFind = req.makeFind.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
+
+      req.makeFind = req.makeFind.filter(e => filters.Status.includes(e.EventStatus_ID))
+                                .filter(e =>
+                                  'I' === e.Type && filters.Location.includes(e.unidade.toUpperCase()) ||
+                                  'E' === e.Type && filters.Location.includes(e.DepartureFrom.toUpperCase())
+                                )
+    }
+
+    let findFilters = req.session.findFilters ? req.session.findFilters : {}
+    req.session.backupFindFilters = req.session.findFilters ? req.session.findFilters : {}
+    delete req.session.findFilters
+
+    next()
+  }
+
   this.getLastHundred = function(req, res, next){
     conn.acquire(function(err,con){
       con.query('SELECT '+

@@ -16,10 +16,8 @@ const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
-router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,function(req, res, next) {
-  req.lastHundredOccurrence.map(e => {
-    console.log(e)
-    console.log('------')
+router.get('/', find.makeFind, find.filterEvents, u.allActive, ie.getAllSiteBuildingRoom, function(req, res, next) {
+  req.makeFind.map(e => {
     if( e.Type === 'I'){
       e.Type = 'Internal'
       e.TypeFormatado = 'Internal('+ Util.toTitleCase(e.unidade) +')'
@@ -33,17 +31,18 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
     e.endFormated = moment(e.end).format('DD/MM/YYYY HH:mm')
     e.title = Util.toTitleCase(e.title)
     e.ProductFormated = (!!e.HasItem) ? 'Yes' + '('+e.QtdItem+')' : 'No' + '('+e.QtdItem+')'
-
-    console.log(e)
-    console.log('------')
   })
+
   res.render('find/find', {
     sess:req.session,
     allActiveUser:req.allActiveUser,
     getAllSiteBuildingRoom: req.getAllSiteBuildingRoom,
-    lastHundredOccurrence: req.lastHundredOccurrence
+    lastHundredOccurrence: req.makeFind
   })
 }).post('/search-event-by-code', find.searchEventByCode, find.getTemplateType, g.guestOfEvent, mi.productOfEvent, function(req, res, next) {
+  req.session.findFilters = req.session.backupFindFilters
+  req.session.externalFilters = req.session.backupExternalFilters
+  req.session.finishFilters = req.session.backupFinishFilters
 
   req.findEventByCode.Type === 'I' ? req.findEventByCode.Type = 'Internal' : req.findEventByCode.Type = 'External'
   req.findEventByCode.ResponsibleByName = Util.toTitleCase(req.findEventByCode.ResponsibleByName)
@@ -88,25 +87,7 @@ router.get('/', find.getLastHundred, u.allActive, ie.getAllSiteBuildingRoom,func
   })
 
   res.json({EventFound: req.findEventByCode})
-}).post('/searchFiltered', find.makeFind, function(req, res, next) {
-  let filters = req.body
-
-  if(filters.ResponsibleOrCreator) filters.ResponsibleOrCreator = Util.stringParseArray(filters.ResponsibleOrCreator).map(e => parseInt(e))
-  if(filters.listRoom) filters.listRoom = Util.stringParseArray(filters.listRoom).map(e => parseInt(e))
-  if(filters.Status) filters.Status = Util.stringParseArray(filters.Status).map(e => parseInt(e))
-  if(filters.Location) filters.Location = Util.stringParseArray(filters.Location).map(e => e.toUpperCase())
-
-  if(filters.EventCode) req.makeFind = req.makeFind.filter(e => e.EventCode === parseInt(filters.EventCode))
-  if((filters.Type === 'I') || (filters.Type === 'E')) req.makeFind = req.makeFind.filter(e => e.Type === filters.Type)
-  if(filters.EventName) req.makeFind = req.makeFind.filter(e => e.title.toUpperCase().includes(filters.EventName.toUpperCase()))
-  if(filters.ResponsibleOrCreator) req.makeFind = req.makeFind.filter(e => filters.ResponsibleOrCreator.includes(e.CreateBy) || filters.ResponsibleOrCreator.includes(e.ResponsibleByEvent))
-
-  req.makeFind = req.makeFind.filter(e => filters.Status.includes(e.EventStatus_ID))
-                             .filter(e =>
-                               'I' === e.Type && filters.Location.includes(e.unidade.toUpperCase()) ||
-                               'E' === e.Type && filters.Location.includes(e.DepartureFrom.toUpperCase())
-                             )
-
+}).post('/searchFiltered', find.makeFind, find.filterEvents, function(req, res, next) {
   req.makeFind.map(e => {
     if( e.Type === 'I'){
       e.Type = 'Internal'
