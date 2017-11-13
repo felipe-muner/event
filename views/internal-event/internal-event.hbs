@@ -73,13 +73,15 @@
                   <div class="panel-heading">Main information</div>
                   <div class="panel-body">
                     <div class="row">
-                      <div class="col-sm-1">
-                        <label for="startTimeNewEvent">Start</label>
-                        <input type="time" name="startTimeNewEvent" id="startTimeNewEvent" class="form-control" data-step="4" data-intro="Start Hour" required>
-                      </div>
-                      <div class="col-sm-1">
-                        <label for="endTimeNewEvent">End</label>
-                        <input type="time" name="endTimeNewEvent" id="endTimeNewEvent" class="form-control" data-step="5" data-intro="End Hour" required>
+                      <div class="col-sm-3">
+                        <div class="col-sm-6">
+                          <label for="startTimeNewEvent">Start</label>
+                          <input type="time" name="startTimeNewEvent" id="startTimeNewEvent" class="form-control" data-step="4" data-intro="Start Hour" required>
+                        </div>
+                        <div class="col-sm-6">
+                          <label for="endTimeNewEvent">End</label>
+                          <input type="time" name="endTimeNewEvent" id="endTimeNewEvent" class="form-control" data-step="5" data-intro="End Hour" required>
+                        </div>
                       </div>
                       <div class="col-sm-4">
                         <label for="nameNewEvent"></label>
@@ -94,10 +96,10 @@
                           {{/each}}
                         </select>
                       </div>
-                      <div class="col-sm-3" data-step="8" data-intro="Departament">
+                      <div class="col-sm-2" data-step="8" data-intro="Departament">
                         <label for="iddepartamento"></label>
                         <select id="iddepartamento" name="iddepartamento" style="width:100%;">
-                          <option value="">SELECT THE DEPARTAMENT</option>
+                          <option value="">DEPARTAMENT</option>
                           {{#each allDepartament}}
                             <option value="{{iddepartamento}}">{{toTitleCase nomedepartamento}}</option>
                           {{/each}}
