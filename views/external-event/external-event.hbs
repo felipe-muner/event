@@ -114,15 +114,15 @@
                     <div class="row">
                       <div class="col-sm-2" data-step="8" data-intro="When event will start">
                         <label for="StartEvent">Departure</label>
-                        <input type="datetime-local" name="StartEvent" id="StartEvent" class="form-control" required>
+                        <input type="datetime-local" name="StartEvent" id="StartEvent" class="form-control font11" required>
                       </div>
                       <div class="col-sm-2" data-step="9" data-intro="When people will leave of event site">
                         <label for="LeavingFromEvent">Leaving the Event Site</label>
-                        <input type="datetime-local" name="LeavingFromEvent" id="LeavingFromEvent" class="form-control">
+                        <input type="datetime-local" name="LeavingFromEvent" id="LeavingFromEvent" class="form-control font11">
                       </div>
                       <div class="col-sm-2" data-step="10" data-intro="When the people will arrived back to the school">
                         <label for="EndEvent">Arrival at School</label>
-                        <input type="datetime-local" name="EndEvent" id="EndEvent" class="form-control" required>
+                        <input type="datetime-local" name="EndEvent" id="EndEvent" class="form-control font11" required>
                       </div>
                       <div class="col-sm-2" data-step="11" data-intro="Event Name">
                         <label for="nameNewEvent"></label>
@@ -163,7 +163,7 @@
                       </div>
                       <div class="col-sm-6" data-step="16" data-intro="Which site the departure will be">
                         <label for="departureFrom">Departure Location</label>
-                        <select name="departureFrom" id="departureFrom" class="form-control" name="departureFrom" required>
+                        <select name="departureFrom" id="departureFrom" class="form-control font11" name="departureFrom" required>
                           <option value=""></option>
                           <option value="Botafogo">Botafogo</option>
                           <option value="Urca">Urca</option>
@@ -181,7 +181,7 @@
                           <label for="meansOfTransport">Means of Transport</label>
                         </div>
                         <div class="">
-                          <select class="form-control" name="meansOfTransport" id="meansOfTransport">
+                          <select class="form-control font11" name="meansOfTransport" id="meansOfTransport">
                             <option value="">Select</option>
                             {{#each meansOfTransport}}
                               <option value="{{EventTransportID}}">{{TypeVehicleEnglish}}/{{TypeVehiclePort}} - {{AmountSeat}}</option>
@@ -235,7 +235,7 @@
                     </div>
                     <div class="row" style="margin-top:5px;" data-step="27" data-intro="You can insert the type of participant and his name">
                       <div class="col-sm-2" data-step="28" data-intro="If you want to specify the type and names, please choose between parent, pupil, staff or visitor">
-                        <select class="form-control" id="listTypeName">
+                        <select class="form-control font11" id="listTypeName">
                           <option data-group-name="parent" value="Parent">Parent</option>
                           <option data-group-name="pupil" value="Pupil">Pupil</option>
                           <option data-group-name="staff" value="Staff">Staff</option>

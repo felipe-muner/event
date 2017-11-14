@@ -139,28 +139,28 @@
           {{#if Evento.isInternal}}
             <div class="row" style="margin-top:10px;">
               <div class="col-sm-2">
-                <select name="NeedComputer" class="form-control" data-container="body" title="Need computer/notebook?" data-toggle="tooltip">
+                <select name="NeedComputer" class="form-control font11" data-container="body" title="Need computer/notebook?" data-toggle="tooltip">
                   {{#each Evento.OptionsNeedComputer}}
                     <option {{setSelected ../Evento.NeedComputer opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
                 </select>
               </div>
               <div class="col-sm-2">
-                <select name="NeedDataShow" class="form-control" data-container="body" title="Need DataShow?" data-toggle="tooltip">
+                <select name="NeedDataShow" class="form-control font11" data-container="body" title="Need DataShow?" data-toggle="tooltip">
                   {{#each Evento.OptionsNeedDataShow}}
                     <option {{setSelected ../Evento.NeedDataShow opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
                 </select>
               </div>
               <div class="col-sm-2">
-                <select name="VideoFrom" class="form-control" data-container="body" title="Video Conference From:" data-toggle="tooltip">
+                <select name="VideoFrom" class="form-control font11" data-container="body" title="Video Conference From:" data-toggle="tooltip">
                   {{#each Evento.OptionsVideoConferenceFrom}}
                     <option {{setSelected ../Evento.VideoFrom opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
                 </select>
               </div>
               <div class="col-sm-2">
-                <select name="VideoTo" class="form-control" data-container="body" title="Video Conference To:" data-toggle="tooltip">
+                <select name="VideoTo" class="form-control font11" data-container="body" title="Video Conference To:" data-toggle="tooltip">
                   {{#each Evento.OptionsVideoConferenceTo}}
                     <option {{setSelected ../Evento.VideoTo opt}} value="{{opt}}">{{opt}}</option>
                   {{/each}}
@@ -193,7 +193,7 @@
                 <div class="panel-body">
                   <div class="row" style="margin-bottom:15px;border-bottom:1px solid black;" data-container="body" title="Choose the type, insert the name and press enter" data-toggle="tooltip">
                       <div class="col-sm-4" style="margin-bottom:10px;">
-                        <select class="form-control" name="listTypeGuest" id="listTypeGuest">
+                        <select class="form-control font11" name="listTypeGuest" id="listTypeGuest">
                           {{#each Evento.OptionsGuest}}
                             <option value="{{opt}}">{{toTitleCase opt}}</option>
                           {{/each}}
