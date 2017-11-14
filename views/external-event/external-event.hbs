@@ -662,6 +662,7 @@
     checkEventPast($('#StartEvent').val())
     checkEndAfterStart()
     checkBudgetBalance()
+    checkBudgetChoosed()
     addItemUsuarioBurro()
     checkItemWithoutAmount()
     passou()
@@ -902,6 +903,13 @@
     }
   }
 
+  function checkBudgetChoosed(){
+    if (!$('#id_budget').val()) {
+      $('#id_budget').css('border-color','red')
+      swal("No Budget Selected", "Please choose an budget", "error")
+      throw new Error('Please choose an budget')
+    }
+  }
 
   function loadMoreInfoExternal(el){
      let form = document.createElement("form")

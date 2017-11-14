@@ -696,6 +696,7 @@
     checkNewTimeDay()
     checkVideoConference()
     checkBudgetBalance()
+    checkBudgetChoosed()
     addItemUsuarioBurro()
     checkItemWithoutAmount()
     passou()
@@ -830,6 +831,14 @@
     if ($('#id_budget').find(":selected").data('saldo') < sum) {
       $('#id_budget').css('border-color','red')
       swal("Budget doesn't have balance", "Choose another budget or remove itens", "error")
+      throw new Error('Please choose an budget')
+    }
+  }
+
+  function checkBudgetChoosed(){
+    if (!$('#id_budget').val()) {
+      $('#id_budget').css('border-color','red')
+      swal("No Budget Selected", "Please choose an budget", "error")
       throw new Error('Please choose an budget')
     }
   }
