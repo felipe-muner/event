@@ -177,9 +177,9 @@ function Reschedule(){
   this.createEvent = function(req, res, next){
     next()
     // async.forEach((req.DesiredDate), function (item, callback){
-    //   if(true === item.Available){
+    //   if(item.Available) {
     //
-    //   }else{
+    //   } else {
     //
     //   }
     // }, function(err) {

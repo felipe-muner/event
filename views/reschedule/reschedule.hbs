@@ -18,23 +18,32 @@
             </div>
           </div>
           <div class="rescheduleDiv" style="display:none;">
-            <div class="row">
-              <div class="col-sm-2">
+            <div class="row" style="margin-top:5px;">
+              <div class="col-sm-3">
                 <label for="StartEvent">Start Event</label>
                 <input type="datetime-local" name="StartEvent" id="StartEvent" class="form-control" disabled>
               </div>
-              <div class="col-sm-2">
+              <div class="col-sm-3">
                 <label for="EndEvent">End Event</label>
                 <input type="datetime-local" name="EndEvent" id="EndEvent" class="form-control" disabled>
               </div>
-              <div class="col-sm-4">
+              <div class="col-sm-6">
                 <label for="RoomName">Room</label>
                 <input type="text" name="RoomName" id="RoomName" class="form-control" disabled>
               </div>
             </div>
+            <div class="row" style="margin-top:5px;">
+              <div class="col-sm-3">
+                <label for="FromDate">From</label>
+                <input type="date" name="FromDate" id="FromDate" class="form-control" onkeyup="updateMinToDateField(this);" required>
+              </div>
+              <div class="col-sm-3">
+                <label for="ToDate">To</label>
+                <input type="date" name="ToDate" id="ToDate" class="form-control" required>
+              </div>
+            </div>
             <div class="row" style="margin-top:10px;">
-              <div class="col-sm-6">
-                <span style="font-weight:bold;">Every:</span>
+              <div class="col-sm-12">
                 <label class="checkbox-inline">
                   <input type="checkbox" value="1" name="dayOfWeek">Monday
                 </label>
@@ -57,15 +66,9 @@
                   <input type="checkbox" value="0" name="dayOfWeek">Sunday
                 </label>
               </div>
-              <div class="col-sm-2" style="padding-right: 0px;padding-left: 0px;">
-                <span style="font-weight:bold;">From:</span>
-                <input type="date" name="FromDate" id="FromDate" onkeyup="updateMinToDateField(this);" required>
-              </div>
-              <div class="col-sm-2">
-                <span style="font-weight:bold;">To:</span>
-                <input type="date" name="ToDate" id="ToDate" required>
-              </div>
-              <div class="col-sm-2 text-right">
+            </div>
+            <div class="row" style="margin-top:15px;">
+              <div class="col-sm-3 text-right">
                 <button type="submit" name="button" class="btn btn-primary btn-xs btn-block">Generate List of New Event</button>
               </div>
             </div>
@@ -124,7 +127,7 @@
 
 
     $('#FromDate').val(moment().format('YYYY-MM-DD'))
-    $('#ToDate').val('2017-10-10')
+    // $('#ToDate').val(moment().add(1, 'days').format('YYYY-MM-DD'))
 
     function updateMinToDateField(el){
       $('#ToDate').attr('min',moment($(el).val()).add(1, 'days').format('YYYY-MM-DD'))

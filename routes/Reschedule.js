@@ -21,15 +21,16 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
     sess: req.session,
     myInternalEvents:req.myInternalEvents
   })
-}).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode, r.guestOfEvent, r.productOfEvent, r.createEvent, function(req, res, next) {
-
-
-
-
+}).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode,
+r.guestOfEvent, r.productOfEvent, r.createEvent, function(req, res, next) {
   // console.log(req.body)
   // console.log(req.EventCode)
   // console.log(req.Room_ID)
-  // console.log(req.DesiredDate)
+  console.log('------------------------------------------')
+  console.log('------------------------------------------')
+  console.log(req.DesiredDate)
+  console.log('------------------------------------------')
+  console.log('------------------------------------------')
 
   // console.log('____EVENT SEARCHED')
   // console.log(req.findEventByCode)
