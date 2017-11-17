@@ -43,6 +43,7 @@ router.get('/', fe.getAllFinishEvent, fe.filterEvents, u.allActive, function(req
 
   res.json(req.allEventToFinish)
 }).post('/write-down-page', fe.productOfEvent, mi.getAllProduct, function(req,res,next){
+  req.session.finishFilters = req.session.backupFinishFilters
   res.render('finish-event/write-down-page',{
     sess:req.session,
     camposAproveitados:req.body,
