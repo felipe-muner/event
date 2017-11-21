@@ -695,7 +695,9 @@
     checkStartAfterNow()
     checkNewTimeDay()
     checkVideoConference()
-    checkBudgetBalance()
+
+    if(2017 === moment($('#dateNewEvent').val()).year()) checkBudgetBalance()
+
     checkBudgetChoosed()
     addItemUsuarioBurro()
     checkItemWithoutAmount()
