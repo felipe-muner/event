@@ -11,7 +11,9 @@ const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', MenuItem.getAllProduct, MenuItem.getAllUnit ,function(req, res, next) {
-  console.log(req.session);
+  console.log('qwe');
+  console.log(req.allProduct)
+  console.log('qwe');
   let flashMsg = req.session.flashMsg
   if(flashMsg) delete req.session.flashMsg
   res.render('menu-item/menu-item',{
@@ -42,9 +44,12 @@ router.get('/', MenuItem.getAllProduct, MenuItem.getAllUnit ,function(req, res, 
   req.session.flashMsg.txtMsg = (parseInt(req.params.Active) === 1) ? 'Product Disabled!' : 'Product Able!'
   req.session.flashMsg.styleMsg = 'alert-warning'
   res.redirect('/menu-item')
-});
-
-router.get('/product-unit', function(req, res, next) {
+}).get('/change-closing/:EventProductID/:Active', MenuItem.changeClosing, function(req, res, next) {
+  req.session.flashMsg = {}
+  req.session.flashMsg.txtMsg = (parseInt(req.params.Active) === 1) ? 'Product Disabled!' : 'Product Able!'
+  req.session.flashMsg.styleMsg = 'alert-warning'
+  res.redirect('/menu-item')
+}).get('/product-unit', function(req, res, next) {
   console.log('product-unit');
   res.render('menu-item/product-unit',{dados:'menu item',sess:req.session})
 });

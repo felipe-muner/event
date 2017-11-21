@@ -42,13 +42,13 @@ router.get('/', fe.getAllFinishEvent, fe.filterEvents, u.allActive, function(req
   })
 
   res.json(req.allEventToFinish)
-}).post('/write-down-page', fe.productOfEvent, mi.getAllProduct, function(req,res,next){
+}).post('/write-down-page', fe.productOfEvent, mi.getAllProductActiveClosing, function(req,res,next){
   req.session.finishFilters = req.session.backupFinishFilters
   res.render('finish-event/write-down-page',{
     sess:req.session,
     camposAproveitados:req.body,
     products: req.products,
-    allProducts: req.allProduct
+    allProducts: req.allProductActiveClosing
   })
 // }).post('/close-event', fe.updateItemsFinishEvent, fe.updateStatusEvent, f.searchEventByCode, mi.productOfEvent, f.getRecipientsEmail, function(req,res,next){
 }).post('/close-event', fe.clearProduct, fe.addProductUpdated, fe.updateStatusEvent, f.searchEventByCode, mi.productOfEvent, f.getRecipientsEmail, function(req,res,next){
