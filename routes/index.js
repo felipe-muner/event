@@ -10,6 +10,7 @@ const moment = require('moment')
 const md5 = require('md5')
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
+const version = require(process.env.PWD + '/package.json')['version']
 
 // router.get('/testeJavaScriptTemplate', function(req, res, next) {
 //   conn.acquire(function(err,con){
@@ -29,6 +30,7 @@ const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', function(req, res, next) {
   console.log('entrei aqui testarei session');
+  req.session.version = version
   if (req.session.matricula) {
     console.log('entrei aqui tem session!');
     res.redirect('/panel')

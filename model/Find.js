@@ -313,9 +313,9 @@ function Find(){
         if(err){
           res.render('error', { error: err } )
         }else{
-          console.log('_____INTERNAL____PARAAA')
-          console.log(result)
-          console.log('_____INTERNAL____PARAAA')
+          // console.log('_____INTERNAL____PARAAA')
+          // console.log(result)
+          // console.log('_____INTERNAL____PARAAA')
           req.myInternalEvents = result
           next()
         }

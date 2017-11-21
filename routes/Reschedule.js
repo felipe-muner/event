@@ -26,11 +26,7 @@ r.guestOfEvent, r.productOfEvent, r.createEvent, function(req, res, next) {
   // console.log(req.body)
   // console.log(req.EventCode)
   // console.log(req.Room_ID)
-  console.log('------------------------------------------')
-  console.log('------------------------------------------')
-  console.log(req.DesiredDate)
-  console.log('------------------------------------------')
-  console.log('------------------------------------------')
+  // console.log(req.DesiredDate)
 
   // console.log('____EVENT SEARCHED')
   // console.log(req.findEventByCode)
