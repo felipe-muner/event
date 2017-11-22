@@ -62,9 +62,10 @@ function MailSender(){
               console.log(budget);
               if(0 !== budget.events.length){
                 contentHTML += '<table cellspacing="0" style="width:100%;">'
-                contentHTML += '<tr style="background-color:#3F51B5;color:white;"><td style="text-align:center;padding:7px;font-weight:bold;" colspan="4">'+ budget.nconta +'</td></tr>'
+                contentHTML += '<tr style="background-color:#3F51B5;color:white;"><td style="text-align:center;padding:7px;font-weight:bold;" colspan="4">'+ budget.setor + ' ' +  budget.grupo + ' ' + budget.conta + ' - ' + budget.nconta +'</td></tr>'
                 budget.events.map(function(evento, indexEvent){
-                  contentHTML += '<tr style="background-color:#00BCD4;color:white;"><td style="padding:5px;" colspan="4">'+ evento.EventCode + ' - ' + evento.Name +'</td></tr>'
+                  contentHTML += '<tr style="background-color:#004D40;color:white;"><td style="padding:5px;" colspan="4">'+ evento.EventCode + ' - ' + evento.Name +'</td></tr>'
+                  contentHTML += '<tr style="background-color:#004D40;color:white;"><td style="padding:5px;" colspan="4">'+ moment(evento.StartEvent).format('DD/MM/YYYY HH:mm') + ' até ' + moment(evento.EndEvent).format('DD/MM/YYYY HH:mm') + ' criado por ' + Util.toTitleCase(evento.nomeMatricula) +'</td></tr>'
                   contentHTML += '<tr>'
                     contentHTML += '<td style="width:55%;">Name</td>'
                     contentHTML += '<td style="">Price</td>'
@@ -104,7 +105,14 @@ function MailSender(){
             let mailOptions = {};
             mailOptions.from = '"- Event System - Financial Report" <noreply@britishschool.g12.br>'
             // mailOptions.to = listRecipientsEmail
-            mailOptions.to = 'adm_ict@britishschool.g12.br,adm_tesouraria@britishschool.g12.br'
+            // mailOptions.to = 'adm_ict@britishschool.g12.br,adm_tesouraria@britishschool.g12.br'
+            console.log('development' === process.env.NODE_ENV);
+
+            if('development' === process.env.NODE_ENV){
+              mailOptions.to = 'adm_ict@britishschool.g12.br'
+            }else{
+              mailOptions.to = 'adm_ict@britishschool.g12.br,adm_tesouraria@britishschool.g12.br'
+            }
             mailOptions.subject = subjectConcat
             mailOptions.text = 'Financial Report'
             // mailOptions.html = $('body').html()
