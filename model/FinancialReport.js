@@ -51,7 +51,7 @@ function FinancialReport(){
     // console.log('---teste');
     async.forEach((req.getDistinctBudget), function (item, callback){
       conn.acquire(function(err,con){
-        con.query('SELECT e.EventCode, e.Name, e.StartEvent, e.EndEvent, e.CreateBy, u.nomeusuario FROM Event e Inner Join usuarios u On e.CreateBy = u.matricula WHERE Budget_ID = ? AND EventStatus_ID = 3', [item.Budget_ID],function(err, result) {
+        con.query('SELECT e.EventCode, e.Name, e.StartEvent, e.EndEvent, e.CreateBy, u.nomeusuario FROM Event e Inner Join usuarios u On e.CreateBy = u.matricula WHERE Budget_ID = ? AND EventStatus_ID = 3 AND (DATE(StartEvent) BETWEEN DATE(?) AND DATE(?))', [item.Budget_ID, req.body.startDate, req.body.endDate],function(err, result) {
           con.release();
           if(err){
             console.log(err);
