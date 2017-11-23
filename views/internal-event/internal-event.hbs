@@ -106,6 +106,13 @@
                         </select>
                       </div>
                     </div>
+                    <div class="row" style="margin-top:7px;">
+                      <div class="col-sm-12">
+                        <span>Reschedule Event?</span>
+                        <input id="rescheduleN" style="margin-left: 5px;" type="radio" name="reschedule" value="No" checked> <label for="rescheduleN">No</label>
+                        <input id="rescheduleS" style="margin-left: 5px;" type="radio" name="reschedule" value="Yes"> <label for="rescheduleS">Yes</label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -285,6 +292,90 @@
           <input type="submit" value="Create" class="btn btn-success" id="submitFormNewEvent" data-step="33" data-intro="Click here to create new event">
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<div id="modalRescheduleEvent" class="modal" role="dialog">
+  <div class="modal-dialog" style="width:90%;">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>
+          Reschedule Event - <span id="rescheduleEventCode"></span> - <span id="rescheduleEventName"></span>
+          (<span id="rescheduleEventStartTime"></span> - <span id="rescheduleEventEndTime"></span>)
+        </h5>
+      </div>
+      <div class="modal-body">
+        <form id="formReschedule">
+          <input type="hidden" id="eventoToReschedule" name="eventoToReschedule">
+          <input type="hidden" id="eventoToRescheduleRoom" name="eventoToRescheduleRoom">
+          <input type="hidden" id="eventoToRescheduleStartTime" name="eventoToRescheduleStartTime">
+          <input type="hidden" id="eventoToRescheduleEndTime" name="eventoToRescheduleEndTime">
+          <div class="row">
+            <div class="col-sm-3">
+              <label for="FromDate">From</label>
+              <input type="date" name="FromDate" id="FromDate" class="form-control" onkeyup="updateMinToDateField(this);" required>
+            </div>
+            <div class="col-sm-3">
+              <label for="ToDate">To</label>
+              <input type="date" name="ToDate" id="ToDate" class="form-control" required>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <div class="col-sm-12">
+              <label class="checkbox-inline">
+                <input type="checkbox" value="1" name="dayOfWeek">Monday
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" value="2" name="dayOfWeek">Tuesday
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" value="3" name="dayOfWeek">Wednesday
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" value="4" name="dayOfWeek">Thursday
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" value="5" name="dayOfWeek">Friday
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" value="6" name="dayOfWeek">Saturday
+              </label>
+              <label class="checkbox-inline">
+                <input type="checkbox" value="0" name="dayOfWeek">Sunday
+              </label>
+            </div>
+          </div>
+          <div class="row" style="margin-top:15px;">
+            <div class="col-sm-3 text-right">
+              <button type="submit" name="button" class="btn btn-primary btn-xs btn-block">Generate List of New Event</button>
+            </div>
+          </div>
+          <div class="row" id="divRangeDate" style="margin-top:10px;display:none;">
+            <div class="col-sm-12">
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <div class="row">
+                    <div class="col-sm-10">
+                      <div style="margin-top:3px;">
+                        <span>New desired dates</span> <span class="badge" id="amountEvent"></span>
+                      </div>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                      <div>
+                        <button onclick="confirmCreation();" type="button" name="button" class="btn btn-success btn-xs btn-block">Confirm Creation</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body" id="listDesiredDates">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
@@ -711,24 +802,45 @@
       data,
       dataType:'json',
       success: function(data) {
-        // debugger
         $('#submitFormNewEvent').prop("disabled",false);
         $('#submitFormNewEvent').prop("value",'Create');
+
         // searchEvents()
         // $('#selectReuseEvent').val('').trigger('change')
         // resetForm()
+
         swal({
           title: "Saved successfully",
-          text: data,
+          text: data.code,
           type:"success",
           allowOutsideClick: false
         }).then(
           function () {
-            $('#modalNewEvent').modal('hide')
-            window.location.replace('/my-event')
+            if(data.rescheduleEvent === 'No') {
+              $('#modalNewEvent').modal('hide')
+              window.location.replace('/my-event')
+            } else if(data.rescheduleEvent === 'Yes') {
+              $('#modalNewEvent').modal('hide')
+
+              $('#rescheduleEventCode').text(data.code)
+              $('#rescheduleEventName').text(data.name)
+              $('#rescheduleEventStartTime').text(moment(data.date).format('DD-MM-YYYY') + ' ' + data.startTime)
+              $('#rescheduleEventEndTime').text(data.endTime)
+
+              $('#eventoToReschedule').val(data.code)
+              $('#eventoToRescheduleRoom').val(data.roomID)
+              $('#eventoToRescheduleStartTime').val(data.startTime)
+              $('#eventoToRescheduleEndTime').val(data.endTime)
+
+              $('#FromDate').attr('min',moment(data.date).add(1, 'days').format('YYYY-MM-DD'))
+              $('#ToDate').attr('min',moment(data.date).add(2, 'days').format('YYYY-MM-DD'))
+
+              $('#FromDate').val(moment(data.date).add(1, 'days').format('YYYY-MM-DD'))
+
+              $('#modalRescheduleEvent').modal('show')
+            }
           }
         )
-
       }
     })
   });
@@ -888,6 +1000,172 @@
     $('#sumstaff').text(0)
     $('#sumvisitor').text(0)
     $('#tableItemEvent tbody').empty()
+  }
+
+  function updateMinToDateField(el){
+    $('#ToDate').attr('min',moment($(el).val()).add(1, 'days').format('YYYY-MM-DD'))
+  }
+
+  $('#formReschedule').submit(function(e){
+    e.preventDefault()
+    validateCheckBoxWeek()
+    genereateArrayDates()
+  })
+
+  function validateCheckBoxWeek(){
+    $('input[type=checkbox][name=dayOfWeek]').css('outline','1px solid #FFF')
+    if(0 === $('input[type=checkbox][name=dayOfWeek]:checked').size()){
+      swal({
+        title: "",
+        text: "Please select at least ONE day of week",
+        type: "error"
+      }).then(
+        function () {
+          $('input[type=checkbox][name=dayOfWeek]').css('outline','1px solid red')
+        }
+      )
+      throw new Error('Please select at least ONE day of week')
+    }
+  }
+
+  function genereateArrayDates(){
+    let arrayWeekDay = []
+    $("input[type=checkbox][name=dayOfWeek]:checked").each(function(){
+      arrayWeekDay.push(parseInt($(this).val()))
+    })
+
+    let a = moment($('#FromDate').val())
+    let b = moment($('#ToDate').val())
+
+    let arrayDatesDesired = []
+    for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days')){
+      if( arrayWeekDay.includes(m.day()) ){
+        arrayDatesDesired.push({
+          // "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + moment($('#StartEvent').val()).format('HH:mm'),
+          // "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' + moment($('#EndEvent').val()).format('HH:mm'),
+          "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
+          "dateStart": m.format('YYYY-MM-DD') + 'T' + $('#eventoToRescheduleStartTime').val(),
+          "dateEnd": m.format('YYYY-MM-DD') + 'T' + $('#eventoToRescheduleEndTime').val(),
+          "weekDay": convertToDayString(m.day())
+        })
+      }
+    }
+
+    $.ajax({
+      url: '/reschedule/verify-dates',
+      type: 'POST',
+      data: {
+        "EventCode": parseInt($('#eventoToReschedule').val()),
+        "Room_ID": parseInt($('#eventoToRescheduleRoom').val()),
+        "desiredDate": JSON.stringify(arrayDatesDesired)
+      },
+      dataType:'json',
+      success: function(data) {
+        console.log(data)
+
+        $('#divRangeDate').css('display','block')
+        if(0 === data.length){
+          $('#amountEvent').text(0)
+          let msgZeroData = '<div class="alert alert-danger" style="margin-bottom:0px;">'+
+            '<strong>No dates!</strong> Please, make a valid filter.'+
+          '</div>'
+
+          $('#listDesiredDates').html(msgZeroData)
+        }else{
+          $('#amountEvent').text(data.length)
+
+          $('#listDesiredDates').empty()
+          $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
+
+          data.forEach(function(e){
+            let newLineDate = ''
+            if(e.Available){
+              newLineDate = '<li class="newEvent" data-available="' + e.Available + '" data-date-start="' + e.dateStart + '" data-date-end="' + e.dateEnd + '" data-weekday="'+ e.weekDay + '" >' +
+                            '<span class="label label-success">Rescheduled</span> - ' + e.dateFormated + '</li>'
+            }else{
+              let labels = ''
+              e.EventsSameTime.forEach((element, index) => {
+                let start = moment(element.StartEvent).format('HH:mm')
+                let end = moment(element.EndEvent).format('HH:mm')
+                let tooltip = element.Name + '<div>' + toTitleCase(element.CreateByName) + '</div><div>' + start + ' - ' + end + '</div>'
+                labels += '<span style="margin-right: 3px;" data-toggle="tooltip" title="" data-original-title="' + tooltip + '" class="label label-danger">' + element.EventCode + '</span>'
+              })
+
+              newLineDate = '<li class="newEvent" data-available="' + e.Available + '" data-date-start="' + e.dateStart + '" data-date-end="' + e.dateEnd + '" data-weekday="'+ e.weekDay + '" >' +
+                            labels + ' - ' + e.dateFormated + '</li>'
+            }
+            $('#listDesiredDates ul').append(newLineDate)
+          })
+          $('[data-toggle="tooltip"]').tooltip({html:true})
+        }
+      }
+    })
+  }
+
+  function toTitleCase(str) {
+    str = str || ''
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  }
+
+  function convertToDayString(numberDay){
+    let weekday = []
+    weekday[0] =  "Sunday";
+    weekday[1] =  "Monday";
+    weekday[2] =  "Tuesday";
+    weekday[3] =  "Wednesday";
+    weekday[4] =  "Thursday";
+    weekday[5] =  "Friday";
+    weekday[6] =  "Saturday";
+    return weekday[numberDay]
+  }
+
+  function confirmCreation(){
+    if(0 === $('.newEvent').size()){
+      swal({
+        title: "",
+        text: "No dates selected",
+        type: "error"
+      }).then(function() {})
+      throw new Error('No dates selected')
+    }else{
+      let dataSend = {
+        "EventCode": parseInt($('#eventoToReschedule').val()),
+        "Room_ID": parseInt($('#eventoToRescheduleRoom').val()),
+        "dateNewEvent": moment($('#listDesiredDates ul li[data-available="true"]').data('date-start')).format('YYYY-MM-DD HH:mm:ss'),
+        "desiredDate": JSON.stringify(serializeDesiredDate())
+      }
+
+      $.ajax({
+        url: '/reschedule/create',
+        type: 'POST',
+        data: dataSend,
+        dataType:'json',
+        success: function(data) {
+          // $('#listDesiredDates').empty()
+          // $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
+          // console.log(data)
+          // data.forEach(function(e){
+          //   if(e.Available){
+          //     $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateStart +'" data-date-end="'+ e.dateEnd +'" data-weekday="'+ e.weekday +'" >'+
+          //       '<span class="label label-success">Rescheduled</span> - ' + moment(e.dateStart).format('DD/MM/YYYY') + ' - ' + e.weekday +
+          //     '</li>')
+          //   }else{
+          //     $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateStart +'" data-date-end="'+ e.dateEnd +'" data-weekday="'+ e.weekday +'" >'+
+          //       '<span class="label label-danger">' + e.EventScheduled.EventCode + '</span> - ' + moment(e.dateStart).format('DD/MM/YYYY') + ' - ' + e.weekday +
+          //     '</li>')
+          //   }
+          // })
+        }
+      })
+    }
+  }
+
+  function serializeDesiredDate(){
+    let arrayDesiredDate = []
+    $('.newEvent').each(function(e){
+      arrayDesiredDate.push($(this).data())
+    })
+    return arrayDesiredDate
   }
 </script>
 {{/section}}

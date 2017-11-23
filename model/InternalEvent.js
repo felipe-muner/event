@@ -184,15 +184,9 @@ function InternalEvent(){
   }
 
   this.getLastEvent = function(req, res, next){
-    console.log(req.body);
-    console.log('__123_lastevent')
-    console.log(req.body.dateNewEvent)
-    console.log('__123_lastevent')
     conn.acquire(function(err,con){
       con.query('SELECT EventID, EventCode FROM event WHERE YEAR(StartEvent) = YEAR(?) order by eventId desc limit 1', [req.body.dateNewEvent], function(err, result) {
-        console.log('______________________________nextevent')
         console.log(this.sql);
-        console.log('______________________________nextevent')
         con.release();
         if(err){
           console.log(err);

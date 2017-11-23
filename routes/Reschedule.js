@@ -10,6 +10,7 @@ const f = require(process.env.PWD + '/model/Find')
 const g = require(process.env.PWD + '/model/Guest')
 const r = require(process.env.PWD + '/model/Reschedule')
 const mi = require(process.env.PWD + '/model/MenuItem')
+const ie = require(process.env.PWD + '/model/InternalEvent')
 const fs = require('fs');
 const moment = require('moment');
 const md5 = require('md5');
@@ -21,7 +22,9 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
     sess: req.session,
     myInternalEvents:req.myInternalEvents
   })
-}).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode,
+}).post('/verify-dates', r.convBodyToReq, r.checkAvailabilityReschedule, function(req, res, next) {
+  res.json(req.DesiredDate)
+}).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode, ie.getLastEvent,
 r.guestOfEvent, r.productOfEvent, r.createEvent, function(req, res, next) {
   // console.log(req.body)
   // console.log(req.EventCode)

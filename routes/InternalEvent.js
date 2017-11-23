@@ -20,9 +20,6 @@ const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
 router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allActive, f.myEvents, function(req, res, next) {
-
-  console.log('felipe entrei ------')
-
   req.myEvents.map((e)=>{
     e.title = Util.toTitleCase(e.title)
     e.ResponsibleByName = Util.toTitleCase(e.ResponsibleByName)
@@ -39,17 +36,20 @@ router.get('/', ie.getAllSiteBuildingRoom, mi.getAllProductActive, d.all, u.allA
     myEvents:req.myEvents
   })
 }).post('/search-events', ie.searchEventTwoDate, function(req, res, next) {
-  //console.log(req.allEvents);
   res.json(req.allEvents)
 }).post('/create-event', a.getDirectApproval,ie.getLastEvent, ie.createEvent, g.bulkGuestEvent, mi.bulkItemEvent, f.searchEventByCode, g.guestOfEvent, mi.productOfEvent, f.getRecipientsEmail, function(req, res, next) {
-  console.log('_______________criei')
-  console.log(req.findEventByCode)
-  console.log('_______________criei2')
-  console.log(req.findEventByCode.CreateBy)
-  console.log('_______________criei')
   req.findEventByCode.msgDefault = 'Evento Interno criado por: ' + req.findEventByCode.CreateBy
   m.internalEvent(req.findEventByCode)
-  res.json(req.nextEventCode)
+
+  res.json({
+    code: req.nextEventCode,
+    name: req.body.nameNewEvent,
+    date: req.body.dateNewEvent,
+    startTime: req.body.startTimeNewEvent,
+    endTime: req.body.endTimeNewEvent,
+    rescheduleEvent: req.body.reschedule,
+    roomID: req.body.roomIDNewEvent
+  })
 }).post('/find-event-by-code',ie.searchEventByCode, ie.getTemplateMoreInfo, g.guestOfEvent, mi.productOfEvent, function(req,res,next){
   req.findEventByCode.start = moment(req.findEventByCode.start).format('DD/MM/YYYY HH:mm')
   req.findEventByCode.end = moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm')
