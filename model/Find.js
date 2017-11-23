@@ -150,6 +150,7 @@ function Find(){
                   'e.Name AS title, '+
                   'e.StartEvent AS start, '+
                   'e.EndEvent AS end, '+
+                  'e.EventStatus_ID, '+
                   'es.StatusName, '+
                   'e.NeedComputer, '+
                   'e.NeedDataShow, '+
