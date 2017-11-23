@@ -157,7 +157,7 @@ function Reschedule(){
             console.log(err);
             res.render('error', { error: err } );
           }else{
-            console.log(this.sql)
+            // console.log(this.sql)
             if(0 === result.length){
               item.Available = true
             }else{
@@ -194,36 +194,75 @@ function Reschedule(){
   //   })
   // })
 
-  this.createEvent = async function(req, res, next){
-    async.forEach((req.DesiredDate), function(item, callback) {
-      if(item.Available) {
-        // let eventCode = setEventCode(moment(item.dateStart).format('YYYY-MM-DD HH:mm:ss'))
-        // let newEvent = createNewEvent(req, item, eventCode)
-        callback()
-      } else {
-        callback()
-      }
+  this.createEvent = function(req, res, next){
+    req.DesiredDate = req.DesiredDate.filter(e=>e.Available)
+    req.newArrayEventCode = []
+    async.forEachSeries((req.DesiredDate), function (item, callback){
+      console.log(item)
+      conn.acquire(function(err,con){
+        con.query('SELECT EventID, EventCode FROM event WHERE YEAR(StartEvent) = YEAR(?) order by eventId desc limit 1', [item.dateStart], function(err, result) {
+          console.log(this.sql);
+          con.release();
+          if(err){
+            console.log(err);
+            res.render('error', { error: err } );
+          }else{
+            let eventCode = '';
+            (result.length === 0) ? eventCode = parseInt(moment(item.dateStart).year() + '0001') : eventCode = result[0].EventCode + 1
+            console.log('proximo codigo' + eventCode)
+
+            req.newArrayEventCode.push(eventCode)
+
+            let newEvent = {
+              Type: 'I',
+              EventCode: eventCode,
+              StartEvent: item.dateStart,
+              EndEvent: item.dateEnd,
+              Room_ID: req.findEventByCode.RoomID,
+              Name: req.findEventByCode.title,
+              NeedComputer: req.findEventByCode.NeedComputer,
+              NeedDataShow: req.findEventByCode.NeedDataShow,
+              VideoFrom: req.findEventByCode.VideoFrom,
+              VideoTo: req.findEventByCode.VideoTo,
+              AdditionalInformation: req.findEventByCode.AdditionalInformation,
+              Nparent: req.findEventByCode.Nparent,
+              Npupil: req.findEventByCode.Npupil,
+              Nstaff: req.findEventByCode.Nstaff,
+              Nvisitor: req.findEventByCode.Nvisitor,
+              Budget_ID: req.findEventByCode.Budget_ID,
+              CreateBy: req.findEventByCode.CreateBy,
+              ResponsibleByEvent: req.findEventByCode.ResponsibleByEvent,
+              Departament_ID: req.findEventByCode.Departament_ID,
+              EventStatus_ID: req.findEventByCode.EventStatus_ID
+            }
+            // console.log('to aqui muner')
+            //CRIANDO NOVO EVENTO
+
+            console.log(newEvent)
+            conn.acquire(function(err,con){
+              con.query('INSERT INTO Event SET ?', [newEvent], function(err, result) {
+                console.log(this.sql)
+                con.release()
+                if(err) {
+                  console.log(err)
+                  res.render('error', { error: err })
+                } else {
+                  console.log('criado ' + eventCode);
+                  callback()
+                }
+              })
+            })
+            //CRIANDO NOVO EVENTO
+          }
+        })
+      })
     }, function(err) {
       next()
     })
+
+    // let eventCode = await setEventCode(moment(item.dateStart).format('YYYY-MM-DD HH:mm:ss'))
+    // let newEvent = await createNewEvent(req, item, eventCode)
   }
-
-}
-
-function setEventCode(date) {
-  conn.acquire(function(err, con) {
-    con.query('SELECT EventID, EventCode FROM event WHERE YEAR(StartEvent) = YEAR(?) order by eventId desc limit 1', [date], function(err, result) {
-      console.log(this.sql)
-      con.release()
-      if(err) {
-        console.log(err)
-        res.render('error', { error: err })
-      } else {
-        let eventCode = result.length === 0 ? parseInt(moment(date).year() + '0001') : result[0].EventCode + 1
-        return eventCode
-      }
-    })
-  })
 }
 
 function createNewEvent(req, item, eventCode) {

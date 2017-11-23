@@ -24,8 +24,11 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
   })
 }).post('/verify-dates', r.convBodyToReq, r.checkAvailabilityReschedule, function(req, res, next) {
   res.json(req.DesiredDate)
-}).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode, ie.getLastEvent,
+}).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode,
 r.guestOfEvent, r.productOfEvent, r.createEvent, function(req, res, next) {
+  console.log('qwe');
+  console.log(req.newArrayEventCode);
+  console.log('qweeee')
   // console.log(req.body)
   // console.log(req.EventCode)
   // console.log(req.Room_ID)

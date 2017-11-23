@@ -1081,7 +1081,7 @@
             let newLineDate = ''
             if(e.Available){
               newLineDate = '<li class="newEvent" data-available="' + e.Available + '" data-date-start="' + e.dateStart + '" data-date-end="' + e.dateEnd + '" data-weekday="'+ e.weekDay + '" >' +
-                            '<span class="label label-success">Rescheduled</span> - ' + e.dateFormated + '</li>'
+                            '<span class="label label-success">Available Reschedule</span> - ' + e.dateFormated + '</li>'
             }else{
               let labels = ''
               e.EventsSameTime.forEach((element, index) => {
