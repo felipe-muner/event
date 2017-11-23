@@ -790,7 +790,9 @@
     let endEvent = moment($('#dateNewEvent').val() + 'T' + $('#endTimeNewEvent').val())
     var isBetween = $('#calendar').fullCalendar( 'clientEvents', function(event){
       if(startEvent.isBetween(event.start, event.end, null, [])
-      || endEvent.isBetween(event.start, event.end, null, [])){
+        || endEvent.isBetween(event.start, event.end, null, [])
+        || event.start.isBetween(startEvent, endEvent, null, [])
+        || event.end.isBetween(startEvent, endEvent, null, [])){
         // alert('Horário selecionado já está em uso na Room' + $('#roomID').select2('data')[0].text.split('-').pop())
         swal("Time already selected", "In " + $('#roomID').select2('data')[0].text.split('-').pop(), "error")
         throw new Error('Time + Room already in use.')
