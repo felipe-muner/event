@@ -51,7 +51,7 @@ function FinancialReport(){
     // console.log('---teste');
     async.forEach((req.getDistinctBudget), function (item, callback){
       conn.acquire(function(err,con){
-        con.query('SELECT EventCode, Name FROM Event WHERE Budget_ID = ? AND EventStatus_ID = 3', [item.Budget_ID],function(err, result) {
+        con.query('SELECT e.EventCode, e.Name, e.StartEvent, e.EndEvent, e.CreateBy, u.nomeusuario FROM Event e Inner Join usuarios u On e.CreateBy = u.matricula WHERE Budget_ID = ? AND EventStatus_ID = 3 AND (DATE(StartEvent) BETWEEN DATE(?) AND DATE(?))', [item.Budget_ID, req.body.startDate, req.body.endDate],function(err, result) {
           con.release();
           if(err){
             console.log(err);
@@ -61,6 +61,10 @@ function FinancialReport(){
               item.events.push({
                 "EventCode": x.EventCode,
                 "Name": x.Name,
+                "StartEvent": x.StartEvent,
+                "EndEvent": x.EndEvent,
+                "matricula": x.CreateBy,
+                "nomeMatricula": x.nomeusuario,
                 products: []
               })
             })
@@ -80,9 +84,9 @@ function FinancialReport(){
     // console.log(typeof clauseIn)
     let sqlString = ''
     if(0 === req.body.arrayIDBudget.length){
-      sqlString = 'SELECT DISTINCT(Budget_ID), o.nconta FROM Event Inner Join orcamento o ON Event.Budget_ID = o.id WHERE Budget_ID IS NOT NULL AND (DATE(StartEvent) BETWEEN DATE(?) AND DATE(?))'
+      sqlString = 'SELECT DISTINCT(Budget_ID), o.setor, o.grupo, o.conta, o.nconta FROM Event Inner Join orcamento o ON Event.Budget_ID = o.id WHERE Budget_ID IS NOT NULL AND (DATE(StartEvent) BETWEEN DATE(?) AND DATE(?))'
     }else{
-      sqlString = 'SELECT DISTINCT(Budget_ID), o.nconta FROM Event Inner Join orcamento o ON Event.Budget_ID = o.id WHERE Budget_ID IS NOT NULL AND (DATE(StartEvent) BETWEEN DATE(?) AND DATE(?)) AND Budget_ID IN ('+clauseIn+')'
+      sqlString = 'SELECT DISTINCT(Budget_ID), o.setor, o.grupo, o.conta, o.nconta FROM Event Inner Join orcamento o ON Event.Budget_ID = o.id WHERE Budget_ID IS NOT NULL AND (DATE(StartEvent) BETWEEN DATE(?) AND DATE(?)) AND Budget_ID IN ('+clauseIn+')'
     }
     conn.acquire(function(err,con){
       // console.log(req.body.arrayIDBudget)
@@ -99,6 +103,9 @@ function FinancialReport(){
             let a = {}
             a.Budget_ID = x.Budget_ID
             a.nconta = x.nconta
+            a.setor = x.setor
+            a.grupo = x.grupo
+            a.conta = x.conta
             a.events = []
             return a
           })

@@ -17,7 +17,7 @@ function MenuItem(){
   this.getAllProduct = function(req, res, next){
     conn.acquire(function(err,con){
       con.query('SELECT '+
-                  'ep.EventProductID, ep.NameEnglish, ep.NamePort, ep.Price, epu.NameEnglish as NameUnitEngl, epu.NamePort as NameUnitPort, ep.Active '+
+                  'ep.EventProductID, ep.NameEnglish, ep.NamePort, ep.Price, epu.NameEnglish as NameUnitEngl, epu.NamePort as NameUnitPort, ep.Active, ep.ClosingItem '+
                 'FROM '+
                   'EventProduct ep INNER JOIN EventProductUnit epu '+
                 'ON ep.Unit = epu.EventProductUnitID', function(err, result) {
@@ -38,7 +38,7 @@ function MenuItem(){
                   'ep.EventProductID, ep.NameEnglish, ep.NamePort, ep.Price, epu.NameEnglish as NameUnitEngl, epu.NamePort as NameUnitPort, ep.Active '+
                 'FROM '+
                   'EventProduct ep INNER JOIN EventProductUnit epu '+
-                'ON ep.Unit = epu.EventProductUnitID AND ep.Active = 1', function(err, result) {
+                'ON ep.Unit = epu.EventProductUnitID AND ep.Active = 1 AND ClosingItem = 0', function(err, result) {
         console.log(this.sql);
         con.release();
         if(err){
@@ -50,12 +50,46 @@ function MenuItem(){
       });
     });
   }
+
+  this.getAllProductActiveClosing = function(req, res, next){
+    console.log('eentrnetnrententer');
+    conn.acquire(function(err,con){
+      con.query('SELECT '+
+                  'ep.EventProductID, ep.NameEnglish, ep.NamePort, ep.Price, epu.NameEnglish as NameUnitEngl, epu.NamePort as NameUnitPort, ep.Active '+
+                'FROM '+
+                  'EventProduct ep INNER JOIN EventProductUnit epu '+
+                'ON ep.Unit = epu.EventProductUnitID AND ep.Active = 1', function(err, result) {
+        console.log(this.sql);
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          req.allProductActiveClosing = result
+          next()
+        }
+      });
+    });
+  }
   this.changeActive = function(req, res, next){
     conn.acquire(function(err,con){
       let changedActive
       (parseInt(req.params.Active) === 1) ? changedActive = 0 : changedActive = 1
       console.log(typeof changedActive);
       con.query('UPDATE EventProduct SET Active = ? WHERE EventProductID = ?', [changedActive, req.params.EventProductID], function(err, result) {
+        console.log(this.sql);
+        con.release();
+        if(err){
+          res.render('error', { error: err } );
+        }else{
+          next()
+        }
+      });
+    });
+  }
+  this.changeClosing = function(req, res, next){
+    conn.acquire(function(err,con){
+
+      con.query('UPDATE EventProduct SET ClosingItem = !ClosingItem WHERE EventProductID = ?', [req.params.EventProductID], function(err, result) {
         console.log(this.sql);
         con.release();
         if(err){
@@ -170,7 +204,6 @@ function MenuItem(){
           res.render('error', { error: err } );
         }else{
           // console.log('fields from products');
-          console.log(result)
           req.findEventByCode.products = result
           next()
         }

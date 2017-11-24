@@ -79,6 +79,13 @@ function Find(){
                                   'I' === e.Type && filters.Location.includes(e.unidade.toUpperCase()) ||
                                   'E' === e.Type && filters.Location.includes(e.DepartureFrom.toUpperCase())
                                 )
+
+      if('Yes' === filters.Products){
+        req.makeFind = req.makeFind.filter(e => e.HasItem === 1)
+      }else if('No' === filters.Products){
+        req.makeFind = req.makeFind.filter(e => e.HasItem === 0)
+      }
+
     }
 
     let findFilters = req.session.findFilters ? req.session.findFilters : {}
@@ -143,6 +150,7 @@ function Find(){
                   'e.Name AS title, '+
                   'e.StartEvent AS start, '+
                   'e.EndEvent AS end, '+
+                  'e.EventStatus_ID, '+
                   'es.StatusName, '+
                   'e.NeedComputer, '+
                   'e.NeedDataShow, '+

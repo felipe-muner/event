@@ -54,8 +54,13 @@ router.get('/', find.makeFind, find.filterEvents, u.allActive, ie.getAllSiteBuil
   req.findEventByCode.end = moment(req.findEventByCode.end).format('DD/MM/YYYY HH:mm')
   req.findEventByCode.LeavingFromEvent = moment(req.findEventByCode.LeavingFromEvent).format('DD/MM/YYYY HH:mm')
 
-  req.findEventByCode.TotalFinalProd = req.findEventByCode.products.reduce((acc,ele)=> acc + (ele.Amount * ele.Price),0)
-  req.findEventByCode.TotalFinalProd = req.findEventByCode.TotalFinalProd.toFixed(2)
+  if (3 === req.findEventByCode.EventStatus_ID) {
+    req.findEventByCode.TotalFinalProd = req.findEventByCode.products.reduce((acc,ele)=> acc + (ele.UsedAmount * ele.Price),0).toFixed(2)
+    req.findEventByCode.products.map(e => e.Amount = e.UsedAmount + '/' + e.Amount)
+    req.findEventByCode.products.map(e => e.TotalProd = (e.Price * e.UsedAmount))
+  }else{
+    req.findEventByCode.TotalFinalProd = req.findEventByCode.products.reduce((acc,ele)=> acc + (ele.Amount * ele.Price),0).toFixed(2)
+  }
 
   req.findEventByCode.products.map((e) => e.TotalProd = (e.TotalProd).toFixed(2))
 

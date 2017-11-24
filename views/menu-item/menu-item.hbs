@@ -18,25 +18,35 @@
     </div>
     <div class="panel-body">
       <form class="" method="POST">
-        <div class="col-sm-3" data-step="2" data-intro="Insert the name in portuguese">
-          <input type="text" class="form-control" placeholder=" Portuguese Product Name"  name="NamePort" required autofocus>
+        <div class="row">
+          <div class="col-sm-3" data-step="2" data-intro="Insert the name in portuguese">
+            <input type="text" class="form-control" placeholder=" Portuguese Product Name"  name="NamePort" required autofocus>
+          </div>
+          <div class="col-sm-3" data-step="3" data-intro="Insert the name in english">
+            <input type="text" class="form-control" placeholder=" English Product Name"  name="NameEnglish" required>
+          </div>
+          <div class="col-sm-2" data-step="4" data-intro="Insert the price">
+            <input type="number" class="form-control" placeholder="Price / Preço" name="Price" step="0.01" required>
+          </div>
+          <div class="col-sm-2" data-step="5" data-intro="Select the unit, if is not present, contact de adm_ict@britishschool.g12.br">
+            <select class="form-control" name="Unit" placeholder="Unit" required>
+              <option value="" disabled selected>Unit / Unidade</option>
+              {{#each units}}
+                <option value="{{EventProductUnitID}}">{{NameEnglish}} - {{NamePort}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="col-sm-1" data-step="6" data-intro="Click here to save the new product">
+            <input type="submit" value="Create" class="btn btn-success btn-xs btn-block">
+          </div>
         </div>
-        <div class="col-sm-3" data-step="3" data-intro="Insert the name in english">
-          <input type="text" class="form-control" placeholder=" English Product Name"  name="NameEnglish" required>
-        </div>
-        <div class="col-sm-2" data-step="4" data-intro="Insert the price">
-          <input type="number" class="form-control" placeholder="Price / Preço" name="Price" step="0.01" required>
-        </div>
-        <div class="col-sm-2" data-step="5" data-intro="Select the unit, if is not present, contact de adm_ict@britishschool.g12.br">
-          <select class="form-control" name="Unit" placeholder="Unit" required>
-            <option value="" disabled selected>Unit / Unidade</option>
-            {{#each units}}
-              <option value="{{EventProductUnitID}}">{{NameEnglish}} - {{NamePort}}</option>
-            {{/each}}
-          </select>
-        </div>
-        <div class="col-sm-1" data-step="6" data-intro="Click here to save the new product">
-          <input type="submit" value="Create" class="btn btn-success btn-xs btn-block">
+        <div class="row" style="margin-top:10px;">
+          <div class="col-sm-12">
+
+            <label class="radio-inline" style="padding-left:0px;">Item apenas para fechamento?</label>
+            <label class="radio-inline"><input type="radio" name="ClosingItem" value="0" required>Nāo<label>
+            <label class="radio-inline" style="margin-left:10px;"><input type="radio" name="ClosingItem" value="1">Sim</label>
+          </div>
         </div>
       </form>
     </div>
@@ -53,6 +63,7 @@
         <th style="width:10%;">Price / Preço (R$)</th>
         <th data-step="8" data-intro="Edit the product" style="width:10%;">Edit</th>
         <th data-step="9" data-intro="Click in Sim/Yes or Nāo/No to toggle the status" style="width:10%;">Active</th>
+        <th data-step="10" data-intro="Click in Sim/Yes or Nāo/No to toggle the status" style="width:10%;">Closing Item?</th>
       </tr>
     </thead>
     <tbody>
@@ -67,6 +78,9 @@
           </td>
           <td style="text-align:center;">
             <a href="/menu-item/change-active/{{EventProductID}}/{{Active}}">{{convBoolToHuman Active}}</a>
+          </td>
+          <td style="text-align:center;">
+            <a href="/menu-item/change-closing/{{EventProductID}}/{{ClosingItem}}">{{convBoolToHuman ClosingItem}}</a>
           </td>
         </tr>
       {{/each}}

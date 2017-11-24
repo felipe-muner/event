@@ -415,7 +415,7 @@
       if('I' === $('#Type').val()) checkSameDay()
       checkEndAfterStart()
       if('I' === $('#Type').val()) checkVideoConference()
-      checkBudgetBalance()
+      if(2017 === moment($('#dateNewEvent').val()).year()) checkBudgetBalance()
       checkBudgetChoosed()
       addItemUsuarioBurro()
       checkItemWithoutAmount()
