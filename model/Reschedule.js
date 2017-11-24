@@ -207,8 +207,9 @@ function Reschedule(){
             console.log(err);
             res.render('error', { error: err } );
           }else{
-            let eventCode = '';
-            (result.length === 0) ? eventCode = parseInt(moment(item.dateStart).year() + '0001') : eventCode = result[0].EventCode + 1
+            // let eventCode = '';
+            // (result.length === 0) ? eventCode = parseInt(moment(item.dateStart).year() + '0001') : eventCode = result[0].EventCode + 1
+            let eventCode = result.length === 0  ? parseInt(moment(item.dateStart).year() + '0001') : result[0].EventCode + 1
             console.log('proximo codigo' + eventCode)
 
             req.newArrayEventCode.push(eventCode)
