@@ -26,6 +26,13 @@ router.get('/', f.myInternalEvents, function(req, res, next) {
   res.json(req.DesiredDate)
 }).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode, r.guestOfEvent,
 r.productOfEvent, r.createEvent, r.createGuestOfEvent, r.createProductOfEvent, function(req, res, next) {
+  req.findEventByCode.msgDefault = 'Evento Interno reprogramado por: ' + req.findEventByCode.CreateBy
+  req.findEventByCode.isReschedule = true
+  req.findEventByCode.products = req.products
+  req.findEventByCode.guests = req.guests
+  req.findEventByCode.eventsRescheduled = req.eventsRescheduled
+  m.internalEvent(req.findEventByCode)
+
   res.json(req.newArrayEventCode)
 })
 

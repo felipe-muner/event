@@ -306,10 +306,30 @@ function MailSender(){
               })
             }
 
+            if(eventFinded.isReschedule) {
+              eventFinded.eventsRescheduled.map(function(e) {
+                $('#tableReschedule').append(
+                  '<tr style="border-bottom:1px solid black;">' +
+                    '<td style="border:1px solid black;padding-left:3px;">' + e.eventCode + '</td>' +
+                    '<td style="border:1px solid black;padding-left:3px;">' + e.date + '</td>' +
+                  '</tr>'
+                )
+              })
+            } else {
+              $('#tableReschedule').css('display', 'none')
+            }
+
             console.log('vou mandar emailll !');
-            let subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
+            let subjectConcat = ''
+            if(eventFinded.isReschedule) {
+              subjectConcat = 'Event ' + eventFinded.EventCode + ' - Rescheduled by ' + Util.toTitleCase(eventFinded.CreatedByName)
+            } else {
+              subjectConcat = 'Event ' + eventFinded.EventCode + ' - ' + eventFinded.StatusName + ' - Created by ' + Util.toTitleCase(eventFinded.CreatedByName) + ' - Responsible by ' + Util.toTitleCase(eventFinded.ResponsibleByName)
+            }
+
             let mailOptions = {}
             mailOptions.from = '"- Event System" <noreply@britishschool.g12.br>'
+
             if('development' === process.env.NODE_ENV){
               console.log('soubaseteste');
               mailOptions.to = 'adm_ict@britishschool.g12.br'

@@ -123,6 +123,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
       $("#eventoToReschedule").select2()
+      $("#eventoToReschedule").attr('disabled', 'disabled')
       setEvent()
       if('' !== $("#eventoToReschedule").val()) $('.rescheduleDiv').css('display', 'block')
     })

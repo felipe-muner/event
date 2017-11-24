@@ -179,6 +179,7 @@ function Reschedule(){
   this.createEvent = function(req, res, next){
     req.DesiredDate = req.DesiredDate.filter(e=>e.Available)
     req.newArrayEventCode = []
+    req.eventsRescheduled = []
     async.forEachSeries((req.DesiredDate), function (item, callback){
       console.log(item)
       conn.acquire(function(err,con){
@@ -193,6 +194,10 @@ function Reschedule(){
             console.log('proximo codigo: ' + eventCode)
 
             req.newArrayEventCode.push(eventCode)
+            req.eventsRescheduled.push({
+              eventCode: eventCode,
+              date: moment(item.dateStart).format('DD/MM/YYYY')
+            })
 
             let newEvent = {
               Type: 'I',
