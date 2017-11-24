@@ -240,6 +240,58 @@ function Reschedule(){
       next()
     })
   }
+
+  this.createGuestOfEvent = function(req, res, next) {
+    if(req.guests.length > 0) {
+      async.forEach((req.newArrayEventCode), function(eventCode, callback) {
+        let bulkQuery = req.guests.map(function(e) {
+          let item = []
+          new Array().push.call(item, eventCode, e.Type, e.NameGuest)
+          return item
+        })
+        conn.acquire(function(err,con) {
+          con.query('INSERT INTO EventGuest(Event_ID, Type, NameGuest) VALUES ?', [bulkQuery], function(err, result) {
+            con.release();
+            if(err) {
+              res.render('error', { error: err });
+            } else {
+              callback()
+            }
+          });
+        });
+      }, function(err) {
+        next()
+      })
+    } else {
+      next()
+    }
+  }
+
+  this.createProductOfEvent = function(req, res, next) {
+    if(req.products.length > 0) {
+      async.forEach((req.newArrayEventCode), function(eventCode, callback) {
+        let bulkQuery = req.products.map(function(e) {
+          let item = []
+          new Array().push.call(item, eventCode, e.EventProduct_ID, e.Price, e.Amount)
+          return item
+        })
+        conn.acquire(function(err,con) {
+          con.query('INSERT INTO EventItem(Event_ID, EventProduct_ID, Price, Amount) VALUES ?', [bulkQuery], function(err, result) {
+            con.release();
+            if(err) {
+              res.render('error', { error: err });
+            } else {
+              callback()
+            }
+          });
+        });
+      }, function(err) {
+        next()
+      })
+    } else {
+      next()
+    }
+  }
 }
 
 module.exports = new Reschedule()

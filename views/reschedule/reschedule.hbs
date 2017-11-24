@@ -325,7 +325,17 @@
             "desiredDate" : JSON.stringify(serializeDesiredDate())
           },
           dataType:'json',
-          success: function(data) {}
+          success: function(data) {
+            let codes = data.join(', ')
+            swal({
+              title: "Saved successfully",
+              text: codes,
+              type:"success",
+              allowOutsideClick: false
+            }).then(function() {
+              window.location.replace('/my-event')
+            })
+          }
         })
       }
     }
