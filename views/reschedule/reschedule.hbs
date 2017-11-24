@@ -121,53 +121,71 @@
 
 {{#section 'script'}}
   <script type="text/javascript">
-    $("#eventoToReschedule").select2()
-    $('#FromDate').attr('min',moment().format('YYYY-MM-DD'))
-    $('#ToDate').attr('min',moment().add(1, 'days').format('YYYY-MM-DD'))
+    $(document).ready(function() {
+      $("#eventoToReschedule").select2()
+      setEvent()
+      if('' !== $("#eventoToReschedule").val()) $('.rescheduleDiv').css('display', 'block')
+    })
 
+    function setEvent() {
+      let eventCode = getURLParameter('eventCode')
+      if(eventCode) {
+        $("#eventoToReschedule").val(eventCode)
+        $("#eventoToReschedule").change()
+      }
 
-    $('#FromDate').val(moment().format('YYYY-MM-DD'))
-    // $('#ToDate').val(moment().add(1, 'days').format('YYYY-MM-DD'))
+      if($('#StartEvent').val()) {
+        let dateStartEvent = moment($('#StartEvent').val()).format('YYYY-MM-DD')
+        $('#FromDate').attr('min',moment(dateStartEvent).add(1, 'days').format('YYYY-MM-DD'))
+        $('#ToDate').attr('min',moment(dateStartEvent).add(2, 'days').format('YYYY-MM-DD'))
+        $('#FromDate').val(moment(dateStartEvent).add(1, 'days').format('YYYY-MM-DD'))
+      }
+    }
 
-    function updateMinToDateField(el){
+    function getURLParameter(name) {
+      return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+    }
+
+    function updateMinToDateField(el) {
       $('#ToDate').attr('min',moment($(el).val()).add(1, 'days').format('YYYY-MM-DD'))
     }
 
-    if( '' !== $("#eventoToReschedule").val() ){
-      $('.rescheduleDiv').css('display', 'block')
-    }
-
-    function showMoreInfo(){
-      if( '' !== $("#eventoToReschedule").val()){
+    function showMoreInfo() {
+      if('' !== $("#eventoToReschedule").val()) {
         moreInformationEvent($("#eventoToReschedule").val())
       }
     }
 
-    $('#eventoToReschedule').change(function(e){
-      if('' !== $('#eventoToReschedule').val()){
+    $('#eventoToReschedule').change(function(e) {
+      if('' !== $('#eventoToReschedule').val()) {
         $('#divRangeDate').css('display','none')
         $('#listDesiredDates').empty()
         $('.rescheduleDiv').css('display','block')
         $('#StartEvent').val('')
         $('#LeavingFromEvent').val('')
         $('#EndEvent').val('')
-        if('I' === $('#eventoToReschedule option:selected').data('type')){
+        if('I' === $('#eventoToReschedule option:selected').data('type')) {
           $('#StartEvent').val($('#eventoToReschedule option:selected').data('start-time').replace(' ','T'))
           $('#EndEvent').val($('#eventoToReschedule option:selected').data('end-time').replace(' ','T'))
           $('#RoomName').val($('#eventoToReschedule option:selected').data('room-name'))
           $('.divLeavingFromEvent').css('display', 'none')
-        }else{
+
+          let dateStartEvent = moment($('#StartEvent').val()).format('YYYY-MM-DD')
+          $('#FromDate').attr('min',moment(dateStartEvent).add(1, 'days').format('YYYY-MM-DD'))
+          $('#ToDate').attr('min',moment(dateStartEvent).add(2, 'days').format('YYYY-MM-DD'))
+          $('#FromDate').val(moment(dateStartEvent).add(1, 'days').format('YYYY-MM-DD'))
+        } else {
           $('#StartEvent').val($('#eventoToReschedule option:selected').data('start-time').replace(' ','T'))
           $('#LeavingFromEvent').val($('#eventoToReschedule option:selected').data('leaving-from-event').replace(' ','T'))
           $('#EndEvent').val($('#eventoToReschedule option:selected').data('end-time').replace(' ','T'))
           $('.divLeavingFromEvent').css('display', 'block')
         }
-      }else{
+      } else {
         $('.rescheduleDiv').css('display','none')
       }
     })
 
-    function moreInformationEvent(ecode){
+    function moreInformationEvent(ecode) {
        let form = document.createElement("form")
        form.method = "POST"
        form.action = "/find/search-event-by-code"
@@ -182,36 +200,29 @@
        form.submit()
     }
 
-    $('#formReschedule').submit(function(e){
+    $('#formReschedule').submit(function(e) {
       e.preventDefault()
-
       validateCheckBoxWeek()
-
-      let arrDates = genereateArrayDates()
-
-
+      genereateArrayDates()
     })
 
-    function validateCheckBoxWeek(){
+    function validateCheckBoxWeek() {
       $('input[type=checkbox][name=dayOfWeek]').css('outline','1px solid #FFF')
-      if(0 === $('input[type=checkbox][name=dayOfWeek]:checked').size()){
+      if(0 === $('input[type=checkbox][name=dayOfWeek]:checked').size()) {
         swal({
           title: "",
           text: "Please select at least ONE day of week",
           type: "error"
-        }).then(
-          function () {
-            $('input[type=checkbox][name=dayOfWeek]').css('outline','1px solid red')
-          }
-        )
+        }).then(function() {
+          $('input[type=checkbox][name=dayOfWeek]').css('outline','1px solid red')
+        })
         throw new Error('Please select at least ONE day of week')
       }
     }
 
-    function genereateArrayDates(){
-
+    function genereateArrayDates() {
       let arrayWeekDay = []
-      $("input[type=checkbox][name=dayOfWeek]:checked").each(function(){
+      $("input[type=checkbox][name=dayOfWeek]:checked").each(function() {
         arrayWeekDay.push(parseInt($(this).val()))
       })
 
@@ -219,42 +230,72 @@
       let b = moment($('#ToDate').val())
 
       let arrayDatesDesired = []
-      for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days')){
-        if( arrayWeekDay.includes(m.day()) ){
+      for(let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days')) {
+        if(arrayWeekDay.includes(m.day())) {
           arrayDatesDesired.push({
-            "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + moment($('#StartEvent').val()).format('HH:mm'),
-            "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' + moment($('#EndEvent').val()).format('HH:mm'),
             "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
+            "dateStart": m.format('YYYY-MM-DD') + 'T' + moment($('#StartEvent').val()).format('HH:mm'),
+            "dateEnd": m.format('YYYY-MM-DD') + 'T' + moment($('#EndEvent').val()).format('HH:mm'),
             "weekDay": convertToDayString(m.day())
           })
         }
       }
 
-      $('#divRangeDate').css('display','block')
-      if(0 === arrayDatesDesired.length){
-        $('#amountEvent').text(0)
-        let msgZeroData = '<div class="alert alert-danger" style="margin-bottom:0px;">'+
-          '<strong>No dates!</strong> Please, make a valid filter.'+
-        '</div>'
+      $.ajax({
+        url: '/reschedule/verify-dates',
+        type: 'POST',
+        data: {
+          "EventCode" : parseInt($('#eventoToReschedule option:selected').val()),
+          "Room_ID": parseInt($('#eventoToReschedule option:selected').data('room-id')),
+          "desiredDate": JSON.stringify(arrayDatesDesired)
+        },
+        dataType:'json',
+        success: function(data) {
+          $('#divRangeDate').css('display','block')
+          if(0 === data.length) {
+            $('#amountEvent').text(0)
+            let msgZeroData = '<div class="alert alert-danger" style="margin-bottom:0px;">'+
+                                '<strong>No dates!</strong> Please, make a valid filter.'+
+                              '</div>'
 
-        $('#listDesiredDates').html(msgZeroData)
-      }else{
+            $('#listDesiredDates').html(msgZeroData)
+          } else {
+            $('#amountEvent').text(data.length)
 
-        $('#amountEvent').text(arrayDatesDesired.length)
+            $('#listDesiredDates').empty()
+            $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
 
-        $('#listDesiredDates').empty()
-        $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
+            data.forEach(function(e) {
+              let newLineDate = ''
+              if(e.Available){
+                newLineDate = '<li class="newEvent" data-available="' + e.Available + '" data-date-start="' + e.dateStart + '" data-date-end="' + e.dateEnd + '" data-weekday="'+ e.weekDay + '" >' +
+                              '<span class="label label-success">Available Reschedule</span> - ' + e.dateFormated + '</li>'
+              }else{
+                let labels = ''
+                e.EventsSameTime.forEach((element, index) => {
+                  let start = moment(element.StartEvent).format('HH:mm')
+                  let end = moment(element.EndEvent).format('HH:mm')
+                  let tooltip = element.Name + '<div>' + toTitleCase(element.CreateByName) + '</div><div>' + start + ' - ' + end + '</div>'
+                  labels += '<span style="margin-right: 3px;" data-toggle="tooltip" title="" data-original-title="' + tooltip + '" class="label label-danger">' + element.EventCode + '</span>'
+                })
 
-        arrayDatesDesired.forEach(function(e){
-          $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateDefaultStart +'" data-date-end="'+ e.dateDefaultEnd +'" data-weekday="'+ e.weekDay +'" >'+
-            e.dateFormated +
-          '</li>')
-        })
-      }
-
+                newLineDate = '<li class="newEvent" data-available="' + e.Available + '" data-date-start="' + e.dateStart + '" data-date-end="' + e.dateEnd + '" data-weekday="'+ e.weekDay + '" >' +
+                              labels + ' - ' + e.dateFormated + '</li>'
+              }
+              $('#listDesiredDates ul').append(newLineDate)
+            })
+            $('[data-toggle="tooltip"]').tooltip({ html: true })
+          }
+        }
+      })
     }
 
-    function convertToDayString(numberDay){
+    function toTitleCase(str) {
+      str = str || ''
+      return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+
+    function convertToDayString(numberDay) {
       let weekday = []
       weekday[0] =  "Sunday";
       weekday[1] =  "Monday";
@@ -266,58 +307,35 @@
       return weekday[numberDay]
     }
 
-    function confirmCreation(){
-      if( 0 === $('.newEvent').size() ){
+    function confirmCreation() {
+      if(0 === $('.newEvent').size()) {
         swal({
           title: "",
           text: "No dates selected",
           type: "error"
-        }).then(
-          function () {
-
-          }
-        )
+        }).then(function() {})
         throw new Error('No dates selected')
-      }else{
-
-        let dataSend = {
-          "EventCode" : parseInt( $('#eventoToReschedule option:selected').val() ),
-          "Room_ID": $('#eventoToReschedule option:selected').data('room-id'),
-          "desiredDate" : JSON.stringify(serializeDesiredDate())
-        }
-
+      } else {
         $.ajax({
           url: '/reschedule/create',
           type: 'POST',
-          data: dataSend,
+          data: {
+            "EventCode" : parseInt($('#eventoToReschedule option:selected').val()),
+            "Room_ID": parseInt($('#eventoToReschedule option:selected').data('room-id')),
+            "desiredDate" : JSON.stringify(serializeDesiredDate())
+          },
           dataType:'json',
-          success: function(data) {
-            $('#listDesiredDates').empty()
-            $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
-            console.log(data)
-            data.forEach(function(e){
-              if(e.Available){
-                $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateStart +'" data-date-end="'+ e.dateEnd +'" data-weekday="'+ e.weekday +'" >'+
-                  '<span class="label label-success">Rescheduled</span> - ' + moment(e.dateStart).format('DD/MM/YYYY') + ' - ' + e.weekday +
-                '</li>')
-              }else{
-                $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateStart +'" data-date-end="'+ e.dateEnd +'" data-weekday="'+ e.weekday +'" >'+
-                  '<span class="label label-danger">' + e.EventScheduled.EventCode + '</span> - ' + moment(e.dateStart).format('DD/MM/YYYY') + ' - ' + e.weekday +
-                '</li>')
-              }
-            })
-          }
+          success: function(data) {}
         })
       }
     }
 
-    function serializeDesiredDate(){
+    function serializeDesiredDate() {
       let arrayDesiredDate = []
-      $('.newEvent').each(function(e){
+      $('.newEvent').each(function(e) {
         arrayDesiredDate.push($(this).data())
       })
       return arrayDesiredDate
     }
-
   </script>
 {{/section}}

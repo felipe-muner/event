@@ -20,29 +20,20 @@ const A4option = require(process.env.PWD + '/views/report/A4config')
 router.get('/', f.myInternalEvents, function(req, res, next) {
   res.render('reschedule/reschedule',{
     sess: req.session,
-    myInternalEvents:req.myInternalEvents
+    myInternalEvents: req.myInternalEvents
   })
 }).post('/verify-dates', r.convBodyToReq, r.checkAvailabilityReschedule, function(req, res, next) {
   res.json(req.DesiredDate)
 }).post('/create', r.convBodyToReq, r.checkAvailabilityReschedule, r.searchEventByCode,
 r.guestOfEvent, r.productOfEvent, r.createEvent, function(req, res, next) {
-  console.log('qwe');
-  console.log(req.newArrayEventCode);
-  console.log('qweeee')
-  // console.log(req.body)
-  // console.log(req.EventCode)
-  // console.log(req.Room_ID)
-  // console.log(req.DesiredDate)
-
-  // console.log('____EVENT SEARCHED')
+  // EVENTS CODE
+  // console.log(req.newArrayEventCode)
+  // EVENT SEARCHED
   // console.log(req.findEventByCode)
-  // console.log('____EVENT SEARCHED')
-  // console.log('____GUEST SEARCHED')
+  // GUEST SEARCHED
   // console.log(req.guests)
-  // console.log('____GUEST SEARCHED')
-  // console.log('____PRODUTO SEARCHED')
+  // PRODUCT SEARCHED
   // console.log(req.products)
-  // console.log('____PRODUTO SEARCHED')
 
   res.json(req.DesiredDate)
 })

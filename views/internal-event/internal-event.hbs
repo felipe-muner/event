@@ -823,23 +823,24 @@
               window.location.replace('/my-event')
             } else if(data.rescheduleEvent === 'Yes') {
               $('#modalNewEvent').modal('hide')
+              window.location.replace('/reschedule?eventCode=' + data.code)
 
-              $('#rescheduleEventCode').text(data.code)
-              $('#rescheduleEventName').text(data.name)
-              $('#rescheduleEventStartTime').text(moment(data.date).format('DD-MM-YYYY') + ' ' + data.startTime)
-              $('#rescheduleEventEndTime').text(data.endTime)
+              // $('#rescheduleEventCode').text(data.code)
+              // $('#rescheduleEventName').text(data.name)
+              // $('#rescheduleEventStartTime').text(moment(data.date).format('DD-MM-YYYY') + ' ' + data.startTime)
+              // $('#rescheduleEventEndTime').text(data.endTime)
 
-              $('#eventoToReschedule').val(data.code)
-              $('#eventoToRescheduleRoom').val(data.roomID)
-              $('#eventoToRescheduleStartTime').val(data.startTime)
-              $('#eventoToRescheduleEndTime').val(data.endTime)
+              // $('#eventoToReschedule').val(data.code)
+              // $('#eventoToRescheduleRoom').val(data.roomID)
+              // $('#eventoToRescheduleStartTime').val(data.startTime)
+              // $('#eventoToRescheduleEndTime').val(data.endTime)
 
-              $('#FromDate').attr('min',moment(data.date).add(1, 'days').format('YYYY-MM-DD'))
-              $('#ToDate').attr('min',moment(data.date).add(2, 'days').format('YYYY-MM-DD'))
+              // $('#FromDate').attr('min',moment(data.date).add(1, 'days').format('YYYY-MM-DD'))
+              // $('#ToDate').attr('min',moment(data.date).add(2, 'days').format('YYYY-MM-DD'))
 
-              $('#FromDate').val(moment(data.date).add(1, 'days').format('YYYY-MM-DD'))
+              // $('#FromDate').val(moment(data.date).add(1, 'days').format('YYYY-MM-DD'))
 
-              $('#modalRescheduleEvent').modal('show')
+              // $('#modalRescheduleEvent').modal('show')
             }
           }
         )
@@ -1045,8 +1046,6 @@
     for (let m = moment(a); m.isSameOrBefore(b); m.add(1, 'days')){
       if( arrayWeekDay.includes(m.day()) ){
         arrayDatesDesired.push({
-          // "dateDefaultStart": m.format('YYYY-MM-DD') + 'T' + moment($('#StartEvent').val()).format('HH:mm'),
-          // "dateDefaultEnd": m.format('YYYY-MM-DD') + 'T' + moment($('#EndEvent').val()).format('HH:mm'),
           "dateFormated": m.format('DD/MM/YYYY') + ' - ' + convertToDayString(m.day()),
           "dateStart": m.format('YYYY-MM-DD') + 'T' + $('#eventoToRescheduleStartTime').val(),
           "dateEnd": m.format('YYYY-MM-DD') + 'T' + $('#eventoToRescheduleEndTime').val(),
@@ -1065,8 +1064,6 @@
       },
       dataType:'json',
       success: function(data) {
-        console.log(data)
-
         $('#divRangeDate').css('display','block')
         if(0 === data.length){
           $('#amountEvent').text(0)
@@ -1100,7 +1097,7 @@
             }
             $('#listDesiredDates ul').append(newLineDate)
           })
-          $('[data-toggle="tooltip"]').tooltip({html:true})
+          $('[data-toggle="tooltip"]').tooltip({ html: true })
         }
       }
     })
@@ -1135,7 +1132,6 @@
       let dataSend = {
         "EventCode": parseInt($('#eventoToReschedule').val()),
         "Room_ID": parseInt($('#eventoToRescheduleRoom').val()),
-        "dateNewEvent": moment($('#listDesiredDates ul li[data-available="true"]').data('date-start')).format('YYYY-MM-DD HH:mm:ss'),
         "desiredDate": JSON.stringify(serializeDesiredDate())
       }
 
@@ -1144,22 +1140,7 @@
         type: 'POST',
         data: dataSend,
         dataType:'json',
-        success: function(data) {
-          // $('#listDesiredDates').empty()
-          // $('#listDesiredDates').append('<ul style="margin-bottom:0px;"></ul>')
-          // console.log(data)
-          // data.forEach(function(e){
-          //   if(e.Available){
-          //     $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateStart +'" data-date-end="'+ e.dateEnd +'" data-weekday="'+ e.weekday +'" >'+
-          //       '<span class="label label-success">Rescheduled</span> - ' + moment(e.dateStart).format('DD/MM/YYYY') + ' - ' + e.weekday +
-          //     '</li>')
-          //   }else{
-          //     $('#listDesiredDates ul').append('<li class="newEvent" data-date-start="'+ e.dateStart +'" data-date-end="'+ e.dateEnd +'" data-weekday="'+ e.weekday +'" >'+
-          //       '<span class="label label-danger">' + e.EventScheduled.EventCode + '</span> - ' + moment(e.dateStart).format('DD/MM/YYYY') + ' - ' + e.weekday +
-          //     '</li>')
-          //   }
-          // })
-        }
+        success: function(data) {}
       })
     }
   }

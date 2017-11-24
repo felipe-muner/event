@@ -176,24 +176,6 @@ function Reschedule(){
   }
 
 
-  // conn.acquire(function(err,con){
-  //   con.query('', [], function(err, result) {
-  //     con.release();
-  //     if(err){
-  //       console.log(err);
-  //       res.render('error', { error: err } );
-  //     }else{
-  //       console.log(this.sql)
-  //       if(0 === result.length){
-  //         item.Available = true
-  //       }else{
-  //         item.Available = result[0]
-  //       }
-  //       callback()
-  //     }
-  //   })
-  // })
-
   this.createEvent = function(req, res, next){
     req.DesiredDate = req.DesiredDate.filter(e=>e.Available)
     req.newArrayEventCode = []
@@ -207,10 +189,8 @@ function Reschedule(){
             console.log(err);
             res.render('error', { error: err } );
           }else{
-            // let eventCode = '';
-            // (result.length === 0) ? eventCode = parseInt(moment(item.dateStart).year() + '0001') : eventCode = result[0].EventCode + 1
             let eventCode = result.length === 0  ? parseInt(moment(item.dateStart).year() + '0001') : result[0].EventCode + 1
-            console.log('proximo codigo' + eventCode)
+            console.log('proximo codigo: ' + eventCode)
 
             req.newArrayEventCode.push(eventCode)
 
@@ -236,9 +216,8 @@ function Reschedule(){
               Departament_ID: req.findEventByCode.Departament_ID,
               EventStatus_ID: req.findEventByCode.EventStatus_ID
             }
-            // console.log('to aqui muner')
-            //CRIANDO NOVO EVENTO
 
+            //CRIANDO NOVO EVENTO
             console.log(newEvent)
             conn.acquire(function(err,con){
               con.query('INSERT INTO Event SET ?', [newEvent], function(err, result) {
@@ -260,48 +239,7 @@ function Reschedule(){
     }, function(err) {
       next()
     })
-
-    // let eventCode = await setEventCode(moment(item.dateStart).format('YYYY-MM-DD HH:mm:ss'))
-    // let newEvent = await createNewEvent(req, item, eventCode)
   }
-}
-
-function createNewEvent(req, item, eventCode) {
-  let newEvent = {
-    Type: 'I',
-    EventCode: eventCode,
-    StartEvent: moment(item.dateStart).format('YYYY-MM-DD HH:mm:ss'),
-    EndEvent: moment(item.dateEnd).format('YYYY-MM-DD HH:mm:ss'),
-    Room_ID: req.findEventByCode.RoomID,
-    Name: req.findEventByCode.title,
-    NeedComputer: req.findEventByCode.NeedComputer,
-    NeedDataShow: req.findEventByCode.NeedDataShow,
-    VideoFrom: req.findEventByCode.VideoFrom,
-    VideoTo: req.findEventByCode.VideoTo,
-    AdditionalInformation: req.findEventByCode.AdditionalInformation,
-    Nparent: req.findEventByCode.Nparent,
-    Npupil: req.findEventByCode.Npupil,
-    Nstaff: req.findEventByCode.Nstaff,
-    Nvisitor: req.findEventByCode.Nvisitor,
-    Budget_ID: req.findEventByCode.Budget_ID,
-    CreateBy: req.findEventByCode.CreateBy,
-    ResponsibleByEvent: req.findEventByCode.ResponsibleByEvent,
-    Departament_ID: req.findEventByCode.Departament_ID,
-    EventStatus_ID: req.findEventByCode.EventStatus_ID
-  }
-
-  conn.acquire(function(err, con) {
-    con.query('INSERT INTO Event SET ?', [newEvent], function(err, result) {
-      console.log(this.sql)
-      con.release()
-      if(err) {
-        console.log(err)
-        res.render('error', { error: err })
-      } else {
-        return true
-      }
-    })
-  })
 }
 
 module.exports = new Reschedule()
