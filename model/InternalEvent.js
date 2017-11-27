@@ -163,7 +163,7 @@ function InternalEvent(){
                   'r.Name as NameRoom '+
                 'FROM '+
                   'Room AS r '+
-                  'Inner Join Building AS b ON r.Building_ID = b.BuildingID '+
+                  'Inner Join Building AS b ON r.Building_ID = b.BuildingID AND b.Status = 1 '+
                   'Inner Join unidades AS u ON b.Site_ID = u.idunidade '+
                 'WHERE '+
                   'r.Status = 1 AND r.CanEvent = 1 '+
