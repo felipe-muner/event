@@ -22,9 +22,9 @@ function Approve(){
 
     let whereClausure = ''
     if (15 === parseInt(req.session.profile)) {
-      whereClausure = 'WHERE e.EventStatus_ID=1'
+      whereClausure = 'WHERE e.EventStatus_ID = 1 AND e.EventFatherCode IS NULL '
     }else if (16 === parseInt(req.session.profile)){
-      whereClausure = 'WHERE e.EventStatus_ID=1 AND (u1.id_site = '+ req.session.idunidade +' OR u2.id_site = '+ req.session.idunidade +')'
+      whereClausure = 'WHERE e.EventStatus_ID = 1 AND e.EventFatherCode IS NULL AND (u1.id_site = '+ req.session.idunidade +' OR u2.id_site = '+ req.session.idunidade +') '
     }else {
       let err = 'Error ao tentar utilizar aprovacao'
       res.render('error', { error: err } );
@@ -44,13 +44,17 @@ function Approve(){
                   'u2.nomeusuario AS ResponsibleByName, '+
                   'u1.nomeusuario AS CreatedByName, '+
                   'u2.id_site AS SiteResponsible, '+
-                  'u1.id_site AS SiteCreator '+
+                  'u1.id_site AS SiteCreator, '+
+                  'GROUP_CONCAT(CONCAT(ev.EventCode, " (", DATE(ev.StartEvent), ")")) AS EventsRescheduled, '+
+                  'COUNT(ev.EventCode) AS QtdEventsRescheduled '+
                 'FROM '+
                   'Event AS e '+
                   'Inner Join EventStatus AS es ON e.EventStatus_ID = es.EventStatusID '+
                   'Inner Join usuarios AS u1 ON e.CreateBy = u1.matricula '+
                   'Left Join usuarios AS u2 ON u2.matricula = e.ResponsibleByEvent '+
-                whereClausure, function(err, result) {
+                  'Left Join Event AS ev ON ev.EventFatherCode = e.EventCode AND ev.EventStatus_ID = 1 '+
+                whereClausure +
+                'GROUP BY e.EventCode', function(err, result) {
         con.release();
         if(err){
           console.log(this.sql)

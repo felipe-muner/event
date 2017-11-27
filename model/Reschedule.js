@@ -219,7 +219,8 @@ function Reschedule(){
               CreateBy: req.findEventByCode.CreateBy,
               ResponsibleByEvent: req.findEventByCode.ResponsibleByEvent,
               Departament_ID: req.findEventByCode.Departament_ID,
-              EventStatus_ID: req.findEventByCode.EventStatus_ID
+              EventStatus_ID: req.findEventByCode.EventStatus_ID,
+              EventFatherCode: req.findEventByCode.EventCode
             }
 
             //CRIANDO NOVO EVENTO

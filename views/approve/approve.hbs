@@ -32,6 +32,7 @@
               <th>Start</th>
               <th>End</th>
               <th>Event Name</th>
+              <th>Events Rescheduled</th>
               <th>More Info</th>
               <th data-step="2" data-intro="Check/Uncheck All Checkboxes">Approve <input type="checkbox" name="markAllCB" id="markAllCB" onclick="toggleCheckBox(this);"></th>
             </tr>
@@ -46,8 +47,12 @@
                 <td class="text-center">{{start}}</td>
                 <td class="text-center">{{end}}</td>
                 <td>{{title}}</td>
+                <td class="text-center">
+                  {{QtdEventsRescheduled}}
+                  <i class="fa fa-plus" aria-hidden="true" onclick="modalEventsRescheduled({{EventCode}},'{{EventsRescheduled}}');"></i>
+                </td>
                 <td style="text-align:center;">
-                  <i class="fa fa-search-plus" aria-hidden="true" onclick="loadMoreInfoApprove(this);" ></i>
+                  <i class="fa fa-search-plus" aria-hidden="true" onclick="loadMoreInfoApprove(this);"></i>
                 </td>
                 <td style="text-align:center;">
                   <input class="checkboxToApprove" type="checkbox" name="toApprove" value="{{EventCode}}">
@@ -62,6 +67,32 @@
 </div>
 
 <form action="/approve/approve-event" method="post" id="approveEvent" style="display:none;"></form>
+
+<div id="modalEvents" class="modal introJs-Bs3-modal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"><span id="eventId"></span> - Events Rescheduled</h4>
+      </div>
+      <div class="text-right" style="margin-top: 10px; margin-right: 2%;">
+        <span data-step="3" data-intro="After choose the event/events click here to cancel" class="label label-danger" onclick="setEventToApprove(4);">Cancel</span>
+        <span data-step="4" data-intro="After choose the event/events click here to approve" class="label label-success" onclick="setEventToApprove(2);">Approve</span>
+      </div>
+      <table id="tableModalEvents" class="table table-hover table-striped" style="width: 96%; margin-left: 2%; margin-top: 10px;">
+        <thead>
+          <tr>
+            <th>Event Number</th>
+            <th>Date</th>
+            <th>Approve <input type="checkbox" name="markAllCB" id="markAllCB" onclick="toggleCheckBoxModal(this);"></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 {{#section 'script'}}
 
@@ -103,7 +134,42 @@
         value: this.value,
         name: 'selectedEvent'}).appendTo('#approveEvent');
     })
+
     $('#approveEvent').submit()
+  }
+
+  function modalEventsRescheduled(eventCode, events) {
+    let arrayEvents = []
+    if(events) {
+      events.split(',').map(e => {
+        arrayEvents.push({
+          code: e.split(' ')[0],
+          date: moment(e.split(' ')[1].replace('(', '').replace(')', '')).format('DD/MM/YYYY')
+        })
+      })
+    }
+
+    $('#tableModalEvents tbody').empty()
+    let lines = ''
+    arrayEvents.forEach(e => {
+      lines += '<tr>' +
+                  '<td class="text-center">' + e.code + '</td>' +
+                  '<td class="text-center">' + e.date + '</td>' +
+                  '<td class="text-center">' +
+                    '<input class="checkboxToApprove" type="checkbox" name="toApproveModal" value="' + e.code + '">' +
+                  '</td>' +
+               '</tr>'
+    })
+
+    $('#tableModalEvents tbody').append(lines)
+    $('#eventId').text(eventCode)
+    $('#modalEvents').modal('show')
+  }
+
+  function toggleCheckBoxModal(source) {
+    checkboxes = document.getElementsByName('toApproveModal');
+    for(checkbox in checkboxes)
+      checkboxes[checkbox].checked = source.checked;
   }
 
   </script>
