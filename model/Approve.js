@@ -69,14 +69,12 @@ function Approve(){
     })
   }
   this.evaluateEvents = function(req, res, next){
-    debugger
     if (!req.body.selectedEvent){
       req.session.flashMsg = {type:'alert-danger', events:'Please select at least 1 event'}
       res.redirect('/approve')
-    }
-    else{
+    }else{
       conn.acquire(function(err,con){
-        con.query('UPDATE Event SET EventStatus_ID = ?, ApprovedAt = NOW(), ApprovedBy = ? WHERE EventCode IN (?)', [req.body.statusToUpdate, req.session.matricula, req.body.selectedEvent], function(err, result) {
+        con.query('UPDATE Event SET EventStatus_ID = ?, ApprovedAt = NOW(), ApprovedBy = ? WHERE EventCode IN (?) OR (EventFatherCode IN (?) AND EventStatus_ID = 1)', [req.body.statusToUpdate, req.session.matricula, req.body.selectedEvent, req.body.selectedEvent], function(err, result) {
           console.log(this.sql);
           con.release();
           if(err){

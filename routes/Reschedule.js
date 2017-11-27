@@ -17,10 +17,10 @@ const md5 = require('md5');
 const pdf = require('html-pdf');
 const A4option = require(process.env.PWD + '/views/report/A4config')
 
-router.get('/', f.myInternalEvents, function(req, res, next) {
+router.get('/', f.EventsToReschedule, function(req, res, next) {
   res.render('reschedule/reschedule',{
     sess: req.session,
-    myInternalEvents: req.myInternalEvents
+    myInternalEvents: req.eventsToReschedule
   })
 }).post('/verify-dates', r.convBodyToReq, r.checkAvailabilityReschedule, function(req, res, next) {
   res.json(req.DesiredDate)
